@@ -1,0 +1,151 @@
+@charset "UTF-8";
+.timeline-dim {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 800px;
+  margin: auto;
+}
+
+p.timeline-p {
+  font-size: 1em;
+  line-height: 1.75em;
+  border-top: 3px solid;
+  /*Color palette must be imported before this file*/
+  -o-border-image: linear-gradient(to right, var(--light-brown) 0%, var(--coffe) 100%);
+     border-image: linear-gradient(to right, var(--light-brown) 0%, var(--coffe) 100%);
+  border-image-slice: 1;
+  border-width: 3px;
+  margin: 0;
+  padding: 40px;
+  counter-increment: section;
+  position: relative;
+  color: var(--coffe);
+}
+p.timeline-p:before {
+  /*content: counter(section);*/
+  position: absolute;
+  border-radius: 5%;
+  padding: 10px;
+  height: 1.25em;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: var(--coffe);
+  text-align: center;
+  line-height: 1.25em;
+  color: var(--background);
+  font-size: 1em;
+}
+
+p.timeline-p:nth-child(odd) {
+  text-align: right;
+  border-right: 3px solid;
+  padding-left: 2rem;
+}
+p.timeline-p:nth-child(odd):before {
+  left: 100%;
+  margin-left: -20px;
+}
+
+p.timeline-p:nth-child(even) {
+  text-align: left;
+  border-left: 3px solid;
+  padding-right: 2rem;
+}
+p.timeline-p:nth-child(even):before {
+  right: 100%;
+  margin-right: -20px;
+}
+
+p.timeline-p:first-child {
+  border-top: 0;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+p.timeline-p:last-child {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Contents */
+p.timeline-p:nth-child(1)::before {
+  content: "2017";
+}
+
+p.timeline-p:nth-child(2)::before {
+  content: "2018";
+}
+
+p.timeline-p:nth-child(3)::before {
+  content: "2019";
+}
+
+p.timeline-p:nth-child(4)::before {
+  content: "2020";
+}
+
+p.timeline-p:nth-child(5)::before {
+  content: "2021";
+}
+
+p.timeline-p:nth-child(6)::before {
+  content: "2022";
+}
+
+/*
+Bootstrap media rules:
+    xs = Extra small <576px. Max container width None (auto)
+    sm = Small ≥576px. Max container width 540px.
+    md = Medium ≥768px. Max container width 720px.
+    lg = Large ≥992px. Max container width 960px.
+    xl = Extra large ≥1200px. Max container width 1140px.
+*/
+@media only screen and (max-width: 960px) {
+  .timeline-dim {
+    max-width: 500px;
+    margin: auto;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .timeline-dim {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 400px;
+    margin: auto;
+  }
+}
+@media only screen and (max-width: 540px) {
+  .timeline-dim {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    max-width: 300px;
+    margin: auto;
+  }
+}
+@media only screen and (max-width: 460px) {
+  .timeline-dim {
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    width: fit-content;
+    margin: auto;
+  }
+}
+@media only screen and (max-width: 300px) {
+  p.timeline-p:nth-child(odd):before {
+    left: 49%;
+    top: -1.05rem;
+  }
+
+  p.timeline-p:nth-child(1):before {
+    left: 46%;
+  }
+
+  p.timeline-p:nth-child(even):before {
+    right: 49%;
+    top: -1.05rem;
+  }
+}/*# sourceMappingURL=timeline.css.map */

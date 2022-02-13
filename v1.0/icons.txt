@@ -1,0 +1,298 @@
+<i class="fas fa-infinity"></i>
+<img class=" -image" src="./imgs/matrix.svg">
+<i class="fas fa-code"></i>
+<i class="fab fa-unity"></i>     
+<i class="fab fa-node-js"></i>     
+<i class="fas fa-layer-group"></i>  
+<i class="fas fa-chart-pie"></i>    
+<i class="fas fa-microchip"></i>     
+<i class="fas fa-book-open"></i>
+
+<object data="./imgs/svgStudy.svg" class="centered-logo" type="image/svg+xml" ></object>
+
+/* FAQ Section */
+    <!-- Faqs -->
+    <section class="container bgk-main-color" id="faqSection" style="padding-top: 3em; padding-bottom: 3em;">
+        <div>
+            <!-- faq question -->
+            <h1 class="faq-page">Perchè scegliere te piuttosto che un professore universitario?</h1>
+            <!-- faq answer -->
+            <div class="faq-body">
+                <p>
+                    Mi ritengo capace di condividere anche in modi diversi un ragionamento.
+                    <br><br>
+                    Certo, avere un curriculum lungo 13 pagine è una bella flexata ma emettere suoni e ripetere un concetto sempre nello stesso modo
+                    (con il power point sotto, quasi a sbeffeggiare) potrebbe non essere un metodo furbissimo per insegnare.
+                        <br><br>
+                    Inoltre dialogare con un coetaneo stimola a fare domande che sarebbe imbarazzante proporre ad un prof universitario per paura di far emergere
+                    delle lacune importanti. 
+                </p>
+            </div>
+        </div>
+        <hr class="hr-line">
+
+        <div >
+            <!-- faq question -->
+            <h1 class="faq-page">Il mio esame è tra 3 giorni, me n'ero scordato, puoi aiutarmi?</h1>
+            <!-- faq answer -->
+            <div class="faq-body">
+                <p>
+                    🎵<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" style="font-weight: bolder; color: blue;">
+                    Certo!</a>🎵
+                </p>
+            </div>
+        </div>
+
+        <hr class="hr-line">
+        <div >
+            <!-- faq question -->
+            <h1 class="faq-page">Non hai recensioni su altri siti di ripetizioni, non mi fido.</h1>
+            <!-- faq answer -->
+            <div class="faq-body">
+                <p>
+                    Purtroppo ho sempre lavorato nelle scuole e mi sono digitalizzato solo adesso 😅 <br>
+                    però se cambi idea puoi sempre contattarmi al volo e magari si trova un compromesso 😃.
+                </p>
+            </div>
+        </div>
+
+        <hr class="hr-line">
+        <div >
+            <!-- faq question -->
+            <h1 class="faq-page">Quello che fai è legale?</h1>
+            <!-- faq answer -->
+            <div class="faq-body">
+                <p>
+                    Sì.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+/* Ex grid HTML
+
+
+    <!-- Courses -->
+    <section class="container section-separation" id="courses-container">
+        <h1 class="hero-title" style="text-align: right;">I miei corsi</h1>
+        <h2>Schiaccia per saperne di più</h2>
+
+        <div class="grid my-courses-grid">
+
+            <div class="card card-background " id="analisi">
+                <i class="fas fa-infinity card-icon"></i>
+                <h1>Analisi I</h1>
+            </div>
+
+            <div class="card card-background"  id="algebra">
+                <br><br>
+                <img class="card-icon-image" src="./imgs/matrix.svg">
+                <h1>Algebra lineare</h1>
+            </div>
+
+
+            <div class="card card-background " id="programmazione">
+                <br><br>
+                <i class="fas fa-code card-icon"></i>
+                <h1>Programmazione</h1>
+            </div>
+
+            <div class="card card-background" id="unity">
+                <br><br>
+                <i class="fab fa-unity card-icon"></i>
+                <h1>Unity</h1>
+            </div>
+
+            <div class="card card-background " id="web" >
+                <br><br>
+                <i class="fab fa-node-js card-icon"></i>
+                <h1>Tecnologie web</h1>
+            </div>
+
+
+            <div class="card card-background"  id="algoritmi">
+                <br><br>
+                <i class="fas fa-layer-group card-icon"></i>
+                <h1>Algoritmi e strutture dati</h1>
+            </div>
+
+
+            <div class="card card-background"  id="statistica">
+                <br><br>
+                <i class="fas fa-chart-pie card-icon"></i>
+                <h1>Statistica</h1>
+            </div>
+
+            <div class="card card-background"  id="architettura">
+                <br><br>
+                <i class="fas fa-microchip card-icon"></i>
+                <h1>Architettura dei processori</h1>
+            </div>
+
+            <div class="card card-background" id="compiti">
+                <br><br>
+                <i class="fas fa-book-open card-icon"></i>
+                <h1>Altro</h1>
+            </div>
+
+        </div>
+    </section>
+
+    /*
+
+    /* Grid css 
+
+    @media only screen and (max-width: 1300px){
+    .hero-title{text-align: center !important;}
+    .fw{flex-wrap: wrap;}
+    .lateral-paragraph{margin-left: 0; margin-top: 3em;}
+}
+
+.my-courses-grid{
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: min-content;
+    gap: 0.5rem;
+    grid-template-areas: 
+    "analisi analisi algebra algebra algebra"
+    "analisi analisi unity unity unity"
+
+    "analisi analisi unity unity unity"
+    "algoritmi web unity unity unity"
+    "algoritmi web unity unity unity"
+    "algoritmi programmazione programmazione programmazione statistica"
+
+    "architettura architettura compiti compiti statistica"
+    "architettura architettura compiti compiti statistica";
+}
+
+/* DA SISTEMARE */
+@media screen and (max-width: 992px) {
+    .my-courses-grid{
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: min-content;
+        gap: 1em;
+        grid-template-areas: 
+        "analisi algebra algebra"
+        "web algebra algebra"
+        "programmazione programmazione programmazione"
+        "programmazione programmazione programmazione"
+        "statistica algoritmi algoritmi"
+        "statistica compiti architettura"
+        "unity unity architettura";
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .my-courses-grid{
+        grid-template-columns: repeat(1, 1fr);
+        grid-auto-rows: min-content;
+        gap: 1em;
+        grid-template-areas: 
+        "analisi"
+        "algebra"
+        "programmazione"
+        "unity"
+        "web"
+        "algoritmi"
+        "statistica"
+        "architettura"
+        "compiti";
+    }
+}
+
+#analisi{grid-area: analisi;}
+#algebra{grid-area: algebra;}
+#programmazione{grid-area: programmazione;}
+#unity{grid-area: unity;}
+#web{grid-area: web;}
+#algoritmi{grid-area: algoritmi;}
+#statistica{grid-area: statistica;}
+#architettura{grid-area: architettura;}
+#compiti{grid-area: compiti;}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    position:relative;
+    padding: 1rem;
+    padding-top: 2rem;
+
+    transition: 1s;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 5px;
+    cursor: pointer;
+}
+
+.card h1{
+    font-weight: bolder;
+    text-shadow: 0px 0px 1px black;
+}
+
+.card::before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: transparent;
+    left: 0;
+    transition: 0.3s;
+}
+
+.card-background{
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-blend-mode: lighten;
+}
+
+.calculus-background{background-image: linear-gradient(rgb(255, 255, 255, 0.9) , rgb(255, 255, 255, 0.6) ),url('./imgs/calculus1.jpg');}
+.algebra-background{background-image: linear-gradient(rgb(255, 255, 255, 0.9) , rgb(255, 255, 255, 0.6) ),url('./imgs/hypercube.jpeg');}
+.unity-background{background-image: linear-gradient(rgb(255, 255, 255, 0.9) , rgb(255, 255, 255, 0.6) ),url('./imgs/2dmap.jpg');}
+.programming-background{background-image: linear-gradient(rgb(255, 255, 255, 0.9) , rgb(255, 255, 255, 0.6) ),url('./imgs/coffe.jpg');}
+.algorithms-background{background-image: linear-gradient(rgb(255, 255, 255, 0.9) , rgb(255, 255, 255, 0.6) ),url('./imgs/tree.webp');}
+.web-background{background-image: linear-gradient(rgb(255, 255, 255, 1) , rgb(255, 255, 255, 0.6) ),url('./imgs/webTech.jpg');}
+.normal-background{background-image: linear-gradient(rgb(255, 255, 255, 1) , rgb(255, 255, 255, 0.6) ),url('./imgs/normal.png');}
+.mips-background{background-image: linear-gradient(rgb(255, 255, 255, 1) , rgb(255, 255, 255, 0.6) ),url('./imgs/motherboard.jpg');}
+.books-background{background-image: linear-gradient(rgb(255, 255, 255, 1) , rgb(255, 255, 255, 0.6) ),url('./imgs/books.jpeg');}
+
+.card:hover{
+    transform: scale(1.01);
+    transition: 1s;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 30px;
+}
+
+.card-icon{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 4rem;
+}
+
+.card-icon-image{
+    width: 64px;
+    height: 64px;
+    display: block;
+    margin-top: 1rem;
+    margin-left: auto;  margin-right: auto;
+}
+
+.card h1{text-align: center;}
+.card p{text-align: center;}
+
+/* FAQS */
+.faq-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.hr-line{
+  width: 50%;
+  margin-right: auto;
+  margin-left: 0;
+  
+}
+
+    */
