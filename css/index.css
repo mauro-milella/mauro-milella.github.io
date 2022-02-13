@@ -1,0 +1,231 @@
+
+.hero-background{
+    height: 100%;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-image: linear-gradient(rgba(12, 12, 12, 0) , rgba(12, 12, 12, 0) ) , url('../imgs/background1.jpg');
+}
+.nav-logo{
+    font-size: 2rem;
+    color: var(--text);
+    user-select: none;
+    font-weight: 200;
+    text-shadow: 0px 0px 1px black;
+    flex-wrap: nowrap;
+    text-align: left;
+}
+
+.nav-ul{
+    display: inline;
+    list-style: none;
+}
+.nav-li{
+    display: inline;
+    margin-left: .7rem;
+}
+.nav-li a{
+    display: inline-block;
+    text-decoration: none;
+    font-family: var(--main-font), 'Arial', sans-serif;
+    font-weight: 400;
+    color: var(--text);
+    transition-duration: .2s;
+}
+.nav-li a:hover{
+    text-decoration: underline;
+    transition-duration: .2s;
+}
+.nav-icon{
+    position: relative;
+    font-size: 2.7rem;
+    color: var(--text);
+    z-index: 2;
+    transition: 1s;
+}
+
+.nav-mobile-screen{
+    display: initial;
+}
+
+.nav-in{
+    content: "";
+}
+.nav-out{
+    content: "";
+}
+
+@keyframes mobile-navbar-transition-in {
+    from{}
+    to{bottom: 0vh;}
+}
+@keyframes mobile-navbar-transition-out{
+    from{bottom: 0vh;}
+    to{bottom: -120vh;}
+}
+
+@media only screen and (max-width: 768px){
+    .nav-mobile-screen{
+        position: fixed;
+        background: var(--brown1);
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        bottom: -120vh;    left: 0;
+        margin: 0;
+    }
+
+    .nav-in{
+        transition-duration: 1s;
+        transform: translateY(-120vh);
+    }
+    .nav-out{
+        transition-duration: 1s;
+        transform: translateY(0vh);
+    }
+
+    .nav-ul{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2rem;
+        padding-left: 2rem;
+        font-size: 2rem;
+    }
+    .nav-ul .nav-li a{
+        transition: none !important;
+    }
+    .nav-li a:hover{
+        transform: none;
+        transition: none !important;
+    }
+}
+
+.hero-paragraph{
+    /*
+    width: -webkit-fit-content;
+    width: -moz-fit-content;
+    */
+    width: fit-content;
+    min-width: 300px;
+    /*
+    height: -webkit-fit-content;
+    height: -moz-fit-content;
+    */
+    height: fit-content;
+    padding: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10rem;
+    background: var(--main-color-trans);
+}
+
+.hero-text{
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', 'Josefin Sans', sans-serif;
+    color: var(--text);
+    font-weight: 300;
+    padding: 1rem;
+    max-width: 800px;
+}
+
+.hero-title{
+    line-height: 1.15em;
+    font-size: 7rem;
+    padding-bottom: 0;
+}
+
+.hero-subtitle{
+    font-family: 'Nunito';
+    font-size: 2rem;
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+
+@media only screen and (max-width: 1048px){
+    .hero-paragraph{margin-top: 8rem;}
+}
+@media only screen and (max-width: 900px){
+    .hero-title{font-size: 6rem;}
+}
+@media only screen and (max-width: 768px){
+    .hero-title{font-size: 5rem;}
+    .hero-subtitle{font-size: 1.5rem;}
+}
+@media only screen and (max-width: 700px){
+    .hero-title{font-size: 4rem;}
+}
+@media only screen and (max-width: 575px){
+    .hero-title{font-size: 3rem;}
+    .hero-paragraph{
+        position: relative;
+        left: -2rem;
+        width: 100%;
+    }
+}
+@media only screen and (max-width: 470px){
+    .hero-subtitle{font-size: 1.35rem;}
+    .hero-text{font-size: 1rem;}
+    .hero-title{font-size: 2.5rem;}
+    .hero-paragraph{min-width: 200px;}
+}
+
+.lateral-paragraph{
+    text-align: left;
+    margin-left: 2rem;
+    margin-top: 0;
+    font-size: 1.4em;
+}
+
+/* Style the buttons that are used to open and close the faq-page body */
+.faq-page {
+    /* background-color: #eee; */
+    color: #444;
+    cursor: pointer;
+    padding: 30px 20px;
+    width: 100%;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+    margin: auto;
+}
+.faq-body{
+    margin: auto;
+    /* text-align: center; */
+   width: 100%; 
+   padding: auto;
+   
+}
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.faq-page:hover {
+    font-size: 1.6rem;
+}
+/* Style the faq-page panel. Note: hidden by default */
+.faq-body {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.2rem;
+    width: fit-content;
+}
+.faq-page:after {
+    content: '\02795';
+    /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+}
+.active:after {
+    content: "\2796";
+    /* Unicode character for "minus" sign (-) */
+}
+
+/*
+Timeline
+*/
+
