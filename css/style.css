@@ -257,8 +257,9 @@ a{
     color: var(--background);
 }
 
-.svg-icon{
+.svg-icon-little{
     max-width: 3em;
+    max-height: 3em;
 }
 
 .social-icon{
