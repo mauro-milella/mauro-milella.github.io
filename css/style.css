@@ -257,6 +257,11 @@ a{
     color: var(--background);
 }
 
+.svg-icon{
+    max-width: 3em;
+    max-height: 3em;
+}
+
 .social-icon{
     font-size: 5rem;
     color: var(--coffe);
