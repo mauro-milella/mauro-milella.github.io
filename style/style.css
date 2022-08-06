@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Kavivanar&family=Miriam+Libre:wght@400;700&family=Poppins:wght@100;400;700;900&display=swap');
+
+body {
+    --bkg-color: #fafafa;
+    --txt-color: rgb(10, 10, 10);
+
+    --title-font: 'Kavivanar', cursive;
+    --std-font: 'Poppins', sans-serif;
+
+    --std-underline: linear-gradient(120deg, rgb(138, 125, 253) 0%, rgb(0, 211, 148) 100%);
+    --std-tip: rgb(125, 253, 200);
+    --bkg-tip: rgb(138, 125, 253);
+
+    --shock-red: rgb(255, 58, 58);  
+    --shock-banana: rgb(255, 255, 50);
+    --shock-mint: rgb(132, 255, 163);
+
+    background-color: var(--bkg-color);
+    color: var(--txt-color);
+}
+
+::-moz-selection {
+    background-color: var(--shock-mint);
+    color: var(--txt-color);
+}
+
+::selection {
+    background-color: var(--shock-mint);
+    color: var(--txt-color);
+    z-index: -1;
+}
+
+.container {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15%;
+    padding-right: 15%;
+
+    font-family: var(--std-font);
+}
+
+h1 {
+    font-family: var(--title-font);
+    font-size: 3em;
+}
+
+
+.paragraph {
+    text-align: left;
+    justify-content: center;
+    font-size: 1.1em;
+}
+
+.underlined {
+    background-image: var(--std-underline);
+    background-repeat: no-repeat;
+    background-size: 100% 0.25em;
+    background-position: 0 77%;
+    transition: background-size 0.25s ease-in;
+}
+
+/* To cover all underlined text when hovered
+.underlined:hover {
+    background-size: 100% 88%;
+}
+*/
+
+/* Data tooltip */
+[data-tooltip]:before {
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    
+    transition: all 0.15s ease;
+    padding: 10px;
+    color: var(--txt-color);
+    box-shadow: 2px 2px 1px var(--bkg-tip);    
+}
+
+[data-tooltip]:hover:before {
+    opacity: 1;
+    
+    background: var(--std-tip);    
+    margin-top: -50px;
+    margin-left: 20px;    
+}
+
+[data-tooltip]:not([data-tooltip-persistent]):before {
+    pointer-events: none;
+}
