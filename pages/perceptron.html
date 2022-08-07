@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Resources to write Latex-->
+    <script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>
+    <!-- Libraries and other scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../scripts/Tooltip.js" defer></script>
+    <script src="../scripts/graphic.js" defer></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../style/style.css"/>
+    <title>M.Milella</title>
+</head>
+<body>
+    <div class="container">
+        <div class="paragraph" style="text-align: right;">
+            <h3>This page sections:</h3>
+
+            <a href="#MCP">MCP model & Perceptron</a><br>
+            <a href="#Adaline">Adaline</a><br>
+            Or go <a href="../index.html">back to homepage</a>
+        </div>
+
+        <div id="MCP">
+            <h1>MCP Model & Perceptron</h1>
+            <div class="paragraph">
+                Around 1943, Warren McCulloch (neurophysiologist) and Walter Pitts (mathematician) have a clear objective in mind: 
+                to understand the mechanisms involved in a biological brain and exploit them in AI field. 
+            </div>
+
+            <div class="frow space">
+                <div class="fcol">
+                    <div class="paragraph">
+                        They recreated a nerve cell as a binary logic gate
+                        <a class="quote" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf" target="_blank">[1]</a>.
+                        <br>
+                        <span class="underlined" data-tooltip>Dendrites</span> receive multiple signals which enter the cell body; if the accumulated signal exceeds a certain threshold an output signal is sent in output through the axon.
+                        <br><br>
+                        A few years later <span class="underlined" data-tooltip>Frank Rosenblatt</span> (psychologist) published the first concept of perceptron learning and an algorithm to automatically tune dendrites’ sensibility to make a decision.
+                        <a class="quote" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf" target="_blank">[2]</a>.
+                    </div>
+                </div>
+                <div class="fcol">
+                    <img src="../imgs/neuron.png" alt="McCullochPitts">
+                </div>
+            </div>
+
+            <hr class="fancyhr hc1">
+
+            <div style="text-align: center;">
+                <span class="expr" data-tooltip>$z$</span> $=$ <span class="expr" data-tooltip>$w_1$</span>$x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx$
+                <br><br>
+                <span class="expr" data-tooltip>$\phi(z)$</span> $=
+                    \left\{\begin{array}{@{}l@{}}
+                    1 & \textrm{if $z >= \theta$}\\
+                    -1 & \textrm{otherwise}
+                    \end{array}\right.\,$
+                <br><br>
+                Consider $w_0 = $  - <span class="expr" data-tooltip>$\theta$</span> , $x_0 = 1$ and $z = w_0x_0 + w_1x_1 + ... + w_mx_m$
+                <br><br>$\phi(z) =
+                    \left\{\begin{array}{@{}l@{}}
+                    1 & \textrm{if $z >= 0$}\\
+                    -1 & \textrm{otherwise}
+                    \end{array}\right.\,$
+            </div>
+
+            <hr class="fancyhr hc2">
+
+            <div class="paragraph">
+                In other words, the idea behind both MCP and Perceptron is to use a reductionist approach to emulate how a single biological neuron works, which can or cannot propagate an electrical impulse. 
+            </div>
+            <div class="frow space"> 
+                <br> 
+                <div class="fcol">
+                    <img src="../imgs/perceptron.png" alt="Perceptron">
+                </div>
+                <div class="fcol">
+                    <div class="paragraph">
+                    <ol>
+                        <li>Initialize $w_j$ to 0</li>
+                        <li>For each training <span class="underlined" data-tooltip>sample</span> $x^{(i)}$:</li>
+                        <ul>
+                            <li>Compute output $\hat{y}$ (a binary classification, in our case)</li>
+                            <li>Update weights</li>
+                        </ul>
+                    </ol>
+                </div>
+                    <div class="paragraph">
+                        We have already formalized input and activaction function, now we can establish a learning rule to update weights: $w_j := w_j + \Delta w_j$.
+                        <br>
+                        In particular $\Delta w_j =$ <span class="expr" data-tooltip>$\eta$</span>  $(y^{(i)} - \hat{y}^{(i)}) x_j^{(i)}$
+                    </div>
+                </div>
+            </div>
+
+            <div class="paragraph">
+                If $1$ is predicted correctly there is no adjustment to $w_j$ : $\Delta w_j = \eta(1-1)x_j^{(i)} = 0$<br>   
+                Otherwise weights are updated towards the direction of the real, correct prediction : $\Delta w_j = \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}$
+            </div>
+                <br>
+            <div class="note">$w_j^{(i)}$ update is proportional to $x_j^{(i)}$ value</div><br>
+            <div class="paragraph">
+                If the two classes can be separated with a linear decision boundary, weights will eventually converge to a point where no more updates occur (figure). 
+                In all the other cases, the adjustment of the weights will never alt and we ought to stop the training forcibly by setting 
+                a threshold for the number of misclassifications or a maximum number of <span class="underlined" data-tooltip>epochs</span>.
+            </div>
+            <div class="grid space">
+                <img src="../imgs/iris1.png" alt="Setosa vs Versicolor">
+                <img src="../imgs/irisRosenblatt.png" alt="Linear decision boundary">
+                <br><br>
+            </div>
+        </section>
+
+        <hr class="fancyhr hc2">
+        <section id="Adaline">
+            <h1>Adaline</h1>
+        </section>"
+
+        <footer>
+            <hr>
+            <h3>Bibliography</h3>
+            <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf" target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous Activity</a>
+            <br>
+            <a class="bibliography" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf" target="_blank">[1] F. Rosenblatt. The Perceptron, a Percieiving and Recognizing Automaton</a>
+        </footer>
+    </div>
+</body>
+</html>

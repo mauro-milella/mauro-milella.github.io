@@ -37,7 +37,16 @@ This is the css needed to do that:
 
 const glossary = {
     "zettabytes": "one trillion gigabytes",
-    "Machine Learning": "subfield of artificial intelligence, which is broadly defined as the capability of a machine to imitate intelligent human behavior",
+    "machine learning": "subfield of artificial intelligence, which is broadly defined as the capability of a machine to imitate intelligent human behavior",
+    "dendrites": "branching extensions of a nerve cell, forming a dendrite tree. Branch density and grouping patterns are highly correlated to the function of the neuron itself",
+    "z": "input function",
+    "w_1": "weight, sensibility of a dendrite",
+    "phi(z)": "activation function",
+    "theta": "activation threshold",
+    "sample": "set of attributes, a row in our dataset",
+    "eta": "learning rate. This hyperparameter controls how much to change the model in response to a certain error",
+    "epochs": "number of times the dataset is iterated over",
+    "frank rosenblatt": "see Mark I Perceptron!",
 };
 
 class Tooltip {
@@ -55,8 +64,12 @@ class Tooltip {
     }
 
     assignTip(obj) {
-        if (obj.textContent in glossary) {
-            obj.setAttribute('data-tooltip', glossary[obj.textContent]);
+        const key = obj.textContent.toLowerCase().replace(/\$|\\/g, '');
+        console.log(key)
+        console.log(glossary)
+        console.log(glossary[key])
+        if (key in glossary) {
+            obj.setAttribute('data-tooltip', glossary[key]);
         }
         else {
             obj.removeAttribute('data-tooltip');
