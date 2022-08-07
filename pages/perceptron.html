@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,9 +13,10 @@
     <script src="../scripts/Tooltip.js" defer></script>
     <script src="../scripts/graphic.js" defer></script>
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="../style/style.css"/>
+    <link rel="stylesheet" href="../style/style.css" />
     <title>M.Milella</title>
 </head>
+
 <body>
     <div class="container">
         <div class="paragraph" style="text-align: right;">
@@ -22,26 +24,35 @@
 
             <a href="#MCP">MCP model & Perceptron</a><br>
             <a href="#Adaline">Adaline</a><br>
+            <a href="#Code">Talk is cheap! Show me the code</a><br><br>
             Or go <a href="../index.html">back to homepage</a>
         </div>
 
-        <div id="MCP">
+        <section id="MCP">
             <h1>MCP Model & Perceptron</h1>
             <div class="paragraph">
-                Around 1943, Warren McCulloch (neurophysiologist) and Walter Pitts (mathematician) have a clear objective in mind: 
-                to understand the mechanisms involved in a biological brain and exploit them in AI field. 
+                Around 1943, Warren McCulloch (neurophysiologist) and Walter Pitts (mathematician) have a clear
+                objective in mind:
+                to understand the mechanisms involved in a biological brain and exploit them in AI field.
             </div>
-
-            <div class="frow space">
+            <br>
+            <div class="frow">
                 <div class="fcol">
                     <div class="paragraph">
                         They recreated a nerve cell as a binary logic gate
-                        <a class="quote" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf" target="_blank">[1]</a>.
+                        <a class="quote"
+                            href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf"
+                            target="_blank">[1]</a>.
                         <br>
-                        <span class="underlined" data-tooltip>Dendrites</span> receive multiple signals which enter the cell body; if the accumulated signal exceeds a certain threshold an output signal is sent in output through the axon.
+                        <span class="underlined" data-tooltip>Dendrites</span> receive multiple signals which enter the
+                        cell body; if the accumulated signal exceeds a certain threshold an output signal is sent in
+                        output through the axon.
                         <br><br>
-                        A few years later <span class="underlined" data-tooltip>Frank Rosenblatt</span> (psychologist) published the first concept of perceptron learning and an algorithm to automatically tune dendrites’ sensibility to make a decision.
-                        <a class="quote" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf" target="_blank">[2]</a>.
+                        A few years later <span class="underlined" data-tooltip>Frank Rosenblatt</span> (psychologist)
+                        published the first concept of perceptron learning and an algorithm to automatically tune
+                        dendrites’ sensibility to make a decision.
+                        <a class="quote" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf"
+                            target="_blank">[2]</a>.
                     </div>
                 </div>
                 <div class="fcol">
@@ -49,70 +60,75 @@
                 </div>
             </div>
 
-            <hr class="fancyhr hc1">
+            <hr class="fancyhr hc3">
 
             <div class="paragraph">
-                Consider \(z\) our input function (see the image further on), \(w_j\) the weight associated to an input \(x_j\) and let \(\phi(z)\)
-                be the activation function. 
+                Consider \(z\) our input function (see the image further on), \(w_j\) the weight associated to an input
+                \(x_j\) and let \(\phi(z)\)
+                be the activation function.
             </div>
-            <div style="text-align: center;">
+            <div class="paragraph">
                 \[z = w_1 x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx \]
-                    \[ \phi(z) =
-                    \left\{\begin{array}{@{}l@{}}
-                    1 & \textrm{if $z >= \theta$}\\
-                    -1 & \textrm{otherwise}
-                    \end{array}\right.\, \]
-                What about the activation threshold \( \theta \) changing side in the equation?<br><br>
-                \(w_0 = - \theta \) , \(x_0 = 1\)<br>
-                \(z = w_0x_0 + w_1x_1 + ... + w_mx_m\)
                 \[ \phi(z) =
-                    \left\{\begin{array}{@{}l@{}}
-                    1 & \textrm{if $z >= 0$}\\
-                    -1 & \textrm{otherwise}
-                    \end{array}\right.\, \]
+                \left\{\begin{array}{@{}l@{}}
+                1 & \textrm{if $z >= \theta$}\\
+                -1 & \textrm{otherwise}
+                \end{array}\right.\, \]
+                Alternatively, we could consider the activation threshold \( \theta \) already as a weight:
+                \[w_0 = - \theta , x_0 = 1\]
+                \[z = w_0x_0 + w_1x_1 + ... + w_mx_m\]
+                \[ \phi(z) =
+                \left\{\begin{array}{@{}l@{}}
+                1 & \textrm{if $z >= 0$}\\
+                -1 & \textrm{otherwise}
+                \end{array}\right.\, \]
             </div>
 
             <hr class="fancyhr hc2">
 
             <div class="paragraph">
-                In other words, the idea behind both MCP and Perceptron is to use a reductionist approach to emulate how a single biological neuron works, which can or cannot propagate an electrical impulse. 
+                In other words, the idea behind both MCP and Perceptron is to use a reductionist approach to emulate how
+                a single biological neuron works, which can or cannot propagate an electrical impulse.
             </div>
-            <div class="frow space"> 
-                <br> 
+            <div class="frow space">
+                <br>
                 <div class="fcol">
                     <img src="../imgs/perceptron.png" alt="Perceptron">
                 </div>
                 <div class="fcol">
-                    <ol>
-                        <li>Initialize \(w_j\) to 0</li>
-                        <li>For each training <span class="underlined" data-tooltip>sample</span> \(x^{(i)}\):</li>
-                        <ul>
-                            <li>Compute output \(\hat{y}\) (a binary classification, in our case)</li>
-                            <li>Update weights</li>
-                        </ul>
-                    </ol>
                     <div class="paragraph">
-                        to fill text here
-                    </div>
-                </div>
-                    <div class="paragraph">
-                        We have already formalized input and activation function, now we can establish a learning rule to update weights: \(w_j := w_j + \Delta w_j\).
-                        <br>
-                        In particular \(\Delta w_j = \eta (y^{(i)} - \hat{y}^{(i)}) x_j^{(i)} \)
+                        The following are the points we must keep in mind when implementing the Perceptron class (see
+                        later) to
+                        classify a binary dataset:
+                        <ol>
+                            <li>Initialize \(w_j\) to 0</li>
+                            <li>For each training <span class="underlined" data-tooltip>sample</span> \(x^{(i)}\):</li>
+                            <ul>
+                                <li>Compute output \(\hat{y}\) through
+                                    a dot product (<code>net_input(X)</code>) and the activation function
+                                    (<code>predict(X)</code>)
+                                </li>
+                                <li>Update weights \(w_j := w_j + \Delta w_j\)</li>
+                            </ul>
+                        </ol>
+                        What we need now is a <span class="underlined" data-tooltip>learning rule</span> such as \(\Delta w_j = \eta (y^{(i)} - \hat{y}^{(i)}) x_j^{(i)} \)
+                        which makes adjustements proportional to input value.
                     </div>
                 </div>
             </div>
-
-            <div class="paragraph">
-                If \(1\) is predicted correctly there is no adjustment to \(w_j\): \[\Delta w_j = \eta(1-1)x_j^{(i)} = 0\]<br>   
-                Otherwise weights are updated towards the direction of the real, correct prediction : \[\Delta w_j = \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}\]
+            <div class="note"> 
+                If \(1\) is predicted correctly there is no adjustment to \(w_j\): \[\Delta w_j = \eta(1-1)x_j^{(i)} =0\]
+                Otherwise weights are updated towards the direction of the real, correct prediction : \[\Delta w_j =
+                \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}\]
             </div>
-                <br>
-            <div class="note">\(w_j^{(i)}\) update is proportional to \(x_j^{(i)}\) value</div><br>
+            <br>
             <div class="paragraph">
-                If the two classes can be separated with a linear decision boundary, weights will eventually converge to a point where no more updates occur (figure). 
-                In all the other cases, the adjustment of the weights will never alt and we ought to stop the training forcibly by setting 
-                a threshold for the number of misclassifications or a maximum number of <span class="underlined" data-tooltip>epochs</span>.
+                If the two classes can be separated with a linear decision boundary, weights will eventually converge to a
+                point where no more updates occur (figure).
+                In all the other cases, the adjustment of the weights will never alt and we ought to stop the training
+                forcibly by setting
+                a threshold for the number of misclassifications or a maximum number of <span class="underlined"
+                    data-tooltip>epochs</span>.
             </div>
             <div class="grid space">
                 <img src="../imgs/iris1.png" alt="Setosa vs Versicolor">
@@ -121,18 +137,59 @@
             </div>
         </section>
 
-        <hr class="fancyhr hc2">
+        <hr class="fancyhr hc1">
         <section id="Adaline">
             <h1>Adaline</h1>
-            todo
+            <div class="paragraph">
+                Now we are going up to examine another mono-level neural network called <span class="underlined" data-tooltip>Adaline</span>
+                , presented by Bernard Widrow and his PhD student <span class="underlined" data-tooltip>Tedd Hoff</span> in 1960
+                <a class="quote"
+                href="https://www-isl.stanford.edu/~widrow/papers/t1960anadaptive.pdf"
+                target="_blank">[3]</a>.
+                Adeline is particularly interesting because it shows the primary concept of finding
+                 the minimum of a <span class="underlined" data-tooltip>cost function</span> which is fundamental to comprehend more sophisticated algorithms. 
+                The main distinction between <span class="underlined" data-tooltip>Adeline learning function</span> and Perceptron is that weights 
+                are updated starting from a linear activation function instead of a unit-step one.
+            </div>
+            <div class="frow space">
+                <img src="../imgs/adaline.png" alt="Perceptron and Adaline comparison">
+            </div>
+            <div class="paragraph">
+                In Adeline, \(\phi(z) = z \) is computed to tune the weights, 
+                while the final classification is predicted by a quantizer (similar to the previous seen unit-step function) as shown in the figure.  
+                Thanks to this improvement we can exploit the continuous output to tune our model instead of seeing the world in black or white
+            </div>
+            <hr class="fancyhr hc3">
+            <div class="paragraph">
+                One of the most considerable ingredients in supervised ML consists of defining a target function and optimise it during the learning phase. 
+                <br>
+                Let’s define a cost function to learn weights in terms of <span class="underlined" data-tooltip>SSE</span> between the computed result and the expected label. 
+                \[J(w) = \frac{1}{2} \sum_{i}(y^{(i)} - \phi(z^{(i)}) )^2 \]
+                <div class="note"> 
+                    \(\frac{1}{2}\) is added only to make derivative easier to compute later.
+                    <br>
+                    The advantage of this function is that it is continuous, differentiable and it is convex,<br>
+                     thus, gradient descent method can be used to find which weights minimise the function. <br><br>
+                </div>
+            </div>
+            <br><br><br><br>
         </section>
     </div>
 
     <footer>
-        <h3>Bibliography</h3>
-        <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf" target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous Activity</a>
-        <br><br>
-        <a class="bibliography" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf" target="_blank">[2] F. Rosenblatt. The Perceptron, a Percieiving and Recognizing Automaton</a>
+        <div class="container">
+            <h1>Bibliography</h1>
+            <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf"
+                target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous
+                Activity</a>
+            <br><br>
+            <a class="bibliography" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf"
+                target="_blank">[2] F. Rosenblatt. The Perceptron, a Percieiving and Recognizing Automaton</a>
+            <br><br>
+            <a class="bibliography" href="https://www-isl.stanford.edu/~widrow/papers/t1960anadaptive.pdf"
+                target="_blank">[3] B. Widrow et al. "Adeline" neuron using chemical "<span data-tooltip>memistors</span>"</a>
+        </div>
     </footer>
 </body>
+
 </html>

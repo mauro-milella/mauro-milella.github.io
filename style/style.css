@@ -13,7 +13,7 @@ body {
     --shock-purple: rgb(138, 125, 253);
     --shock-red: rgb(255, 58, 58);  
     --shock-banana: rgb(255, 255, 50);
-    --dark-yellow: rgb(255, 202, 58) 100%;
+    --dark-yellow: rgb(255, 202, 58);
     --shock-mint: rgb(132, 255, 163);
 
     --std-underline: linear-gradient(120deg, rgb(125, 165, 253, 0.7) 0%, rgb(0, 211, 148, 0.7) 100%);
@@ -57,7 +57,8 @@ body {
 
 footer {
     width: 100%;
-    padding: 5em;
+    padding-top: 5em;
+    padding-bottom: 5em;
     background-color: var(--grey);
 }
 
@@ -106,14 +107,6 @@ h1 {
     transition: background-size 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.expr {
-    background-image: var(--std-expr);
-    background-repeat: no-repeat;
-    background-size: 100% 0.5em;
-    background-position: 0 120%;
-    transition: background-size 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-}
-
 a {
     background-image: var(--std-link);
     background-repeat: no-repeat;
@@ -133,7 +126,7 @@ a:hover {
     background-image: var(--rev-link);
 }
 
-.underlined:hover, .expr:hover {
+.underlined:hover {
     cursor: pointer;
     background-size: 100% 88%;
 }
@@ -154,27 +147,36 @@ a:hover {
 }
 
 .note {
-    width: fit-content;
+    max-width: fit-content;
     border-radius: 0;       
-    border-left: 8px solid var(--shock-purple);
     background-color: var(--grey);
     margin-left: auto;
     margin-right: auto;
-    font-weight: bold;
-    padding: 0.5em 1em 0.5em 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+    padding-bottom: 0.2em;
     color: var(--txt-note1); 
-    font-family: var(--quote-font);   
+    border-left: 8px solid var(--shock-purple);
+    font-family: var(--std-font);  
+    text-align: center; 
 }
 
 .note::before {       
-    content: 'Note: ';       
-    display: inline;           
-    font-weight: bold;       
-    color: var(--txt-note2);         
+    content: 'Note';   
+    display: block;       
+    font-family: var(--title-font);  
+    font-weight: bold;     
+    font-size: 1.4em;  
+    color: var(--shock-purple);         
     width: 500px;       
     text-transform: uppercase;       
-    letter-spacing: 3px;       
+    letter-spacing: 2px;       
     text-align: left;
+    transform-origin: 0 0;
+    transform: rotate(-90deg);
+    position: relative;
+    left: -3.1em;
+    top: 2.9em;
 }    
 
 img {
@@ -203,6 +205,11 @@ img {
     box-shadow: 2px 2px 0px 0px var(--shock-purple);
 }
 
+.hc3 {
+    border-bottom: 4px solid var(--dark-yellow);
+    box-shadow: 2px 2px 0px 0px var(--txt-color);
+}
+
 /* Data tooltip */
 [data-tooltip]:before {
     content: attr(data-tooltip);
@@ -221,10 +228,15 @@ img {
     background: var(--std-tip);    
     margin-top: -50px;
     margin-left: 20px;    
+    z-index: 1;
 }
 
 [data-tooltip]:not([data-tooltip-persistent]):before {
     pointer-events: none;
+}
+
+.floating {
+    position: relative;
 }
 
 /* Media queries */
@@ -258,11 +270,28 @@ img {
         grid-gap: 1em;
     }
 }
+
+@media screen and (max-width: 800px) {
+
+}
   
 @media screen and (max-width: 720px) {
     img {
         max-width: 400px;
+    }  
+
+    .note {
+        border-left: 0px solid var(--shock-purple);
     }
+
+    .note::before {       
+        width: fit-content;
+        transform: rotate(0deg);
+        position: relative;
+        left: 0em;
+        top: -1.1em;
+        border-bottom: 8px solid var(--shock-purple);
+    }  
 }
 
 @media screen and (max-width: 500px) {

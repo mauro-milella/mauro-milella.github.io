@@ -43,6 +43,13 @@ const glossary = {
     "eta": "learning rate. This hyperparameter controls how much to change the model in response to a certain error",
     "epochs": "number of times the dataset is iterated over",
     "frank rosenblatt": "see Mark I Perceptron!",
+    "learning rule": "function which improves a model performance when it's applied repeatedly",
+    "adaline": "ADAptive LInear NEuron",
+    "tedd hoff": "he was also Intel's employee number 12. lol",
+    "adeline learning function": "Widrow-Hoff rule",
+    "cost function": "parameter that defines how well a model is performing",
+    "sse": "sum of squared errors",
+    "memistors": "nanoelectric circuitry elements used in parallel computing memory technology"
 };
 
 class Tooltip {
@@ -61,9 +68,6 @@ class Tooltip {
 
     assignTip(obj) {
         const key = obj.textContent.toLowerCase().replace(/\$|\\/g, '');
-        console.log(key)
-        console.log(glossary)
-        console.log(glossary[key])
         if (key in glossary) {
             obj.setAttribute('data-tooltip', glossary[key]);
         }
