@@ -9,20 +9,24 @@ body {
     --quote-font: 'Miriam Libre', sans-serif;
     --biblio-font: 'Kavivanar', cursive;
 
-    --grey: rgb(235, 235, 235);
+    --grey: rgb(245, 245, 245);
     --shock-purple: rgb(138, 125, 253);
     --shock-red: rgb(255, 58, 58);  
     --shock-banana: rgb(255, 255, 50);
+    --dark-yellow: rgb(255, 202, 58) 100%;
     --shock-mint: rgb(132, 255, 163);
 
     --std-underline: linear-gradient(120deg, rgb(125, 165, 253, 0.7) 0%, rgb(0, 211, 148, 0.7) 100%);
-    --std-link: linear-gradient(120deg, rgb(255,255,50) 0%, rgb(255, 202, 58) 100%);
+    --std-link: linear-gradient(120deg, var(--shock-banana),  var(--shock-banana));
+    --rev-link: linear-gradient(120deg, var(--dark-yellow),  var(--dark-yellow));
     --std-expr: linear-gradient(120deg, rgba(255, 86, 86, 0.7) 0%, rgba(255, 177, 177, 0.7) 100%);
     --std-tip: rgb(125, 253, 200);
     --bkg-tip: var(--shock-purple);
 
     background-color: var(--bkg-color);
     color: var(--txt-color);
+
+    margin: 0;
 }
 
 ::-moz-selection {
@@ -49,6 +53,12 @@ body {
 .section {
     margin-top: 2em;
     margin-bottom: 2em;
+}
+
+footer {
+    width: 100%;
+    padding: 5em;
+    background-color: var(--grey);
 }
 
 .space {
@@ -93,7 +103,7 @@ h1 {
     background-repeat: no-repeat;
     background-size: 100% 0.25em;
     background-position: 0 77%;
-    transition: background-size 0.25s ease-in;
+    transition: background-size 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .expr {
@@ -101,7 +111,7 @@ h1 {
     background-repeat: no-repeat;
     background-size: 100% 0.5em;
     background-position: 0 120%;
-    transition: background-size 0.25s ease-in;
+    transition: background-size 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 a {
@@ -109,7 +119,7 @@ a {
     background-repeat: no-repeat;
     background-size: 100% 0.25em;
     background-position: 0 77%;
-    transition: background-size 0.25s ease-in;
+    transition: background-image 0.25s ease-in;
 
     width: fit-content;
 
@@ -119,7 +129,11 @@ a {
     text-decoration: none;
 }
 
-a:hover, .underlined:hover, .expr:hover {
+a:hover {
+    background-image: var(--rev-link);
+}
+
+.underlined:hover, .expr:hover {
     cursor: pointer;
     background-size: 100% 88%;
 }

@@ -18,7 +18,7 @@
 <body>
     <div class="container">
         <div class="paragraph" style="text-align: right;">
-            <h3>This page sections:</h3>
+            <h3>This page bookmarks:</h3>
 
             <a href="#MCP">MCP model & Perceptron</a><br>
             <a href="#Adaline">Adaline</a><br>
@@ -51,22 +51,25 @@
 
             <hr class="fancyhr hc1">
 
+            <div class="paragraph">
+                Consider \(z\) our input function (see the image further on), \(w_j\) the weight associated to an input \(x_j\) and let \(\phi(z)\)
+                be the activation function. 
+            </div>
             <div style="text-align: center;">
                 \[z = w_1 x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx \]
-                <span class="expr" data-tooltip>z</span> $=$ <span class="expr" data-tooltip>$w_1$</span>$x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx$
-                <br><br>
-                <span class="expr" data-tooltip>$\phi(z)$</span> $=
+                    \[ \phi(z) =
                     \left\{\begin{array}{@{}l@{}}
                     1 & \textrm{if $z >= \theta$}\\
                     -1 & \textrm{otherwise}
-                    \end{array}\right.\,$
-                <br><br>
-                Consider $w_0 = $  - <span class="expr" data-tooltip>$\theta$</span> , $x_0 = 1$ and $z = w_0x_0 + w_1x_1 + ... + w_mx_m$
-                <br><br>$\phi(z) =
+                    \end{array}\right.\, \]
+                What about the activation threshold \( \theta \) changing side in the equation?<br><br>
+                \(w_0 = - \theta \) , \(x_0 = 1\)<br>
+                \(z = w_0x_0 + w_1x_1 + ... + w_mx_m\)
+                \[ \phi(z) =
                     \left\{\begin{array}{@{}l@{}}
                     1 & \textrm{if $z >= 0$}\\
                     -1 & \textrm{otherwise}
-                    \end{array}\right.\,$
+                    \end{array}\right.\, \]
             </div>
 
             <hr class="fancyhr hc2">
@@ -80,30 +83,32 @@
                     <img src="../imgs/perceptron.png" alt="Perceptron">
                 </div>
                 <div class="fcol">
-                    <div class="paragraph">
                     <ol>
-                        <li>Initialize $w_j$ to 0</li>
-                        <li>For each training <span class="underlined" data-tooltip>sample</span> $x^{(i)}$:</li>
+                        <li>Initialize \(w_j\) to 0</li>
+                        <li>For each training <span class="underlined" data-tooltip>sample</span> \(x^{(i)}\):</li>
                         <ul>
-                            <li>Compute output $\hat{y}$ (a binary classification, in our case)</li>
+                            <li>Compute output \(\hat{y}\) (a binary classification, in our case)</li>
                             <li>Update weights</li>
                         </ul>
                     </ol>
+                    <div class="paragraph">
+                        to fill text here
+                    </div>
                 </div>
                     <div class="paragraph">
-                        We have already formalized input and activaction function, now we can establish a learning rule to update weights: $w_j := w_j + \Delta w_j$.
+                        We have already formalized input and activation function, now we can establish a learning rule to update weights: \(w_j := w_j + \Delta w_j\).
                         <br>
-                        In particular $\Delta w_j =$ <span class="expr" data-tooltip>$\eta$</span>  $(y^{(i)} - \hat{y}^{(i)}) x_j^{(i)}$
+                        In particular \(\Delta w_j = \eta (y^{(i)} - \hat{y}^{(i)}) x_j^{(i)} \)
                     </div>
                 </div>
             </div>
 
             <div class="paragraph">
-                If $1$ is predicted correctly there is no adjustment to $w_j$ : $\Delta w_j = \eta(1-1)x_j^{(i)} = 0$<br>   
-                Otherwise weights are updated towards the direction of the real, correct prediction : $\Delta w_j = \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}$
+                If \(1\) is predicted correctly there is no adjustment to \(w_j\): \[\Delta w_j = \eta(1-1)x_j^{(i)} = 0\]<br>   
+                Otherwise weights are updated towards the direction of the real, correct prediction : \[\Delta w_j = \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}\]
             </div>
                 <br>
-            <div class="note">$w_j^{(i)}$ update is proportional to $x_j^{(i)}$ value</div><br>
+            <div class="note">\(w_j^{(i)}\) update is proportional to \(x_j^{(i)}\) value</div><br>
             <div class="paragraph">
                 If the two classes can be separated with a linear decision boundary, weights will eventually converge to a point where no more updates occur (figure). 
                 In all the other cases, the adjustment of the weights will never alt and we ought to stop the training forcibly by setting 
@@ -119,15 +124,15 @@
         <hr class="fancyhr hc2">
         <section id="Adaline">
             <h1>Adaline</h1>
-        </section>"
-
-        <footer>
-            <hr>
-            <h3>Bibliography</h3>
-            <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf" target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous Activity</a>
-            <br>
-            <a class="bibliography" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf" target="_blank">[1] F. Rosenblatt. The Perceptron, a Percieiving and Recognizing Automaton</a>
-        </footer>
+            todo
+        </section>
     </div>
+
+    <footer>
+        <h3>Bibliography</h3>
+        <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf" target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous Activity</a>
+        <br><br>
+        <a class="bibliography" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf" target="_blank">[2] F. Rosenblatt. The Perceptron, a Percieiving and Recognizing Automaton</a>
+    </footer>
 </body>
 </html>
