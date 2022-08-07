@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Resources to write Latex-->
-    <script type="text/x-mathjax-config" defer> MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}}); </script>
-    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer> </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <!-- Libraries and other scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="../scripts/Tooltip.js" defer></script>
     <script src="../scripts/graphic.js" defer></script>
     <!-- Stylesheets -->
@@ -52,7 +52,8 @@
             <hr class="fancyhr hc1">
 
             <div style="text-align: center;">
-                <span class="expr" data-tooltip>$z$</span> $=$ <span class="expr" data-tooltip>$w_1$</span>$x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx$
+                \[z = w_1 x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx \]
+                <span class="expr" data-tooltip>z</span> $=$ <span class="expr" data-tooltip>$w_1$</span>$x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx$
                 <br><br>
                 <span class="expr" data-tooltip>$\phi(z)$</span> $=
                     \left\{\begin{array}{@{}l@{}}
