@@ -52,6 +52,8 @@ const glossary = {
     "memistors": "nanoelectric circuitry elements used in parallel computing memory technology",
     "scikit-learn": "scikit-learn is a splendid Python module for machine learning",
     "after each sample": "if weights are updated after each sample then the update method is said to be stochastic, otherwise, it is called batch",
+    "normalized": "normalization is a scaling technique to convert a distribution into a Normal distribution, with mean 0 and standard deviation 1",
+    
 };
 
 class Tooltip {
