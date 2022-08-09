@@ -49,7 +49,9 @@ const glossary = {
     "adeline learning function": "Widrow-Hoff rule",
     "cost function": "parameter that defines how well a model is performing",
     "sse": "sum of squared errors",
-    "memistors": "nanoelectric circuitry elements used in parallel computing memory technology"
+    "memistors": "nanoelectric circuitry elements used in parallel computing memory technology",
+    "scikit-learn": "scikit-learn is a splendid Python module for machine learning",
+    "after each sample": "if weights are updated after each sample then the update method is said to be stochastic, otherwise, it is called batch",
 };
 
 class Tooltip {

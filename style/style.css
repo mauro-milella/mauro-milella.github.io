@@ -10,11 +10,18 @@ body {
     --biblio-font: 'Kavivanar', cursive;
 
     --grey: rgb(245, 245, 245);
+    --lblue: #51D6FF;
+
     --shock-purple: rgb(138, 125, 253);
-    --shock-red: rgb(255, 58, 58);  
+    --shock-red: #D81159;
     --shock-banana: rgb(255, 255, 50);
+    --shock-green: #37FF8B;
+
+    --dark-green: #1B998B;
     --dark-yellow: rgb(255, 202, 58);
-    --shock-mint: rgb(132, 255, 163);
+
+    --pastel-red: #FB6376;
+    --pastel-pink: #FFDCCC;
 
     --std-underline: linear-gradient(120deg, rgb(125, 165, 253, 0.7) 0%, rgb(0, 211, 148, 0.7) 100%);
     --std-link: linear-gradient(120deg, var(--shock-banana),  var(--shock-banana));
@@ -27,15 +34,16 @@ body {
     color: var(--txt-color);
 
     margin: 0;
+    overflow-x: hidden;
 }
 
 ::-moz-selection {
-    background-color: var(--shock-mint);
+    background-color: var(--shock-green);
     color: var(--txt-color);
 }
 
 ::selection {
-    background-color: var(--shock-mint);
+    background-color: var(--shock-green);
     color: var(--txt-color);
     z-index: -1;
 }
@@ -104,6 +112,7 @@ h1 {
     background-repeat: no-repeat;
     background-size: 100% 0.25em;
     background-position: 0 77%;
+    display: inline-block;
     transition: background-size 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -154,7 +163,7 @@ a:hover {
     margin-right: auto;
     padding-left: 2em;
     padding-right: 2em;
-    padding-bottom: 0.2em;
+    padding-bottom: 1.5em;
     color: var(--txt-note1); 
     border-left: 8px solid var(--shock-purple);
     font-family: var(--std-font);  
@@ -177,12 +186,19 @@ a:hover {
     position: relative;
     left: -3.1em;
     top: 2.9em;
+    margin-bottom: -0.4em;
 }    
 
 img {
     max-width: 450px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.img-b {
+    object-fit: contain;
+    max-width: 850px;
+    width: fit-content;
 }
 
 .fancyhr {
@@ -193,11 +209,14 @@ img {
     border: none;
     position: relative;
     transition: box-shadow 200ms ease-in-out;
+
+    border-bottom: 4px solid var(--lblue);
+    box-shadow: 2px 2px 0px 0px var(--txt-color);
 }
 
 .hc1 {
     border-bottom: 4px solid var(--shock-purple);
-    box-shadow: 2px 2px 0px 0px var(--shock-mint);
+    box-shadow: 2px 2px 0px 0px var(--shock-green);
 }
 
 .hc2 {
@@ -213,9 +232,9 @@ img {
 /* Data tooltip */
 [data-tooltip]:before {
     content: attr(data-tooltip);
-    position: absolute;
     opacity: 0;
-    
+    position: absolute;
+
     transition: all 0.15s ease;
     padding: 10px;
     color: var(--txt-color);
@@ -224,10 +243,9 @@ img {
 
 [data-tooltip]:hover:before {
     opacity: 1;
-    
-    background: var(--std-tip);    
+
     margin-top: -50px;
-    margin-left: 20px;    
+    background: var(--std-tip);    
     z-index: 1;
 }
 
@@ -271,8 +289,8 @@ img {
     }
 }
 
-@media screen and (max-width: 800px) {
-
+@media screen and (max-width: 900px) {
+    
 }
   
 @media screen and (max-width: 720px) {
@@ -292,9 +310,21 @@ img {
         top: -1.1em;
         border-bottom: 8px solid var(--shock-purple);
     }  
+
+    [data-tooltip]:before {
+        transition: none;
+    }
+
+    [data-tooltip]:hover:before {
+        margin-top: -50px;
+        width: fit-content;
+        overflow-wrap: break-word;
+        left: 10%;
+        right: 10%;
+    }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 400px) {
     img {
         max-width: 300px;
     }
