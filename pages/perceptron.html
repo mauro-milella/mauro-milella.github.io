@@ -71,7 +71,7 @@
                 \(x_j\) and let \(\phi(z)\)
                 be the activation function.
             </div>
-            <div class="paragraph">
+            <div class="latex">
                 \[z = w_1 x_1 + ... + w_mx_m \]
                 \[ = \sum_{m}^{j=0}x_jw_j = w^Tx \]
                 \[ \phi(z) =
@@ -79,7 +79,11 @@
                 1 & \textrm{if $z >= \theta$}\\
                 -1 & \textrm{otherwise}
                 \end{array}\right.\, \]
+            </div>
+            <div class="paragraph">
                 Alternatively, we could consider the activation threshold \( \theta \) already as a weight:
+            </div>
+            <div class="latex">
                 \[w_0 = - \theta , x_0 = 1\]
                 \[z = w_0x_0 + w_1x_1 + ... + w_mx_m\]
                 \[ \phi(z) =
@@ -115,15 +119,20 @@
                                 <li>Update weights \(w_j = w_j + \Delta w_j\)</li>
                             </ul>
                         </ol>
-                        What we need now is a <span class="underlined" data-tooltip>learning rule</span> such as \(\Delta w_j = \eta (y^{(i)} - \hat{y}^{(i)}) x_j^{(i)} \)
+                        What we need now is a <span class="underlined" data-tooltip>learning rule</span> such as 
+                        <div class="latex">
+                            \(\Delta w_j = \eta (y^{(i)} - \hat{y}^{(i)}) x_j^{(i)} \)
+                        </div>
                         which makes adjustements proportional to input value.
                     </div>
                 </div>
             </div>
             <div class="note"> 
                 If \(1\) is predicted correctly there is no adjustment to \(w_j\): \[\Delta w_j = \eta(1-1)x_j^{(i)} =0\]
-                Otherwise weights are updated towards the direction of the real, correct prediction : \[\Delta w_j =
-                \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}\]
+                Otherwise weights are updated towards the direction of the real, correct prediction : 
+                <div class="latex">
+                    \[\Delta w_j = \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}\]
+                </div>
             </div>
             <div class="paragraph">
                 If the two classes can be separated with a linear decision boundary, weights will eventually converge to a
@@ -168,7 +177,9 @@
                 One of the most considerable ingredients in supervised ML consists of defining a target function and optimise it during the learning phase. 
                 <br>
                 Let’s define a cost function to learn weights in terms of <span class="underlined" data-tooltip>SSE</span> between the computed result and the expected label. 
-                \[J(w) = \frac{1}{2} \sum_{i}(y^{(i)} - \phi(z^{(i)}) )^2 \]
+                <div class="latex">
+                    \[J(w) = \frac{1}{2} \sum_{i}(y^{(i)} - \phi(z^{(i)}) )^2 \]
+                </div>
                 <div class="note"> 
                     \(\frac{1}{2}\) is added only to make derivative easier to compute later.
                     <br>
@@ -316,88 +327,87 @@
                 and Adeline and draw the separation boundary between "setosa" and "versicolor" class.
             </div>
 
-                <pre>
-                    <code class="language-python">
-                        import pandas as pd
-                        import matplotlib.pylab as plt
-                        import numpy as np
-                        from sklearn.datasets import load_iris
-            
-                        from neurons import Perceptron, AdalineGD
+            <pre>
+                <code class="language-python">
+                    import pandas as pd
+                    import matplotlib.pylab as plt
+                    import numpy as np
+                    from sklearn.datasets import load_iris
+        
+                    from neurons import Perceptron, AdalineGD
 
-                        iris = load_iris()
-                        df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
-                        df["target"] = iris.target  # setosa: 0, versicolor: 1, virginica: 2.
+                    iris = load_iris()
+                    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+                    df["target"] = iris.target  # setosa: 0, versicolor: 1, virginica: 2.
 
-                        # Consider only sepal and petal length of setosa and versicolor:
-                        X = df.drop(["sepal width (cm)", "petal width (cm)" ,"target"], axis='columns')[0:100].values
-                        y = np.where(df.target[0:100] == 0, -1, 1)  
-                    </code>
-                </pre>
+                    # Consider only sepal and petal length of setosa and versicolor:
+                    X = df.drop(["sepal width (cm)", "petal width (cm)" ,"target"], axis='columns')[0:100].values
+                    y = np.where(df.target[0:100] == 0, -1, 1)  
+                </code>
+            </pre>
 
-                <div class="paragraph">
-                    If a sample refers to iris Setosa, we assign -1 to it and 1 otherwise. 
-                    We can train our models as follow:
-                </div>
+            <div class="paragraph">
+                If a sample refers to iris Setosa, we assign -1 to it and 1 otherwise. 
+                We can train our models as follow:
+            </div>
 
-                <pre>
-                    <code class="language-python">
-                        # Train perceptron
-                        ppn = Perceptron(eta=0.1, n_iter=10)
-                        ppn.fit(X, y)
+            <pre>
+                <code class="language-python">
+                    # Train perceptron
+                    ppn = Perceptron(eta=0.1, n_iter=10)
+                    ppn.fit(X, y)
 
-                        # Train Adaline
-                        # Dataset is standardized in order to guarantee
-                        # gradient-descent optimal performance.
-                        X_std = np.copy(X)
-                        X_std[:,0] = (X[:,0] - X[:,0].mean()) / X[:,0].std()
-                        X_std[:,1] = (X[:,1] - X[:,1].mean()) / X[:,1].std()
+                    # Train Adaline
+                    # Dataset is standardized in order to guarantee
+                    # gradient-descent optimal performance.
+                    X_std = np.copy(X)
+                    X_std[:,0] = (X[:,0] - X[:,0].mean()) / X[:,0].std()
+                    X_std[:,1] = (X[:,1] - X[:,1].mean()) / X[:,1].std()
 
-                        ada_eta = 0.01
-                        ada = AdalineGD(n_iter=15, eta=ada_eta)
-                        ada.fit(X_std, y)
-                    </code>
-                </pre>
+                    ada_eta = 0.01
+                    ada = AdalineGD(n_iter=15, eta=ada_eta)
+                    ada.fit(X_std, y)
+                </code>
+            </pre>
 
-                <div class="paragraph">
-                    Machine learning algorithms often require data to be <span class="underlined" data-tooltip>normalized</span> to confront attributes with 
-                    different unit measures or generally speaking guarantee optimal performance.
-                    In our case, iris Versicolor petal length seems to be way higher than Sentosa's so it could “dominate” the update cycle.
-                </div>
+            <div class="paragraph">
+                Machine learning algorithms often require data to be <span class="underlined" data-tooltip>normalized</span> to confront attributes with 
+                different unit measures or generally speaking guarantee optimal performance.
+                In our case, iris Versicolor petal length seems to be way higher than Sentosa's so it could “dominate” the update cycle.
+            </div>
 
-                <div class="text-center">
-                    <img class="img-fluid" src="../imgs/neurons/standardization.png" alt="Iris plot">
-                </div>
-                <div class="paragraph">
-                    Also, Thanks to <code>errors_</code> we can draw a convergence plot to see how fast our models converged to 0.
-                    And tadan!
-                </div>
-                <div class="text-center">
-                    <img class="img-fluid" src="../imgs/neurons/final_plot.png" alt="Iris plot">
-                </div>
-                <div class="paragraph">
-                    Perceptron reaches convergence in just 6 iterations while Adeline (\(\eta=0.01 \)) it's a bit slower but intuitively
-                    we can see how the latter model seems to predict classes more reasonably than the former.
-                </div>
+            <div class="text-center">
+                <img class="img-fluid" src="../imgs/neurons/standardization.png" alt="Iris plot">
+            </div>
+            <div class="paragraph">
+                Also, Thanks to <code>errors_</code> we can draw a convergence plot to see how fast our models converged to 0.
+                And tadan!
+            </div>
+            <div class="text-center">
+                <img class="img-fluid" src="../imgs/neurons/final_plot.png" alt="Iris plot">
+            </div>
+            <div class="paragraph">
+                Perceptron reaches convergence in just 6 iterations while Adeline (\(\eta=0.01 \)) it's a bit slower but intuitively
+                we can see how the latter model seems to predict classes more reasonably than the former.
             </div>
         </section>
     </div>
 
-    <footer>
-        <div class="container">
-            <h1 class="mb-5">Bibliography</h1>
+    <footer class="text-left bg-warning">
+        <h1 class="mb-5">Bibliography</h1>
 
-            <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf"
-                target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous
-                Activity</a>
-            <br><br>
-            <a class="bibliography" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf"
-                target="_blank">[2] F. Rosenblatt. The Perceptron, a Percieiving and Recognizing Automaton</a>
-            <br><br>
-            <a class="bibliography" href="https://www-isl.stanford.edu/~widrow/papers/t1960anadaptive.pdf"
-                target="_blank">[3] B. Widrow et al. "Adeline" neuron using chemical "<span data-tooltip>memistors</span>"</a>
-        </div>
+        <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf"
+            target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous
+            Activity</a>
+        <br><br>
+        <a class="bibliography" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf"
+            target="_blank">[2] F. Rosenblatt. The Perceptron, a Percieiving and Recognizing Automaton</a>
+        <br><br>
+        <a class="bibliography" href="https://www-isl.stanford.edu/~widrow/papers/t1960anadaptive.pdf"
+            target="_blank">[3] B. Widrow et al. "Adeline" neuron using chemical "memistors"</a>
+
     </footer>
+
 </body>
 
 </html>
