@@ -24,6 +24,7 @@ body {
     --shock-banana: rgb(255, 255, 50);
     --shock-green: #37FF8B;
     --shock-blue: #016FB9;
+    --shock-aquagreen: rgb(125, 253, 200);
 
     --dark-green: #1B998B;
     --dark-yellow: rgb(255, 202, 58);
@@ -32,11 +33,15 @@ body {
     --pastel-pink: #FFDCCC;
     --pastel-yellow: #FDF5BF;
 
-    --std-underline: linear-gradient(120deg, rgb(125, 165, 253, 0.7) 0%, rgb(0, 211, 148, 0.7) 100%);
+    --std-underline: linear-gradient(120deg, rgb(0, 211, 148, 0.7) 0%, rgb(0, 211, 148, 0.7) 100%);
+    --alt-underline:  linear-gradient(120deg, var(--pastel-red) 0%, var(--pastel-red) 100%);
     --std-link: linear-gradient(120deg, var(--dark-yellow),  var(--dark-yellow));
     --std-expr: linear-gradient(120deg, rgba(255, 86, 86, 0.7) 0%, rgba(255, 177, 177, 0.7) 100%);
-    --std-tip: rgb(125, 253, 200);
+
+    --std-tip: var(--shock-aquagreen);
     --bkg-tip: var(--shock-purple);
+    --alt-tip: var(--pastel-red);
+    --bkg2-tip: var(--shock-red);
 
     background-color: var(--bkg-color);
     color: var(--txt-color);
@@ -66,6 +71,7 @@ footer {
     padding-right: 15%;
     padding-top: 5em;
     padding-bottom: 5em;
+    background-color: var(--dark-yellow);
 }
 
 .paragraph {
@@ -90,6 +96,10 @@ h1 {
     background-position: 0 77%;
     display: inline-block;
     transition: background-size 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.und1 {
+    background-image: var(--alt-underline);
 }
 
 a {
@@ -166,6 +176,11 @@ a {
     margin-bottom: -0.4em;
 }    
 
+/* 
+##############
+# A fancy hr #
+##############
+*/
 .fancyhr {
     width: 0%;
     min-width: 60%;
@@ -180,22 +195,31 @@ a {
     box-shadow: 2px 2px 0px 0px var(--txt-color);
 }
 
+.hcmax {
+    width: 100% !important;
+}
+
 .hc1 {
-    border-bottom: 4px solid var(--shock-purple);
-    box-shadow: 2px 2px 0px 0px var(--shock-green);
+    border-color: var(--shock-purple);
+    color: var(--shock-green);
 }
 
 .hc2 {
-    border-bottom: 4px solid var(--shock-red);
-    box-shadow: 2px 2px 0px 0px var(--shock-purple);
+    border-color: var(--shock-red);
+    color: var(--shock-purple);
 }
 
 .hc3 {
-    border-bottom: 4px solid var(--dark-yellow);
-    box-shadow: 2px 2px 0px 0px var(--txt-color);
+    border-color: var(--dark-yellow);
+    color: var(--txt-color);
 }
 
-/* Data tooltip */
+/*
+##############
+#   Data     #
+#   tooltip  #
+##############
+*/
 [data-tooltip]:before {
     content: attr(data-tooltip);
     opacity: 0;
@@ -216,15 +240,28 @@ a {
     z-index: 1;
 }
 
+.dt1:before { box-shadow: 2px 2px 1px var(--bkg2-tip); }
+.dt1:hover:before {background: var(--alt-tip);}
+
 [data-tooltip]:not([data-tooltip-persistent]):before {
     pointer-events: none;
 }
 
+/*
+################
+# Text effects #
+################
+*/
 .floating {
     position: relative;
 }
 
-/* Media queries */
+/*
+##############
+#   Media    #
+#   queries  #
+##############
+*/
 @media screen and (max-width: 1174px) {
     .container {
         padding-left: 5%;
@@ -245,10 +282,6 @@ a {
     .fcol {
         flex-basis: 100%;
     }
-}
-
-@media screen and (max-width: 900px) {
-
 }
   
 @media screen and (max-width: 720px) {
