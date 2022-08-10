@@ -6,15 +6,6 @@
 }
 */
 
-.container {
-    margin: auto !important;
-    overflow-x: hidden;
-}
-
-.row {
-    margin-right: 0em !important;
-}
-
 body {
     --bkg-color: #fafafa;
     --txt-color: rgb(10, 10, 10);
@@ -87,6 +78,8 @@ footer {
 h1 {
     font-family: var(--title-font);
     font-size: 3em;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
     font-weight: bold;
 }
 
