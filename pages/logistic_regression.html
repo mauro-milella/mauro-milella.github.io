@@ -26,6 +26,7 @@
             <h3 style="font-family: var(--funny-font);">On this journey:</h3>
 
             <a href="#LogisticRegression">Logistic Regression</a><br>
+            <a href="#Code">Python please!</a><br>
             <br><br>
             Or go <a href="../index.html">back to homepage</a>  
         </div>
@@ -34,13 +35,98 @@
         <section id="LogisticRegression">
             <h1>Logistic Regression</h1>
             <div class="paragraph">
-                aosaosk
+                Logistic regression is a widely used classification model capable to estimate how many probabilities a sample it’s like to belong to a class (which is essential, for example, to do medical predictions or weather forecasting).
+                <br>
+                Everything starts from the logit function which takes as input values ranging in \( [0,1] \) and returns some number \( n \in \mathbb{R} \); this is useful
+                to create a linear relation between an attribute value and log-odds.
+                <div class="latex">
+                    \[\text{logit}(p) = log \frac{p}{(1-p)}\]
+                </div>
+            </div>
+            <div class="paragraph">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 p-3">
+                        What we would want to discover is \(P(y=1 | x;w)\) which is
+                        the conditional probability of a chosen sample to belong to class 1, given it's attributes \(x\) 
+                        parametrized by weigths \(w\).
+        
+                        <div class="latex">
+                            \[ \text{logit}(P(y=1|x;w)) = \sum^{n}_{i=0}w_mx_m = w^Tx = z \]
+                            \[ \text{logit}(P(y=1|x;w))^{-1} = \phi(z) = \frac{1}{1+e^{-z}} \]
+                        </div>
+                        Where \(\phi{z}\) is said to be the <span class="underlined" data-tooltip>sigmoid</span> function (plotted) which takes as input value some real value
+                        mapping it to \([0, 1]\) and intersecting \(y\)-axis when \(z\) is \(0\).
+                    </div>
+
+                    <div class="col-lg-6 col-md-12">
+                        <img src="../imgs/logistic_regression/sigmoid.png" class="img-fluid" alt="Sigmoid">
+                    </div>
+                </div>
+            </div>
+            <div class="paragraph">
+                Some predicted probability can be converted into a binary value by a unit-step function.
+                <div class="latex">
+                    \[ \hat{y} =
+                    \left\{\begin{array}{@{}l@{}}
+                    1 & \textrm{if $z=0$}\\
+                    -log(1-\phi(z)) & \textrm{otherwise}
+                    \end{array}\right.\, \]
+                </div>
+                What we want to do now is to find a method to generate the "optimal sigmoid" to fit our data.
+                One step at a time: we want to tune our weights to increase our odds as much as possible. 
+                Let’s find a cost function and then maximize it.
+
+                <div class="latex">
+                    \[L(w) = P(y|x;w) = \prod^{n}_{i=1}P(y^{(i)} | x^{(i)};w) = \prod^{n}_{i=1} (\phi(z^{(i)}))^{y^{(i)}} (1-\phi(z^{(i)}))^{1-y^{(i)}} \]
+                    \[l(w) = log(L(w)) = \sum^{n}_{i=1} y^{(i)}(\phi(z^{(i)})) + (1-y^{(i)})(1-\phi(z^{(i)}))  \]
+                </div>
+                
+                Or we could minimize the following.
+                <div class="latex">
+                    \[J(w) = \sum^{n}_{i=1} -y^{(i)}(\phi(z^{(i)})) - (1-y^{(i)})(1-\phi(z^{(i)}))  \]
+                </div>
+            </div>
+            <div class="note">
+                By applying \(log\) function we reduce the probabilities to have a numerical underflow
+                <br> This is also a smart way to keep our mental stability while derivating.
+            </div>
+            <div class="paragraph">
+                Let's consider a single sample and see how weights are fixed depending on how bad a misclassification is.
+            </div>
+            <div class="latex">
+                \[ J(\phi(z), y;w) = -y(\phi(z)) - (1-y)(1-\phi(z))  \]
+                \[ J(\phi(z), y;w) =
+                \left\{\begin{array}{@{}l@{}}
+                -log(\phi(z)) & \textrm{if $y = 1$}\\
+                -log(1-\phi(z)) & \textrm{if $y = 0$}
+                \end{array}\right.\, \]
+            </div>
+                
+            <div class="text-center">
+                <img src="../imgs/logistic_regression/weights_tuning.png" class="img-fluid" alt="Cost function behaviour">
+            </div>
+        </section>
+    
+        <hr class="fancyhr hc2">
+
+        <section id="Python">
+            <h1>Code</h1>
+            <div class="paragraph">
+                If I were to implement Logistic Regression on my own i would simply substitute the 
+                cost function \(J\) into Adaline class (see <a href="./perceptron.html#Adaline">Adaline</a>).
+                BUT! Of course an highly optimized version of Logistic Regression is already implemented for us.
+
+                <pre>
+                    <code class="language-python">
+
+                    </code>
+                </pre>
             </div>
         </section>
     </div>
 
     <footer class="text-left bg-warning">
-        <h1 class="mb-5">Bibliography</h1>
+        <h1 class="mb-5">Resources</h1>
 
         <a class="bibliography" href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf"
             target="_blank">[1] W. McCulloch, W. Pitts. A Logical Calculus of the Ideas Immanent in Nervous

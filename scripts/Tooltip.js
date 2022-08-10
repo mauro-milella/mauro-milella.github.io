@@ -53,6 +53,8 @@ const glossary = {
     "scikit-learn": "scikit-learn is a splendid Python module for machine learning",
     "after each sample": "if weights are updated after each sample then the update method is said to be stochastic, otherwise, it is called batch",
     "normalized": "normalization is a scaling technique to convert a distribution into a Normal distribution, with mean 0 and standard deviation 1",
+    "perfect algorithm": "\"no launch theorem\"",
+    "sigmoid": "Many natural processes exhibit a progression from small beginnings that accelerates and approaches a climax over time. When a specific mathematical model is lacking, a sigmoid function is often used.",
     
 };
 
