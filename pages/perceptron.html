@@ -270,23 +270,23 @@
                 See <code>net_input</code> as \(z\) and <code>predict</code> as \(\phi(z)\). Cool part is coming now!
             </div>
                 
-                <pre>
-                    <code class="language-python">
-                    def fit(self, X, y):
-                        self.w_ = np.zeros(1 + X.shape[1])
-                        self.errors_ = []
+            <pre>
+                <code class="language-python">
+                def fit(self, X, y):
+                    self.w_ = np.zeros(1 + X.shape[1])
+                    self.errors_ = []
 
-                        for _ in range(self.n_iter):
-                            errors = 0
-                            for xi, target in zip(X, y):
-                                update = self.eta * (target - self.predict(xi))
-                                self.w_[1:] += update * xi
-                                self.w_[0] += update
-                                errors += int(update != 0.0)
-                            self.errors_.append(errors)
-                        return self
-                    </code>
-                </pre>
+                    for _ in range(self.n_iter):
+                        errors = 0
+                        for xi, target in zip(X, y):
+                            update = self.eta * (target - self.predict(xi))
+                            self.w_[1:] += update * xi
+                            self.w_[0] += update
+                            errors += int(update != 0.0)
+                        self.errors_.append(errors)
+                    return self
+                </code>
+            </pre>
 
             <div class="paragraph">
                 Fit method cycles over each sample, updating weights as we defined before. Also, we collect the number of misclassifications per epoch to draw a convergence plot later (see experiments section).
@@ -295,39 +295,41 @@
             <hr class="fancyhr">
             <div class="paragraph">
                 <h2>Adaline</h2>
-                <div class="paragraph">
-                    Since we just need how weights are updated, <code>fit</code> method is all we need to change.
-                    <pre>
-                        <code class="language-python">
-                            def fit(self, X, y):
-                            self.w_ = np.zeros(1 + X.shape[1])
-                            self.cost_ = []
-                            
-                            for i in range(self.n_iter):
-                                output = self.net_input(X)
-                                errors = (y - output)
-                                self.w_[1:] += self.eta * X.T.dot(errors)
-                                self.w_[0] += self.eta * errors.sum()
-                                cost = (errors**2).sum() / 2.0
-                                self.cost_.append(cost)
-                            return self
-                        </code>
-                    </pre>
+            </div>
+            
+            <div class="paragraph">
+                Since we just need how weights are updated, <code>fit</code> method is all we need to change.
+            </div>
+            
+            <pre>
+                <code class="language-python">
+                    def fit(self, X, y):
+                    self.w_ = np.zeros(1 + X.shape[1])
+                    self.cost_ = []
+                    
+                    for i in range(self.n_iter):
+                        output = self.net_input(X)
+                        errors = (y - output)
+                        self.w_[1:] += self.eta * X.T.dot(errors)
+                        self.w_[0] += self.eta * errors.sum()
+                        cost = (errors**2).sum() / 2.0
+                        self.cost_.append(cost)
+                    return self
+                </code>
+            </pre>
 
-                    <div class="note" style="max-width: 800px;">
-                        Gradient descent could be computationally expensive 
-                        because we 
-                        need to visit the entire dataset every 
-                        time we move towards the 
-                        cost function global minimum. 
-                        <br><br>
-                        A common alternative is 
-                        the so-called <b>stochastic</b> (or “online”) gradient descent, 
-                        where each weight is updated on the fly.
-                        <br><br>
-                        I'll deepen the topic later on, along with mini-batch gradient descent.
-                    </div>
-                </div>
+            <div class="note" style="max-width: 800px;">
+                Gradient descent could be computationally expensive 
+                because we 
+                need to visit the entire dataset every 
+                time we move towards the 
+                cost function global minimum. 
+                <br><br>
+                A common alternative is 
+                the so-called <b>stochastic</b> (or “online”) gradient descent, 
+                where each weight is updated on the fly.
+                <br><br>
+                I'll deepen the topic later on, along with mini-batch gradient descent.
             </div>
         </section>
 
@@ -385,7 +387,7 @@
 
             <div class="paragraph">
                 Machine learning algorithms often require data to be <span class="underlined" data-tooltip>normalized</span> to confront attributes with 
-                different unit measures or generally speaking guarantee optimal performance.
+                different unit measures or generally speaking guarantee optimal performance - don't worry, this is covered in future chapters.
                 In our case, iris Versicolor petal length seems to be way higher than Sentosa's so it could “dominate” the update cycle.
             </div>
 

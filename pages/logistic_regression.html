@@ -27,6 +27,8 @@
 
             <a href="#LogisticRegression">Logistic Regression</a><br>
             <a href="#Code">Python please!</a><br>
+            <a href="#Regularization">Regularization</a><br>
+            
             <br><br>
             Or go <a href="../index.html">back to homepage</a>  
         </div>
@@ -88,7 +90,7 @@
             <div class="latex">
                 \[L(w) = P(y|x;w) = \prod^{n}_{i=1}P(y^{(i)} | x^{(i)};w) = \prod^{n}_{i=1} (\phi(z^{(i)}))^{y^{(i)}} (1-\phi(z^{(i)}))^{1-y^{(i)}} \]
                 \[l(w) = log(L(w)) = \sum^{n}_{i=1} y^{(i)}(\phi(z^{(i)})) + (1-y^{(i)})(1-\phi(z^{(i)}))  \]
-                \[J(w) = \sum^{n}_{i=1} -y^{(i)}(\phi(z^{(i)})) - (1-y^{(i)})(1-\phi(z^{(i)}))  \]
+                \[J(w) = \sum^{n}_{i=1} -y^{(i)}\left(\phi(z^{(i)})\right) - (1-y^{(i)})\left(1-\phi(z^{(i)})\right)   \]
             </div>
             
             <div class="note paragraph">
@@ -144,7 +146,7 @@
 
                         X_train, X_test, y_train, y_test = train_test_split(df[['mean radius']].values, df['target'].values, test_size=0.3, random_state=42)
                         
-                        lr = LogisticRegression(C=1000)
+                        lr = LogisticRegression(C=1.0)
                         lr.fit(X_train, y_train)
                     </code>
                 </pre>
@@ -173,10 +175,76 @@
                 </pre>
             </div>
 
-            <div class="paragraph text-center">
+            <div text-center">
                 <img src="../imgs/logistic_regression/prediction.png" class="img-fluid" alt="Cost function behaviour">
             </div>
 
+        </section>
+
+        <hr>
+
+        <section id="Regularization">
+            <h1>Regularization</h1>
+
+            <div class="paragraph">
+                If you read the above code, you probably noticed a mysterious parameter \(C\). It is an 
+                <span class="underlined und1 dt1" data-tooltip>hyperparameter</span> used to specify how strong
+                <span class="underlined und1 dt1" data-tooltip>regularization</span> is;
+                this is fundamental to find a good compromise between 
+                <span class="underlined und1 dt1" data-tooltip>underfitting</span> and
+                <span class="underlined und1 dt1" data-tooltip>overfitting</span>.
+            </div>
+
+
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12 p-3">
+                    <div class="paragraph">
+                        When a model behaves super for a given dataset but fails to cope with new data, then it doesn’t really learned something valuable; 
+                        it knows the dataset but it didn’t get not the theory underlying it so it’s said to be overfitted.
+                    </div>
+                    <div class="paragraph">
+                        Ideally, one wants to choose a model that both accurately captures the regularities in its training data, but also generalizes well to unseen data. Unfortunately, it is typically impossible to do both simultaneously.
+                        This is also known as 
+                        <div style="display:inline-block;">
+                            <span class="underlined und1 dt1" data-tooltip>bias</span> /
+                            <span class="underlined und1 dt1" data-tooltip>variance</span> tradeoff.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-12">
+                        <img src="../imgs/logistic_regression/fitting.png" class="img-fluid" alt="Underfitting and overfitting">
+                </div>
+            </div>
+
+            <div class="paragraph">
+                To resolve this compromise we need to use some regularization techniques to reduce data 
+                <span class="underlined " data-tooltip>noise</span>, manage 
+                <span class="underlined " data-tooltip>multicollinearity</span> and avoid overfitting,
+                by introducing new informations (bias) thus penalize extreme weights in the model.
+            </div>
+
+            <div class="note" style="max-width: 800px;">
+                When applying regularization it is fundamental for the attributes to be scaled to the same range.
+                Remember when we normalized our dataset, while learning Adaline? 
+            </div>
+
+            <div class="paragraph">
+                One of the most common techniques is L2 which can be write as the following.
+            </div>
+
+            <div class="latex">
+                \[ \frac{\lambda}{2} ||w^2|| = \frac{\lambda}{2} \sum^{m}_{j=1}(w_j^2) \]
+            </div>
+
+            <div class="paragraph">
+                We just need to add the regularization parameter \(\lambda\) to the previous cost function.
+            </div>
+        
+            <div class="latex">
+                \[ J(w) = \left[ \sum^{n}_{i=1} -y^{(i)}\left(\phi(z^{(i)})\right) - (1-y^{(i)})\left(1-\phi(z^{(i)})\right) \right] + \frac{\lambda}{2} \sum^{m}_{j=1}(w_j^2) \] 
+            </div>
+            
         </section>
     </div>
 

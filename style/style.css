@@ -150,7 +150,7 @@ a {
 
 .note {
     width: fit-content;
-    max-width: 100%;
+    max-width: 800px;
     border-radius: 0;
     background-color: var(--grey);
     margin-left: auto;
