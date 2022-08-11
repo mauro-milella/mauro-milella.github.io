@@ -55,6 +55,8 @@ const glossary = {
     "normalized": "normalization is a scaling technique to convert a distribution into a Normal distribution, with mean 0 and standard deviation 1",
     "perfect algorithm": "\"no launch theorem\"",
     "sigmoid": "Many natural processes exhibit a progression from small beginnings that accelerates and approaches a climax over time. When a specific mathematical model is lacking, a sigmoid function is often used.",
+    "ovr": "One versus Rest; technique for performing multi-classification problems by applying a binary classificator multiple times, each of one we study the presence and the difference of a single class",
+
     
 };
 

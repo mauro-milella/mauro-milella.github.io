@@ -24,7 +24,7 @@
 <body>
     <div class="container">
         <div class="paragraph" style="text-align: right;">
-            <h3 style="font-family: var(--funny-font);">On this journey:</h3>
+            <h3>On this journey:</h3>
 
             <a href="#MCP">MCP model & Perceptron</a><br>
             <a href="#Adaline">Adaline</a><br>
@@ -41,7 +41,7 @@
                 objective in mind:
                 to understand the mechanisms involved in a biological brain and exploit them in AI field.
             </div>
-            <div class="row">
+            <div class="row mb-2">
                 <div class="col-sm-12 col-md-12 col-lg-6">
                     <div class="paragraph">
                         They recreated a nerve cell as a binary logic gate
@@ -55,34 +55,31 @@
                         <br><br>
                         A few years later <span class="underlined" data-tooltip>Frank Rosenblatt</span> (psychologist)
                         published the first concept of perceptron learning and an algorithm to automatically tune
-                        dendrites’ sensibility to make a decision.
+                        dendrites’ sensibility to make a decision
                         <a class="quote" href="https://blogs.umass.edu/brain-wars/files/2016/03/rosenblatt-1957.pdf"
                             target="_blank">[2]</a>.
                     </div>
                 </div>
-                <div class="col-lg-6 text-center" >
+                <div class="col-lg-6 text-center mt-2 mb-2" >
                     <img src="../imgs/neurons/neuron.png" class="img-fluid" alt="McCullochPitts">
                 </div>
             </div>
 
-            <hr class="fancyhr hc1">
-
-            <div class="paragraph">
+            <div class="paragraph text-center">
                 Consider \(z\) our input function (see the image further on), \(w_j\) the weight associated to an input
-                \(x_j\) and let \(\phi(z)\)
-                be the activation function.
+                \(x_j\) and let \(\phi(z)\) be the activation function.
             </div>
             <div class="latex">
-                \[z = w_1 x_1 + ... + w_mx_m \]
-                \[ = \sum_{m}^{j=0}x_jw_j = w^Tx \]
+                \[z = w_1 x_1 + ... + w_mx_m = \sum_{m}^{j=0}x_jw_j = w^Tx \]
                 \[ \phi(z) =
                 \left\{\begin{array}{@{}l@{}}
                 1 & \textrm{if $z >= \theta$}\\
                 -1 & \textrm{otherwise}
                 \end{array}\right.\, \]
             </div>
-            <div class="paragraph">
-                Alternatively, we could consider the activation threshold \( \theta \) already as a weight:
+
+            <div class="paragraph text-center">
+                Alternatively, we could consider the activation threshold \( \theta \) already as a weight.
             </div>
             <div class="latex">
                 \[w_0 = - \theta , x_0 = 1\]
@@ -93,48 +90,47 @@
                 -1 & \textrm{otherwise}
                 \end{array}\right.\, \]
             </div>
+        </section>
+    </div>
 
-            <hr class="fancyhr hc2">
-
-            <div class="paragraph">
-                In other words, the idea behind both MCP and Perceptron is to use a reductionist approach to emulate how
-                a single biological neuron works, which can or cannot propagate an electrical impulse.
-            </div>
-            <div class="row">
+    <div class="pt-4 pb-4" style="background-color: var(--shock-aquagreen); margin: 2em 0em 2em 0em;">
+        <div class="container">
+            <div class="row mb-2 align-items-center gy-4">
                 <div class="col-md-12 col-lg-6 text-center">
                     <img src="../imgs/neurons/perceptron.png" class="img-fluid" alt="Perceptron">
                 </div>
                 <div class="col-md-12 col-lg-6">
                     <div class="paragraph">
-                        The following are the points we must keep in mind when implementing the Perceptron class (see
-                        later) to
+                        In other words, the idea behind both MCP and Perceptron is to use a reductionist approach to emulate how
+                        a single biological neuron works, which can or cannot propagate an electrical impulse.
+                    </div>
+                    <div class="paragraph ">
+                        The following are the points we must keep in mind when implementing the Perceptron class to
                         classify a binary dataset:
                         <ol>
                             <li>Initialize \(w_j\) to 0</li>
-                            <li>For each training <span class="underlined" data-tooltip>sample</span> \(x^{(i)}\):</li>
+                            <li>For each training <span class="underlined und1 dt1" data-tooltip>sample</span> \(x^{(i)}\):</li>
                             <ul>
                                 <li>Compute output \(\hat{y}\) through
                                     a dot product <code>net_input(X)</code> and the activation function
-                                    <code>predict(X)</code>
+                                    <code>predict(X)</code> (see code section)
                                 </li>
                                 <li>Update weights \(w_j = w_j + \Delta w_j\)</li>
                             </ul>
                         </ol>
-                        What we need now is a <span class="underlined" data-tooltip>learning rule</span> such as 
-                        <div class="latex">
-                            \(\Delta w_j = \eta (y^{(i)} - \hat{y}^{(i)}) x_j^{(i)} \)
-                        </div>
-                        which makes adjustements proportional to input value.
                     </div>
                 </div>
             </div>
-            <div class="note"> 
-                If \(1\) is predicted correctly there is no adjustment to \(w_j\): \[\Delta w_j = \eta(1-1)x_j^{(i)} =0\]
-                Otherwise weights are updated towards the direction of the real, correct prediction : 
-                <div class="latex">
-                    \[\Delta w_j = \eta(1-(-1))x_j^{(i)} = \eta(2)x_j^{(i)}\]
-                </div>
+            <div class="paragraph text-center">
+                What we need now is a <span class="underlined und1 dt1" data-tooltip>learning rule</span> such as 
+                    \(\Delta w_j = \eta (y^{(i)} - \hat{y}^{(i)}) x_j^{(i)} \)
+                which makes adjustements proportional to input value.
             </div>
+        </div>
+    </div>
+
+    <div class="container">
+            
             <div class="paragraph">
                 If the two classes can be separated with a linear decision boundary, weights will eventually converge to a
                 point where no more updates occur (figure).
@@ -142,37 +138,43 @@
                 forcibly by setting
                 a threshold for the number of misclassifications or a maximum number of <span class="underlined" data-tooltip>epochs</span>.
             </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-6">
-                    <img src="../imgs/neurons/iris1.png" class="img-fluid" alt="Setosa vs Versicolor">
-                </div>
-                <div class="col-md-12 col-lg-6">
-                    <img src="../imgs/neurons/irisRosenblatt.png" class="img-fluid" alt="Linear decision boundary">
-                </div>
+            <div class="paragraph text-center">
+                <img src="../imgs/neurons/irisRosenblatt.png" class="img-fluid" alt="Linear decision boundary">
             </div>
-        </section>
 
-        <hr class="fancyhr hc">
+        <hr>
         <section id="Adaline">
             <h1>Adaline</h1>
-            <div class="paragraph">
-                Now we are going up to examine another mono-level neural network called <span class="underlined" data-tooltip>Adaline</span>
-                , presented by Bernard Widrow and his PhD student <span class="underlined" data-tooltip>Tedd Hoff</span> in 1960
-                <a class="quote" href="https://www-isl.stanford.edu/~widrow/papers/t1960anadaptive.pdf" target="_blank">[3]</a>.
-                Adeline is particularly interesting because it shows the primary concept of finding
-                the minimum of a <span class="underlined" data-tooltip>cost function</span> which is fundamental to comprehend more sophisticated algorithms. 
-                The main distinction between <span class="underlined" data-tooltip>Adeline learning function</span> and Perceptron is that weights 
-                are updated starting from a linear activation function instead of a unit-step one.
+
+            <div class="row mb-2 align-items-center">
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <div class="paragraph">
+                        Now we are going up to examine another mono-level neural network called <span class="underlined" data-tooltip>Adaline</span>
+                        , presented by Bernard Widrow and his PhD student <span class="underlined" data-tooltip>Tedd Hoff</span> in 1960
+                        <a class="quote" href="https://www-isl.stanford.edu/~widrow/papers/t1960anadaptive.pdf" target="_blank">[3]</a>.
+                    </div>
+                    <div class="paragraph">
+                        Adeline is particularly interesting because it shows the primary concept of finding
+                        the minimum of a <span class="underlined" data-tooltip>cost function</span> which is fundamental to comprehend more sophisticated algorithms. 
+                    </div>
+                    <div class="paragraph">
+                        The main distinction between <span class="underlined" data-tooltip>Adeline learning function</span> and Perceptron is that weights 
+                        are updated starting from a linear activation function instead of a unit-step one.
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center mt-2 mb-2">
+                    <div class="text-center">
+                        <img src="../imgs/neurons/adaline.png" class="img-fluid" alt="Perceptron and Adaline comparison">
+                    </div>
+                </div>
             </div>
-            <div class="text-center">
-                <img src="../imgs/neurons/adaline.png" class="img-fluid" alt="Perceptron and Adaline comparison">
-            </div>
+
             <div class="paragraph">
                 In Adeline, \(\phi(z) = z \) is computed to tune the weights, 
                 while the final classification is predicted by a quantizer (similar to the previous seen unit-step function) as shown in the figure.  
                 Thanks to this improvement we can exploit the continuous output to tune our model instead of seeing the world in black or white
             </div>
-            <hr class="fancyhr hc3">
+
             <div class="paragraph">
                 One of the most considerable ingredients in supervised ML consists of defining a target function and optimise it during the learning phase. 
                 <br>
@@ -180,36 +182,48 @@
                 <div class="latex">
                     \[J(w) = \frac{1}{2} \sum_{i}(y^{(i)} - \phi(z^{(i)}) )^2 \]
                 </div>
-                <div class="note"> 
-                    \(\frac{1}{2}\) is added only to make derivative easier to compute later.
-                    <br>
-                    The advantage of this function is that it is continuous, differentiable and it is convex,
-                     thus, gradient descent method can be used to find which weights minimise the function.
-                </div><br>
+            </div>
+
+            <div class="note"> 
+                \(\frac{1}{2}\) is added only to make derivative easier to compute later.
+                <br>
+                The advantage of this function is that it is continuous, differentiable and it is convex,
+                 thus, gradient descent method can be used to find which weights minimise the function.
+            </div>
+
+            <div class="paragraph">                        
                 Thanks to a technique called gradient descent 
                 (more <a href="https://www.ibm.com/cloud/learn/gradient-descent#:~:text=Gradient%20descent%20is%20an%20optimization,each%20iteration%20of%20parameter%20updates">here</a>) 
-                it’s possible to update our weights by moving away from the gradient \(\triangledown J(w) \).
-            </div>
-            <div class="text-center">
-                <img src="../imgs/neurons/gradient-descent.png" class="img-fluid" alt="Gradient descent">
-            </div>
-            <div class="paragraph">
-                Let's do the math, yay! So, our cost function is generally defined as \(w = w + \Delta w\) and we want to "move away" from the gradient...
-                <div class="latex">
-                    \[\Delta w = -\eta \triangledown J(w) \]
-                    \[\frac{\partial J}{\partial w_j} = \frac{\partial}{\partial w_j} \frac{1}{2} \sum_i (y^{(i)} - \phi(z^{(i)}) )^2 \]
-                    \[=\frac{1}{2}\sum_i 2(y^{(i)} - \phi(z^{(i)}) ) \frac{\partial}{\partial w_j} (y^{(i)} - \phi(z^{(i)}) \]
-                    \[=\sum_i (y^{(i)} - \phi(z^{(i)}) ) \frac{\partial}{\partial w_j} ( y^{(i)} - \sum_i (w_j^{(i)} x_j^{(i)}) ) \]
-                    \[=\sum_i (y^{(i)} - \phi(z^{(i)}) ) (-x_j^{(i)}) \]
-                    \[\triangledown J(w) = \frac{\partial J}{\partial w_j} = -\sum_i(y^{(i)} - \phi(z^{(i)})) x_j^{(i)} \]
+                it’s possible to update our weights by moving away from the gradient \(\triangledown J(w) \).</div>
+
+            <div class="row mb-2 align-items-center">
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <div class="paragraph">
+                        <div class="latex">
+                            \[\Delta w = -\eta \triangledown J(w) \]
+                            \[\frac{\partial J}{\partial w_j} = \frac{\partial}{\partial w_j} \frac{1}{2} \sum_i (y^{(i)} - \phi(z^{(i)}) )^2 \]
+                            \[=\frac{1}{2}\sum_i 2(y^{(i)} - \phi(z^{(i)}) ) \frac{\partial}{\partial w_j} (y^{(i)} - \phi(z^{(i)}) \]
+                            \[=\sum_i (y^{(i)} - \phi(z^{(i)}) ) \frac{\partial}{\partial w_j} ( y^{(i)} - \sum_i (w_j^{(i)} x_j^{(i)}) ) \]
+                            \[=\sum_i (y^{(i)} - \phi(z^{(i)}) ) (-x_j^{(i)}) \]
+                            \[\triangledown J(w) = \frac{\partial J}{\partial w_j} = -\sum_i(y^{(i)} - \phi(z^{(i)})) x_j^{(i)} \]
+                        </div>
+                    </div>
                 </div>
+                <div class="col-lg-6 text-center mt-2 mb-2">
+                    <div class="text-center">
+                        <img src="../imgs/neurons/gradient-descent.png" class="img-fluid" alt="Gradient descent">
+                    </div>
+                </div>
+            </div>
+
+            <div class="paragraph">
                 This may look similar to Perceptron learning rule but keep in mind that \(\phi(z)\) is a real number and not just a class label.
                 Furthermore, weights are updated considering the entire training set instead of incrementing gradually 
                 <span class="underlined" data-tooltip>after each sample</span>.
             </div>
         </section>
 
-        <hr class="fancyhr hc1">
+        <hr>
         <section id="Code">
             <h1>Implementations</h1>
             <h2>Perceptron</h2>
@@ -300,7 +314,6 @@
                         </code>
                     </pre>
 
-                    <br>
                     <div class="note" style="max-width: 800px;">
                         Gradient descent could be computationally expensive 
                         because we 
@@ -318,7 +331,7 @@
             </div>
         </section>
 
-        <hr class="fancyhr hc2">
+        <hr >
         <section class="mb-5" id="Experiments">
             <h1>Experiments</h1>
 
@@ -376,14 +389,14 @@
                 In our case, iris Versicolor petal length seems to be way higher than Sentosa's so it could “dominate” the update cycle.
             </div>
 
-            <div class="text-center">
+            <div class="text-center paragraph lparag">
                 <img class="img-fluid" src="../imgs/neurons/standardization.png" alt="Iris plot">
             </div>
             <div class="paragraph">
                 Also, Thanks to <code>errors_</code> we can draw a convergence plot to see how fast our models converged to 0.
                 And tadan!
             </div>
-            <div class="text-center">
+            <div class="text-center paragraph lparag">
                 <img class="img-fluid" src="../imgs/neurons/final_plot.png" alt="Iris plot">
             </div>
             <div class="paragraph">

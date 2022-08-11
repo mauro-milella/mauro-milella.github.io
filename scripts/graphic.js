@@ -11,7 +11,7 @@ function hr_scroll() {
     direction = (scroll_top > direction_i) ? 'up' : 'down';
     direction_i = scroll_top;
 
-    $('hr').each(function() {
+    $('.fancyhr').each(function() {
         var $this = $(this);
         from_top = $this.offset().top - scroll_top - 100;
 

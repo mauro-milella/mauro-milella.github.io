@@ -43,51 +43,55 @@
                     \[\text{logit}(p) = log \frac{p}{(1-p)}\]
                 </div>
             </div>
-            <div class="paragraph">
-                <div class="row">
-                    <div class="col-lg-6 col-md-12 p-3">
+
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12 p-3">
+                    <div class="paragraph">
                         What we would want to discover is \(P(y=1 | x;w)\) which is
                         the conditional probability of a chosen sample to belong to class 1, given it's attributes \(x\) 
                         parametrized by weigths \(w\).
-        
-                        <div class="latex">
-                            \[ \text{logit}(P(y=1|x;w)) = \sum^{n}_{i=0}w_mx_m = w^Tx = z \]
-                            \[ \text{logit}(P(y=1|x;w))^{-1} = \phi(z) = \frac{1}{1+e^{-z}} \]
-                        </div>
-                        Where \(\phi{z}\) is said to be the <span class="underlined" data-tooltip>sigmoid</span> function (plotted) which takes as input value some real value
+                    </div>
+    
+                    <div class="latex">
+                        \[ \text{logit}(P(y=1|x;w)) = \sum^{n}_{i=0}w_mx_m = w^Tx = z \]
+                        \[ \text{logit}(P(y=1|x;w))^{-1} = \phi(z) = \frac{1}{1+e^{-z}} \]
+                    </div>
+
+                    <div class="paragraph">
+                        Where \(\phi(z)\) is said to be the <span class="underlined" data-tooltip>sigmoid</span> function (plotted) which takes as input value some real value
                         mapping it to \([0, 1]\) and intersecting \(y\)-axis when \(z\) is \(0\).
                     </div>
+                </div>
 
-                    <div class="col-lg-6 col-md-12">
-                        <img src="../imgs/logistic_regression/sigmoid.png" class="img-fluid" alt="Sigmoid">
-                    </div>
+                <div class="col-lg-6 col-md-12">
+                    <img src="../imgs/logistic_regression/sigmoid.png" class="img-fluid" alt="Sigmoid">
                 </div>
             </div>
+            
             <div class="paragraph">
                 Some predicted probability can be converted into a binary value by a unit-step function.
-                <div class="latex">
-                    \[ \hat{y} =
-                    \left\{\begin{array}{@{}l@{}}
-                    1 & \textrm{if $z=0$}\\
-                    -log(1-\phi(z)) & \textrm{otherwise}
-                    \end{array}\right.\, \]
-                </div>
-                <hr class="fancyhr hc2">
-                What we want to do now is to find a method to generate the "optimal sigmoid" to fit our data.
-                One step at a time: we want to tune our weights to increase our odds as much as possible. 
-                Let’s find a cost function and then maximize it.
-
-                <div class="latex">
-                    \[L(w) = P(y|x;w) = \prod^{n}_{i=1}P(y^{(i)} | x^{(i)};w) = \prod^{n}_{i=1} (\phi(z^{(i)}))^{y^{(i)}} (1-\phi(z^{(i)}))^{1-y^{(i)}} \]
-                    \[l(w) = log(L(w)) = \sum^{n}_{i=1} y^{(i)}(\phi(z^{(i)})) + (1-y^{(i)})(1-\phi(z^{(i)}))  \]
-                </div>
-                
-                Or we could minimize the following.
-                <div class="latex">
-                    \[J(w) = \sum^{n}_{i=1} -y^{(i)}(\phi(z^{(i)})) - (1-y^{(i)})(1-\phi(z^{(i)}))  \]
-                </div>
             </div>
-            <div class="note">
+
+            <div class="latex">
+                \[ \hat{y} =
+                \left\{\begin{array}{@{}l@{}}
+                1 & \textrm{if $z=0$}\\
+                0 & \textrm{otherwise}
+                \end{array}\right.\, \]
+            </div>
+
+            <div class="paragraph">
+                What we want to do now is to find a method to generate the "optimal sigmoid" to fit our data.
+                Let’s find a cost function: we can both maximize \(l(w)\) or minimize \(J(w)\).
+            </div>
+
+            <div class="latex">
+                \[L(w) = P(y|x;w) = \prod^{n}_{i=1}P(y^{(i)} | x^{(i)};w) = \prod^{n}_{i=1} (\phi(z^{(i)}))^{y^{(i)}} (1-\phi(z^{(i)}))^{1-y^{(i)}} \]
+                \[l(w) = log(L(w)) = \sum^{n}_{i=1} y^{(i)}(\phi(z^{(i)})) + (1-y^{(i)})(1-\phi(z^{(i)}))  \]
+                \[J(w) = \sum^{n}_{i=1} -y^{(i)}(\phi(z^{(i)})) - (1-y^{(i)})(1-\phi(z^{(i)}))  \]
+            </div>
+            
+            <div class="note paragraph">
                 By applying \(log\) function we reduce the probabilities to have a numerical underflow
                 <br> This is also a smart way to keep our mental stability while derivating.
             </div>
@@ -106,23 +110,73 @@
             <div class="text-center">
                 <img src="../imgs/logistic_regression/weights_tuning.png" class="img-fluid" alt="Cost function behaviour">
             </div>
+
         </section>
     
-        <hr class="fancyhr hc">
+        <hr>
 
         <section id="Python">
             <h1>Code</h1>
             <div class="paragraph">
                 If I were to implement Logistic Regression on my own i would simply substitute the 
-                cost function \(J\) into Adaline class (see <a href="./perceptron.html#Adaline">Adaline</a>).
+                cost function \(J\) into Adaline class (see <a href="./perceptron.html#Adaline">here</a>).
                 BUT! Of course an highly optimized version of Logistic Regression is already implemented for us.
+                What we are about to do is study the relation between breast-cancer mean radius and it's danger.
+                As you can read in the documentation the attributes are various, such as "number of concave portions of the contour", but now
+                we only focus on one feature. Every binary classifier, LogisticRegression included, could be extended using 
+                <span class="underlined und1 dt1" data-tooltip>OvR</span>. 
+            </div>
 
+            <div class="paragraph">
                 <pre>
                     <code class="language-python">
+                        import pandas as pd
+                        import matplotlib.pylab as plt
+                        import numpy as np
 
+                        from sklearn.linear_model import LogisticRegression
+                        from sklearn.model_selection import train_test_split # see
+                        from sklearn.datasets import load_breast_cancer
+
+                        cancer = load_breast_cancer()
+                        df = pd.DataFrame(data=cancer.data, columns=cancer.feature_names)[['mean radius']]
+                        df['target'] = cancer.target
+
+                        X_train, X_test, y_train, y_test = train_test_split(df[['mean radius']].values, df['target'].values, test_size=0.3, random_state=42)
+                        
+                        lr = LogisticRegression(C=1000)
+                        lr.fit(X_train, y_train)
                     </code>
                 </pre>
             </div>
+
+            <div class="paragraph">
+                The model is now trained. Since we divided the initial dataset in a train and a test set,
+                we can use the latter to better visualize what the theory says.
+            </div>
+
+            <div class="paragraph">
+                <pre>
+                    <code class="language-python">
+                        # Does predicted value match the corresponding target? Oh, then draw a green circle please!
+                        for i in range(len(X_test)):
+                            plt.scatter(X_test[i], y_test[i], linewidths=0, color=('green' if lr.predict([X_test[i]]) == y_test[i] else 'red') )
+
+                        # Estimating a probability for each x in our domain should give a sigmoid
+                        probs = []
+                        rads = np.arange(min(X_test), max(X_test), 0.01)
+                        for r in rads:
+                            p_loss, p_win = lr.predict_proba([[r]])[0]
+                            probs.append(p_win)
+                        plt.plot(rads, probs)
+                    </code>
+                </pre>
+            </div>
+
+            <div class="paragraph text-center">
+                <img src="../imgs/logistic_regression/prediction.png" class="img-fluid" alt="Cost function behaviour">
+            </div>
+
         </section>
     </div>
 
