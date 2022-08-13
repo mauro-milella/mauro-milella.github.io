@@ -21,18 +21,22 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="paragraph" style="text-align: right;">
-            <h3 style="font-family: var(--funny-font);">On this journey:</h3>
-
-            <a href="#LogisticRegression">Logistic Regression</a><br>
-            <a href="#Code">Python please!</a><br>
-            <a href="#Regularization">Regularization</a><br>
-            
-            <br><br>
-            Or go <a href="../index.html">back to homepage</a>  
+    <div class="pt-4 pb-4" style="background-color: var(--shock-banana);">
+        <div class="container">
+            <div class="paragraph" style="text-align: right;">
+                <h3>On this journey:</h3>
+                
+                <a href="#LogisticRegression">Logistic Regression</a><br>
+                <a href="#Code">Python please!</a><br>
+                <a href="#Regularization">Regularization</a><br>
+                
+                <br><br>
+                Or go <a href="../index.html">back to homepage</a>  
+            </div>
         </div>
-        <hr class="fancyhr hc3 hcmax">
+    </div>
+
+    <div class="container">
 
         <section id="LogisticRegression">
             <h1>Logistic Regression</h1>
@@ -175,7 +179,7 @@
                 </pre>
             </div>
 
-            <div text-center">
+            <div class="text-center">
                 <img src="../imgs/logistic_regression/prediction.png" class="img-fluid" alt="Cost function behaviour">
             </div>
 
@@ -243,14 +247,19 @@
         
             <div class="latex">
                 \[ J(w) = \left[ \sum^{n}_{i=1} -y^{(i)}\left(\phi(z^{(i)})\right) - (1-y^{(i)})\left(1-\phi(z^{(i)})\right) \right] + \frac{\lambda}{2} \sum^{m}_{j=1}(w_j^2) \] 
+                \[ \lambda = \frac{1}{C} \]
             </div>
-            
+
+            <div class="paragraph">
+                This topic is so vast that I am not going deep right now as more knowledge may be needed.
+            </div>
+
         </section>
     </div>
 
     <footer class="text-left bg-warning">
         <h1 class="mb-5">Resources</h1>
-
+        <h5>Nothing at the moment, I guess this is a todo!</h5>
     </footer>
 </body>
 </html>
