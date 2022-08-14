@@ -32,6 +32,7 @@ body {
 
     --dark-green: #1B998B;
     --dark-yellow: rgb(255, 202, 58);
+    --dark-grey: rgb(228, 228, 228);
 
     --pastel-red: #FB6376;
     --pastel-pink: #FFDCCC;
@@ -67,6 +68,11 @@ body {
     z-index: -1;
 }
 
+.container {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
 footer {
     padding-left: 15%;
     padding-right: 15%;
@@ -78,8 +84,8 @@ footer {
 .paragraph {
     text-align: left;
     font-size: 1.1em;
-    margin-top: 1em;
-    margin-bottom: 1em;
+    margin-top: 2em;
+    margin-bottom: 2em;
 }
 
 .lparag {
@@ -128,6 +134,7 @@ a {
 
     color: var(--txt-color);
     text-decoration: none;
+    font-weight: bold;
 }
 
 .underlined:hover {
