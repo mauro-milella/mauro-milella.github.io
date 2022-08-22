@@ -64,8 +64,12 @@ const glossary = {
     "variance" : "error from sensitivity to small fluctuations in the training set",
     "noise" : "meaningless information",
     "multicollinearity" : "when one predictor variable can be linearly predicted from the others with some degree of accuracy",
-    
-
+    "information gain" : "entropy reduction caused from a dataset split",
+    "optimal decision tree" : "ID3, C4.5/J48, CART...",
+    "impurity" : "measure of the homogeneity of the labels in a node. The higher the impurity, the more homogeneous the labels are",
+    "first decision tree" : "AID : automatic interaction detection",
+    "thaid" : "Theta Automatic Interaction Detection",
+    "cart" : "type of classification algorithm that is required to build a decision tree, on the basis of Gini's impurity",
 };
 
 class Tooltip {

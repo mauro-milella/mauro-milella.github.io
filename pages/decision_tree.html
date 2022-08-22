@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Resources to write Latex-->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Libraries and other scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../scripts/Tooltip.js" defer></script>
+    <script src="../scripts/graphic.js" defer></script>
+    <script src="../scripts/prism.js" defer></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="../style/style.css" />
+    <link rel="stylesheet" href="../style/prism.css" />
+    <title>M.Milella</title>
+</head>
+<body>
+
+    <!-- Chapters -->
+    <div class="pt-4 pb-4" style="background-color: var(--shock-red);">
+        <div class="container">
+            <div class="paragraph" style="text-align: right;">
+                <h3>On this journey:</h3>
+                
+                <a href="#DecisionTrees">Decision trees</a><br>
+                <a href="#ImpurityMeasures">Impurity measures</a><br>
+                <a href="#Code">Talk is cheap, show me the code!</a><br>
+                <a href="#RandomForests">Random Forests</a><br>
+                
+                <br><br>
+                Or go <a href="../index.html">back to homepage</a>  
+            </div>
+        </div>
+    </div>
+
+    <!-- Main part -->
+    <div class="container">
+        <section id="DecisionTrees">
+        <h1>Decision Trees</h1>
+        <div class="paragraph">
+            A Decision Tree is a directed graph where nodes corresponds to some tests on attributes,
+            a branch represents an outcome of the test and a leaf corresponds to a class label.
+        </div>
+
+        <div class="paragraph">
+            In 1963 Morgan and Sonquist published the 
+            <span class="underlined und1 dt1" data-tooltip>first decision tree</span> <span class="quote">[1]</span>.
+            The methods developed since then were used to model the human concept of learning in psychology until,
+            in 1972, researches discovered how this was useful for programming and the first classification tree appeared in the 
+            <span class="underlined und1 dt1" data-tooltip>THAID</span> 
+            project <span class="quote">[2]</span> by Messenger and Mandell.
+        </div>
+
+
+        <div class="row mb-2 align-items-center">
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <div class="paragraph">
+                    Decision trees are of two main types, which goes under the umbrella term of 
+                    <span class="underlined und1 dt1" data-tooltip>CART</span> 
+                    : classification trees (a discrete class is predicted) and regression trees
+                    (predicted outcome is a real number).
+                    <br><br>
+                    Also, a Decision Tree consist of:
+                    <ul>
+                        <li>Non-leaf nodes containing a certain condition to verify</li>
+                        <li>Branches, or the "direction" to follow in relation to a condition</li>
+                        <li>Leaf nodes, or outcomes. Samples associated with a leaf node belong to the same class</li>
+                    </ul>
+                </div>
+                <div class="paragraph">
+                    Certainly, one remarkable advantage of this model is its interpretability but we have to keep in mind that it might be too simple and unstable, meaning that a small change in the data can lead to a large change in the structure of the
+                    <span class="underlined und1 dt1" data-tooltip>optimal decision tree</span>. 
+                    Also, if the tree contains too many nodes it might be overfitted: a solution is to prune the model by setting a maximum depth.
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-2 mb-2" >
+                <img src="../imgs/decision_trees/Decision-Tree-elements-2.webp" class="img-fluid" alt="Elements of a decision tree">
+            </div>
+        </div>
+
+        <div class="row mb-2 align-items-center flex-wrap-reverse">
+            <div class="col-sm-12 col-md-12 col-lg-6">
+                <div class="latex">
+                    \[ IG(D_{p},f) = I(D_{p}) - \sum^{m}_{j=1} \frac{N_{j}}{N_{p}}I(D_{j}) \]
+                    \[ \text{Binary tree: } \, IG(D_{p},a) = I(D_{p}) - \frac{N_{\text{left}}}{N_p} I(D_{\text{left}}) - \frac{N_{\text{right}}}{N_p} I(D_{\text{right}}) \]
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-2 mb-2" >
+                <div class="paragraph">
+                    To split out the dataset considering the most informative attribute we must define a target function to optimize the learning process. 
+                </div>
+                <div class="paragraph">
+                    Here, \(f\) is the "leading" attribute on which we want to split the dataset on, \(D_{p}\) and \(D_{j}\) are parent dataset
+                    and j-th children dataset, finally \(N_{p}\) and \(N_{j}\) are the number of samples in each of those dataset.
+                    Essentially,
+                    <span class="underlined und1 dt1" data-tooltip>information gain</span> 
+                     is given by the 
+                    <span class="underlined und1 dt1" data-tooltip>impurity</span>. 
+                    difference between a parent and his children.
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            <div class="paragraph">
+                    For simplicity and in order to reduce the combinatorial research space the vast majority of machine learning 
+                    libraries (such as <code>scikit-learn</code>) implements binary decision trees, hence each parent has two children
+                    as shown in the latter formula.
+            </div>
+        </div>  
+        </section>
+        <hr>
+
+        <section id="ImpurityMeasures">
+        <h1>Impurity measures</h1>
+            <div class="paragraph">
+                The most common impurity measures are <b>Entropy</b> \(I_H\),  <b>Gini Impurity</b> \(I_G\) and <b>Classification error</b> \(I_E\).
+            </div>
+            <h2>Entropy</h2>
+            <div class="latex">
+                \[I_H(t) = -\sum^c_{i=1} p(i \, | \, n) \, log_2(p(i \, | \,n))  \]
+            </div>
+            <div class="paragraph">
+                Here \( p(i|n)\) is the proportion of samples whose belongs to class \(c\) in a given node \(n\).
+                Entropy is 0 if all the samples belong to the same class and it's 1 if the samples are distributed uniformely.
+                For example given a binary class then:
+            </div>
+
+            <div class="latex">
+                \[ I_H =
+                \left\{\begin{array}{@{}l@{}}
+                0 & \textrm{if $p(i=0|n) = 0$ or $p(i=1|n)=1$}\\
+                1 & \textrm{if $p(i=0|n) = \frac{1}{2}$ and $p(i=0|n)=\frac{1}{2}  $}
+                \end{array}\right.\, \]
+            </div>
+
+            <div class="paragraph">
+                Thus it’s correct to assert that the Entropy criterion tries to maximize the reciprocal information inside a tree.
+            </div>
+
+            <h2>Gini Impurity</h2>
+            <div class="paragraph">
+                Gini Impurity is a criterion to minimise misclassifications probabilities; like Entropy it is maximum if classes are perfectly mixed.
+            </div>
+            <div class="latex">
+                \[I_G(t) = 1 - \sum^c_{i=1} p(i \, | n )(1-p(i \, | n)) = 1 - \sum^c_{i=1} p(i \, | n)^2  \]
+            </div>
+
+            <h2>Classification Error</h2>
+            <div class="paragraph">
+                This criterion is useful to prune the model, but it's not recommended to let the decision tree grow due to its simplicity.
+            </div>
+            <div class="latex">
+                \[I_E = 1 - \text{max}\{p(i \, | n)\} \]
+            </div>
+
+            <div class="paragraph">As we can see \(I_G\) it's a compromise between \(I_E\) (which might is too coarse) 
+                and \(I_H\) (scaled in the plot)
+            </div>
+
+            <div class="text-center">
+                <img src="../imgs/decision_trees/impurity_measures.png" class="img-fluid" alt="Impurity measures comparison">
+            </div>
+
+        </section>
+        <hr>
+
+        <section id="Code">
+            <h1>Code</h1>
+            <div class="paragraph">
+                The following code should be straightforward as scikit-learn already implements everything for us:
+                we train a DecisionTreeClassifier on the iris dataset, with a maximum depth of 3 and entropy as our impurity index.
+                To highlight decision boundaries more clearly I also wrote an utility function which 
+                also points out whether a sample was seen during the training phase or is new 
+                (since it's a bit long, I left it at the end of the section).
+            </div>
+
+            <pre>
+                <code class="language-python">
+                    import pandas as pd
+                    import matplotlib.pyplot as plt
+                    import numpy as np
+                    from sklearn.datasets import load_iris
+                    from sklearn.model_selection import train_test_split
+                    from sklearn.tree import DecisionTreeClassifier
+
+                    iris = load_iris()
+                    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+                    df["target"] = iris.target  # setosa: 0, versicolor: 1, virginica: 2
+
+                    print(df.head())
+                    X = df.drop(["sepal length (cm)", "sepal width (cm)", "target"], axis=1).values
+                    y = df.target.values
+
+                    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+                    X_combined = np.vstack((X_train, X_test))
+                    y_combined = np.hstack((y_train, y_test))
+
+                    tree = DecisionTreeClassifier(criterion='entropy', max_depth=3, random_state=0)
+                    tree.fit(X_train, y_train)
+
+                    plot_decision_regions(X_combined, y_combined, classifier=tree, labels=['setosa', 'versicolor', 'virginica'], test_idx=range(105, 150))
+                    plt.xlabel('petal length [cm]')
+                    plt.ylabel('petal width [cm]')
+                    plt.legend(loc='upper left')
+                    plt.show()
+                </code>
+            </pre>
+
+            <div class="text-center">
+                <img src="../imgs/decision_trees/iris_decision_tree.png" class="img-fluid" alt="Elements of a decision tree">
+            </div>
+
+            <div class="paragraph">
+                It's also possible to export the tree as a .dot file thanks to GraphViz, and then convert it to a png
+                by executing  <code> dot -Tpng tree.dot -o tree.png</code>  into the terminal.
+            </div>
+            <pre>
+                <code class="language-python">
+                    from sklearn.tree import export_graphviz
+
+                    export_graphviz(tree, out_file="tree.dot", feature_names=['petal length', 'petal width'])
+                </code>
+            </pre>
+
+            <div class="text-center">
+                <img src="../imgs/decision_trees/tree.png" class="img-fluid" alt="Elements of a decision tree">
+            </div>
+            <br>
+
+            <pre>
+                <code class="language-python">
+                    from matplotlib.colors import ListedColormap
+
+                    def plot_decision_regions(X, y, classifier, labels, test_idx=None, resolution=0.02):
+                    # setup marker generator and color map
+                    markers = ('s', 'x', 'o', '^', 'v')
+                    colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
+                    cmap = ListedColormap(colors[:len(np.unique(y))])
+                
+                    # plot the decision surface
+                    x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+                    x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+                    xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution), np.arange(x2_min, x2_max, resolution))
+                
+                    Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
+                    Z = Z.reshape(xx1.shape)
+                
+                    plt.contourf(xx1, xx2, Z, alpha=0.4, cmap=cmap)
+                    plt.xlim(xx1.min(), xx1.max())
+                    plt.ylim(xx2.min(), xx2.max())
+                
+                    # plot class samples
+                    for idx, cl in enumerate(np.unique(y)):
+                        plt.scatter(x=X[y == cl, 0], y=X[y == cl, 1], alpha=0.8, color=cmap(idx), marker=markers[idx], label=labels[cl])
+                
+                    # highlight test samples
+                    if test_idx:
+                        X_test, y_test = X[test_idx, :], y[test_idx]
+                        plt.scatter(X_test[:, 0], X_test[:, 1], facecolors='none', edgecolors='k', label='test set')
+                </code>
+            </pre>
+        </section>
+        <hr>
+
+        <section id="RandomForests">
+            <h1>Random Forests</h1>
+
+            <div class="paragraph">
+                Random forests are a combination of tree predictors such that each tree depends on the values of a random 
+                vector sampled independently and with the same distribution for all trees in the forest.
+                The generalization error for forests converges to a limit as the number of trees in the forest becomes large.
+                In other words the idea behind this algorithm is that
+                a large number of relatively uncorrelated models (trees) operating as a committee will outperform any of the individual constituent models.
+            </div>
+
+            <div class="paragraph">But how does random forest ensure that the behavior of 
+                each individual tree is not too correlated with the behavior of any of 
+                the other trees in the model? Two method exists.
+            </div>
+
+            <h2>Bagging</h2>
+            <div class="paragraph">
+                I said that Decision trees are very sensitive in the training phase, 
+                meaning that a small change in the input dataset can lead to a large change in the resulting model.
+                Random forests take advantage of this by allowing each individual tree to randomly sample from the dataset.
+            </div>
+            <div class="paragraph">
+                Notice that with bagging we are not subsetting the training data
+                into smaller chunks and training each tree on a different chunk, as dataset is sampled
+                with replacement.
+            </div>
+
+            <h2>Feature Randomness</h2>
+            <div class="paragraph">
+                Each tree in a random forest can pick only from a random subset of features. 
+                This forces even more variation amongst the trees in the model and ultimately 
+                results in lower correlation across trees and more diversification. In other words
+                not only we end up with trees that are trained on different sets of data (bagging) but 
+                also use different features to make decisions.
+            </div>
+
+            <div class="paragraph">
+                Using the same iris dataset as before we can choose 
+                the number of tree in a RandomForestClassifier and then print its accuracy (score);
+                in this toy example score should often be around \(0.9\bar3\).
+            </div>
+
+            <pre>
+                <code class="language-python">
+                    from sklearn.ensemble import RandomForestClassifier
+
+                    model = RandomForestClassifier(n_estimators=40)
+                    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis='columns'), df.target, test_size=0.2)
+                    model.fit(X_train, y_train)
+                    y_predict = model.predict(X_test)
+                    print("Score: ", model.score(X_test, y_test))
+                </code>
+            </pre>
+
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-left bg-warning">
+        <h1 class="mb-5">Resources</h1>
+
+        <a class="bibliography" href="http://cda.psych.uiuc.edu/statistical_learning_course/morgan_sonquist.pdf"
+            target="_blank">[1] James N. Morgan, John A. Sonquist (1963). Problems in the Analysis of Survey Data, and a Proposal
+            </a>
+            <br><br>
+            <a class="bibliography" href="https://www.jstor.org/stable/2284634"
+            target="_blank">[2] Messenger, R. & Mandell (1972). A modal search technique for predictive nominal scale multivariate analysis.
+            </a>
+
+    </footer>
+</body>
+</html>
