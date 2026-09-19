@@ -4,7 +4,7 @@ const customCommands = {
         desc: 'Show this help menu',
         fn: (args, sys) => {
             let html = `<h1>Available Commands</h1>`;
-            html += `<p>Type <code>:command</code> to execute.</p>`;
+            html += `<p>Type <code>:command_name</code> to execute.</p>`;
             html += `<table>`;
 
             for (const [key, cmd] of Object.entries(customCommands)) {
@@ -15,7 +15,7 @@ const customCommands = {
             }
 
             html += `</table>`;
-            html += `<br><p>You can also type filenames like <code>:home</code> or <code>:about</code>.</p>`;
+            html += `<br><p>You can also type filenames like <code>:about</code>.</p>`;
 
             sys.print(html);
         }

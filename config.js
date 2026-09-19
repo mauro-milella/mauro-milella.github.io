@@ -1,9 +1,9 @@
 const config = {
     title: 'Mauro Milella',
-    startPage: 'home',
+    startPage: 'about',
 
     files: [
-        'home',
+        // 'home',
         'about',
         'archive'
     ],
@@ -23,7 +23,7 @@ const config = {
         subtitle: 'Welcome to my neovim-themed personal website',
         subtitleColor: 'var(--comment)',
         actions: [
-            { key: 'h', icon: 'fas fa-home',     label: 'Home',  cmd: 'home' },
+            // { key: 'h', icon: 'fas fa-home',     label: 'Home',  cmd: 'home' },
             { key: 'a', icon: 'fas fa-user',     label: 'About', cmd: 'about' },
             { key: '?', icon: 'fas fa-terminal', label: 'Help',  cmd: ':help' },
             // { key: 's', icon: 'fas fa-database', label: 'SQL',   cmd: ':sql' },
