@@ -510,6 +510,17 @@ function hideAlpha() {
 
 window.showAlpha = showAlpha;
 
+function goHome() {
+    state.openBuffers = [];
+    state.currentFile = null;
+    el.output.innerHTML = '';
+    el.statusFile.innerText = '[No Name]';
+    updateUI();
+    showAlpha();
+}
+
+window.goHome = goHome;
+
 function initMouseTrackerBar() {
     if (document.getElementById('mouse-track-bar')) return;
 

@@ -14,7 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css?v=1771704484">
+    <link rel="stylesheet" href="style.css">
 
     <!-- Syntax Highlighting (Prism) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
@@ -91,6 +91,10 @@
                 <div class="tree-header" style="margin-top:auto; border-top: none; padding-top:10px;">Links</div>
                 <div id="link-list-container"></div>
                 <div style="height: 10px;"></div>
+
+                <div class="tree-header" style="border-top: 1px solid var(--border); padding-top:10px;">Navigation</div>
+                <div class="file-node" onclick="goHome()"><i class="fas fa-home" style="color: var(--purple)"></i> Home</div>
+                <div style="height: 10px;"></div>
             </div>
 
             <!-- Editor -->
@@ -142,9 +146,9 @@
     <div class="mobile-toggle" onclick="toggleTree()"><i class="fas fa-bars"></i></div>
 
     <!-- Scripts (Load Order Matters: config → commands → engine) -->
-    <script src="config.js?v=1771704484"></script>
-    <script src="commands.js?v=1771704484"></script>
-    <script src="engine.js?v=1771704484"></script>
+    <script src="config.js"></script>
+    <script src="commands.js"></script>
+    <script src="engine.js"></script>
 
 </body>
 
