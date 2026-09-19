@@ -2,7 +2,7 @@ if (typeof config === 'undefined') throw new Error("config.js missing");
 if (typeof customCommands === 'undefined') console.warn("commands.js missing");
 
 const THEMES = config.themes || ['tokyo', 'gruvbox', 'dracula', 'cyberpunk', 'latte'];
-const COLORS = ['var(--blue)', 'var(--purple)', 'var(--yellow)', 'var(--green)', 'var(--red)', 'var(--cyan)', 'var(--orange)', 'var(--magenta)'];
+const COLORS = ['var(--green)', 'var(--blue)', 'var(--yellow)', 'var(--purple)', 'var(--red)', 'var(--cyan)', 'var(--orange)', 'var(--magenta)'];
 const state = { currentFile: null, openBuffers: [], mode: 'NORMAL' };
 
 window.THEMES = THEMES;
@@ -175,11 +175,11 @@ function startAsciiDonut(container) {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    const W = 72, H = 22;
+    const W = 90, H = 28;
     const chars = ' .,-~:;=!*#$@';
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const cssW = 660;
-    const cssH = 300;
+    const cssW = 900;
+    const cssH = 400;
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
@@ -255,13 +255,13 @@ function startAsciiStarfield(container) {
     if (!ctx) return;
 
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const cssW = 660, cssH = 300;
+    const cssW = 900, cssH = 450;
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
     const W = canvas.width, H = canvas.height;
     const cx = W / 2, cy = H / 2;
-    const numStars = 200;
+    const numStars = 600;
     const stars = [];
     const starChars = '.+*@#°';
 
@@ -323,13 +323,13 @@ function startAsciiCube(container) {
     if (!ctx) return;
 
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const cssW = 660, cssH = 300;
+    const cssW = 900, cssH = 450;
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
     const W = canvas.width, H = canvas.height;
     const cx = W / 2, cy = H / 2;
-    const size = Math.min(W, H) * 0.28;
+    const size = Math.min(W, H) * 0.35;
 
     const vertices = [
         [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
