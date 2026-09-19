@@ -1,9 +1,9 @@
 [
   {
     "slug": "2026-01-15-getting-started",
-    "title": "Getting Started with neovim-web",
-    "date": "2026-01-15",
-    "description": "Set up your Neovim-themed website in 5 minutes with zero dependencies.",
+    "title": "Dummy title",
+    "date": "2026-09-20",
+    "description": "Dummy descripton",
     "image": "images/dodecahedron.png",
     "tags": [
       "tutorial",
