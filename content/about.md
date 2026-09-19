@@ -6,7 +6,7 @@ I am a PhD student in Mathematics at the University of Ferrara fascinated by,
 among the many things, the intersection of formal verification and (machine
 learning) models trained on language. 
 
-I am part of the [Applied Computational Logic and Artificial Intelligence Lab],
+I am part of the [Applied Computational Logic and Artificial Intelligence Lab](https://aclai.unife.it/en/),
 where I work everyday with a bunch of curious and inspiring guys.
 
 You can read about my research somewhere else in this website.
