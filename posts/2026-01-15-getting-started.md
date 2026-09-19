@@ -2,7 +2,7 @@
 title: Getting Started with neovim-web
 date: 2026-01-15
 description: Set up your Neovim-themed website in 5 minutes with zero dependencies.
-image: images/example-blog-header.jpg
+image: images/dodecahedron.png
 tags:
   - tutorial
   - getting-started
