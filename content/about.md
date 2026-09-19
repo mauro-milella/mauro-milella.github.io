@@ -1,78 +1,38 @@
-# :fas fa-circle-info: About neovim-web
+## :fas fa-terminal: mauro-milella ~ > cat about.md
 
-**neovim-web** turns markdown files into a Neovim-themed website. No build step, no npm, no framework. Just edit and deploy.
+Hi : )
 
----
+I am a PhD student in Mathematics at the University of Ferrara fascinated by, 
+among the many things, the intersection of formal verification and (machine
+learning) models trained on language. 
 
-## :fas fa-cubes: Features
+I am part of the [Applied Computational Logic and Artificial Intelligence Lab],
+where I work everyday with a bunch of curious and inspiring guys.
 
-- **Vim keybindings** - `j`/`k` scroll, `:` commands, `/` search
-- **Telescope fuzzy finder** - search files, commands, and links
-- **Alpha dashboard** - animated startup screen with ASCII art backgrounds
-- **5 color themes** - Tokyo Night, Gruvbox, Dracula, Cyberpunk, Latte
-- **DuckDB SQL** - query your own site content with SQL in the browser
-- **Blog system** - markdown posts with frontmatter, auto-generated cards
-- **Buffer tabs** - open multiple pages like Neovim buffers
+You can read about my research somewhere else in this website.
 
-## :fas fa-layer-group: Architecture
+I usually spend my day studying (mostly logic, with a flavor of computer-science), 
+solving puzzles or designing them, studying, sleeping a bit, playing videogames,
+studying, making love, and practicing fast typing.
 
-```
-config.js  →  commands.js  →  engine.js
-   ↑               ↑              ↑
-Your site      Custom cmds    Core runtime
- config        (optional)    (don't touch)
-```
-
-Pages live in `content/` as plain markdown. The engine fetches and parses icons (`:fab fa-github:` syntax), renders HTML via **Marked.js**, and applies **Prism** syntax highlighting.
-
-## :fas fa-database: SQL Demo
-
-The `:sql` command gives you a full DuckDB console. Try:
-
-```sql
-SELECT filename, word_count FROM pages ORDER BY word_count DESC;
-```
-
-Every page in your site is queryable: content, word counts, filenames.
-
-## :fas fa-code: Extending
-
-### Add a page
-
-Create `content/projects.md`, add `"projects"` to `config.files`. Done.
-
-### Add a command
-
-```js
-// In commands.js
-'hello': {
-    desc: "Say hello",
-    fn: (args, sys) => {
-        sys.print('<p style="color:var(--green)">Hello, world!</p>');
-    }
-}
-```
-
-### Add a theme
-
-Define CSS variables in `style.css` under `[data-theme="mytheme"]`, then add `'mytheme'` to `config.themes`.
-
-## :fas fa-gears: Markdown Support
-
-This page demonstrates the supported markdown features:
-
-> Blockquotes work great for callouts and notes.
-
-Here's some inline `code`, and a [link to GitHub](https://github.com).
-
-- Unordered lists
-- With **bold** and *italic* text
-- And `:fas fa-check:` Font Awesome icons inline
-
-1. Ordered lists
-2. Work too
-3. Obviously
+The color that makes me smile is <span style="color: #d79921">ochre</span>, 
+because it reminds me of three beautiful things: sunflowers,
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: #8ec07c">the</a> 
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: #458588">gruvbox</a> 
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: #d79921">color</a> 
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: #cc241d">palette</a> 
+I use in vim since 2018, and my best friend.
 
 ---
 
-*Built with vanilla JS, CSS, and HTML. No frameworks were harmed in the making of this website.*
+## :fas fa-rocket: quick tip
+
+Use `/`, `Ctrl+p` or tap tap the 🔍︎ icon to search the pages and commands available.
+
+From PC, use `:` to enter the *command mode*, and `Escape` to exit.
+
+Try to prompt `:help` to see all the available commands.
+For example, you can prompt `:contact` to send me an email, or `:about` to 
+return to this page.
+
+![image info](./images/dodecahedron.png)
