@@ -4,7 +4,8 @@ const config = {
 
     files: [
         'home',
-        'about'
+        'about',
+        'archive'
     ],
 
     links: [
@@ -51,7 +52,7 @@ const config = {
         email: 'mauro.milella@unife.it'
     },
 
-    blog: {
+    archive: {
         enabled: true,
         manifestPath: 'posts/posts.json',
         postsDir: 'posts'
