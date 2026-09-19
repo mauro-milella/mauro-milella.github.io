@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Tokyo Night Background (Rounded Square) -->
+  <rect width="512" height="512" rx="128" fill="#1a1b26"/>
+  
+  <!-- The Static "Home" Tilde -->
+  <text x="50%" y="55%" 
+        dominant-baseline="middle" 
+        text-anchor="middle" 
+        font-family="Courier New, monospace" 
+        font-weight="bold" 
+        font-size="380" 
+        fill="#9ece6a">
+    ~
+  </text>
+</svg>

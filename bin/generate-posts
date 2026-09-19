@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+"""Scan posts/*.md, extract frontmatter, and generate posts/posts.json."""
+
+import json
+import os
+import re
+import sys
+
+POSTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'posts')
+
+def extract_frontmatter(filepath):
+    with open(filepath, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    match = re.match(r'^---\n(.*?)\n---', text, re.DOTALL)
+    if not match:
+        return None
+
+    meta = {}
+    current_key = None
+    list_values = []
+
+    for line in match.group(1).split('\n'):
+        # List item (e.g. "  - python")
+        list_match = re.match(r'^\s+-\s+(.+)', line)
+        if list_match and current_key:
+            list_values.append(list_match.group(1).strip())
+            meta[current_key] = list_values
+            continue
+
+        # Key-value pair
+        kv_match = re.match(r'^(\w+):\s*(.*)', line)
+        if kv_match:
+            current_key = kv_match.group(1)
+            val = kv_match.group(2).strip()
+
+            # Inline list: tags: [a, b, c]
+            inline_list = re.match(r'^\[(.*)\]$', val)
+            if inline_list:
+                meta[current_key] = [v.strip().strip("'\"") for v in inline_list.group(1).split(',')]
+                list_values = meta[current_key]
+            elif val:
+                meta[current_key] = val.strip("'\"")
+                list_values = []
+            else:
+                list_values = []
+
+    return meta
+
+def main():
+    posts = []
+
+    for filename in sorted(os.listdir(POSTS_DIR), reverse=True):
+        if not filename.endswith('.md'):
+            continue
+
+        filepath = os.path.join(POSTS_DIR, filename)
+        meta = extract_frontmatter(filepath)
+        if not meta or 'title' not in meta:
+            print(f"  Skipping {filename} (no frontmatter/title)")
+            continue
+
+        slug = filename.replace('.md', '')
+        posts.append({
+            'slug': slug,
+            'title': meta.get('title', slug),
+            'date': meta.get('date', ''),
+            'description': meta.get('description', ''),
+            'image': meta.get('image', ''),
+            'tags': meta.get('tags', []),
+        })
+
+    out_path = os.path.join(POSTS_DIR, 'posts.json')
+    with open(out_path, 'w', encoding='utf-8') as f:
+        json.dump(posts, f, indent=2, ensure_ascii=False)
+
+    print(f"Generated {out_path} with {len(posts)} posts")
+
+if __name__ == '__main__':
+    main()

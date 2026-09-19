@@ -2,104 +2,133 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Resources to write Latex-->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <!-- Libraries and other scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../scripts/Tooltip.js" defer></script>
-    <script src="../scripts/graphic.js" defer></script>
-    <script src="../scripts/prism.js" defer></script>
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/style.css" />
-    <link rel="stylesheet" href="style/prism.css" />
-    <title>M.Milella</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Loading...</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css?v=1771704484">
+
+    <!-- Syntax Highlighting (Prism) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-toml.min.js"></script>
+
+    <!-- Primary Meta Tags (customize these for your site) -->
+    <meta name="title" content="neovim-web">
+    <meta name="description" content="A Neovim-themed personal website framework">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="neovim-web">
+    <meta property="og:description" content="A Neovim-themed personal website framework. Zero build, zero npm, pure vanilla JS/CSS/HTML.">
+    <meta property="og:image" content="images/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="neovim-web">
+    <meta name="twitter:description" content="A Neovim-themed personal website framework. Zero build, zero npm, pure vanilla JS/CSS/HTML.">
+    <meta name="twitter:image" content="images/og-image.png">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>My journey into Machine Learning </h1>
-        <div class="paragraph mt-5 mb-5">
-            Hi there! 👋 Welcome to my journey into Machine Learning! <br>
-            My purpose is to write a logbook about my studies, which started officially during Summer 2022, 
-            collecting and reporting all the most sound resources I cross in my way.
-        </div>
-    </div>
 
-    <div class="pt-4 pb-4 mb-5" style="background-color: var(--dark-yellow)">
-        <div class="container">
-            <div class="paragraph">
-                We live in a world <b>flooded</b> with data.
-                In 2018, the total amount of data created, captured, copied, and consumed was 33 <span class="underlined und1 dt1" data-tooltip>zettabytes</span> and is predicted to reach <b>175</b> ZBs by 2025!
-                
-                <span class="underlined und1 dt1" data-tooltip>Machine Learning</span> has evolved as an AI branch capable to extract knowledge from this
-                large amount of data and make decisions/previsions: 
-                not only it’s fundamental in scientific research but plays an important role in our life too 
-                (voice and text recognition, medical machinery, browsers, spam filters, invincible chess opponents…) 
+    <div class="scanlines"></div>
+
+    <div class="app-container">
+        <!-- Buffer Tabs & Top Widgets -->
+        <div class="buffer-bar glow-text">
+            <div id="tab-container" class="tabs-left"></div>
+            <div class="tab-overflow-btn" id="tab-overflow-btn" onclick="toggleTabOverflow()"></div>
+            <div class="widgets-right">
+                <div class="widget widget-green" id="telescope-widget" style="cursor:pointer;" onclick="openTelescope()"><i class="fas fa-search"></i></div>
+                <!-- <div class="widget widget-blue"><i class="fas fa-wifi"></i> ONLINE</div> -->
+                <!-- <div class="widget widget-purple"><i class="fas fa-clock"></i> <span id="clock-widget"></span></div> -->
             </div>
         </div>
+
+        <div class="workspace">
+            <!-- Sidebar -->
+            <div class="nvim-tree" id="nvim-tree">
+                <div class="tree-hint" onclick="openTelescope()"><i class="fas fa-search"></i> Search <span class="tree-hint-key">/</span></div>
+                <div style="height: 10px;"></div>
+
+                <div class="tree-header"><i class="fas fa-project-diagram"></i> Explorer</div>
+                <div id="file-list-container"></div>
+
+                <div id="mobile-cmd-wrapper">
+                    <span style="color: var(--green); margin-right: 8px;">&#10095;</span>
+                    <input type="text" id="mobile-cmd-input" placeholder="Enter cmd..." autocomplete="off" autocapitalize="off" spellcheck="false">
+                    <button id="mobile-cmd-btn">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="tree-header" style="margin-top:auto; border-top: none; padding-top:10px;">Links</div>
+                <div id="link-list-container"></div>
+                <div style="height: 10px;"></div>
+            </div>
+
+            <!-- Editor -->
+            <div class="editor-container">
+                <div class="content-scroll" id="scroll-container" tabindex="0">
+                    <div id="markdown-output" class="markdown-body glow-text"></div>
+                    <br><br><div style="color: var(--comment)">~</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="status-line">
+            <div style="display:flex; height:100%">
+                <!-- Mode -->
+                <div class="segment mode-normal" id="mode-segment">NORMAL</div>
+
+                <!-- Git -->
+                <!-- <div class="segment seg-dark" id="git-branch" style="cursor: pointer;"> -->
+                <!--     <i class="fas fa-code-branch" style="font-size: 10px;"></i> main -->
+                <!-- </div> -->
+
+                <!-- Theme switcher -->
+                <div class="segment seg-dark" id="theme-switch" style="cursor: pointer; border-left: 1px solid var(--border);">
+                    <i class="fas fa-palette" style="font-size: 10px;"></i>
+                    <span id="theme-name"></span>
+                </div>
+
+                <!-- Filename -->
+                <div class="segment seg-light" id="status-filename">[No Name]</div>
+            </div>
+
+            <div style="display:flex; height:100%">
+                <div class="segment seg-light">markdown</div>
+                <div class="segment seg-dark" id="status-percent">TOP</div>
+            </div>
+        </div>
+
+
+        <!-- Command Bar -->
+        <div class="cmd-bar">
+            <span id="cmd-display" style="color: var(--comment)">:help</span>
+            <input type="text" id="cmd-input" class="cmd-input">
+        </div>
     </div>
+    <div class="mobile-toggle mobile-search" onclick="openTelescope()"><i class="fas fa-search"></i></div>
+    <div class="mobile-toggle" onclick="toggleTree()"><i class="fas fa-bars"></i></div>
 
-    <div class="container">
-        <div class="paragraph">
-            <h3 style="font-weight: bold;">Supervised learning: classifiers and basic concepts</h3>
-            Here I introduce some of the classical machine-learning algorithms. Luckily for our pleasure, there is no such thing as the 
-            <span class="underlined" data-tooltip>perfect algorithm</span> but on the contrary, each one has pros and cons.
-            <br><br>
-            <ul>
-                <li><a href="pages/perceptron.html">MCP model, Perceptron, Adaline</a></li>
-                <li><a href="pages/logistic_regression.html">Logistic regression and some hint about Regularization</a></li>
-                <li><a href="pages/svm.html">Support Vector Machine</a></li>
-                <li><a href="pages/decision_tree.html">Decision trees</a></li>
-                <li><a href="pages/knn.html">KNN</a></li>
-            </ul>
-        </div>
-
-        <div class="paragraph" style="text-align: right;">
-            <h3 style="font-weight: bold;">Pre-elaboration techniques</h3>
-            Data quality and its meaningfulness are fundamental factors when talking about learning quality. 
-            It’s crucial to examine and pre-elaborate a dataset before proceeding to learn something from it.
-            <br><br>
-            <ul style="direction: rtl;">
-                <li><a href="pages/encoding.html">Data encoding, partitioning, standardization and normalization</a></li>
-                <li><a href="pages/feature_selection.html">Feature selection</a></li>
-                <li>Feature extraction
-                    <ul>
-                        <li><a href="pages/feature_extraction.html">PCA and LDA</a></li>
-                        <li><a href="pages/feature_extraction.html">Kernel techniques</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
-        <div class="paragraph">
-            <h3 style="font-weight: bold;">Models evaluation and hyperparameters optimization</h3>
-            Let’s investigate the techniques utilized to optimize a model performance 
-            and obtain its true performances through various metrics.
-            <br><br>
-            <ul>
-            </ul>
-        </div>
-
-        <div class="paragraph" style="text-align: right;">
-            <h3 style="font-weight: bold;">Ensemble models</h3>
-            <br><br>
-            <ul style="direction: rtl;">
-                
-            </ul>
-        </div>
-
-        <div class="paragraph">
-            <h3 style="font-weight: bold;">Sentiment analysis</h3>
-            <br><br>
-            <ul>
-            </ul>
-        </div>
-
-    </div>  
+    <!-- Scripts (Load Order Matters: config → commands → engine) -->
+    <script src="config.js?v=1771704484"></script>
+    <script src="commands.js?v=1771704484"></script>
+    <script src="engine.js?v=1771704484"></script>
 
 </body>
 </html>
