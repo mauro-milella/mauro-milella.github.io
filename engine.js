@@ -30,12 +30,16 @@ else openFile(config.startPage);
 // Uncomment to add a little paddle following your mouse
 // initMouseTrackerBar();
 
-// Add "blog" to sidebar only if posts exist
+// Add "archive" to sidebar only if posts exist
+// notice that, in the original project from which this fork has been derived,
+// the blog was called archive.
+// I did not change the variable names, but only 
+// the strings and arguments (from 'blog' to 'archive')
 if (config.blog?.enabled !== false) {
     const manifestPath = config.blog?.manifestPath || 'posts/posts.json';
     fetch(manifestPath).then(r => r.ok ? r.json() : []).then(posts => {
-        if (posts.length > 0 && !config.files.includes('blog')) {
-            config.files.push('blog');
+        if (posts.length > 0 && !config.files.includes('archive')) {
+            config.files.push('archive');
             renderSidebar();
         }
     }).catch(() => {});
@@ -658,7 +662,9 @@ async function openFile(filename, force = false) {
         updateUI();
         el.scroll.scrollTop = 0;
         if (window.innerWidth < 768) toggleTree(false);
-        if (filename === 'blog') loadBlogCards();
+
+        // if (filename === 'blog') loadBlogCards();
+        if (filename === 'archive') loadBlogCards();
 
     } catch (e) {
         console.error(e);
@@ -710,12 +716,18 @@ function updateUI() {
     }).join('');
 
     document.querySelectorAll('.file-node').forEach(elem => elem.classList.remove('active'));
+
+    // Note that, although "blog:" is changed to "archive:" in many places, 
+    // we still name each individual file within an archive as "blog post".
+    // It's just a nomenclature convention, but posts will potentially vary 
+    // very much in their content and in their goal.
     if (state.currentFile && !state.currentFile.startsWith('blog:')) {
         document.getElementById(`node-${state.currentFile}`)?.classList.add('active');
     }
     if (state.currentFile) {
-        if (state.currentFile.startsWith('blog:'))
-            el.statusFile.innerText = `[blog] ${blogMeta[state.currentFile]?.slug || ''}`;
+        // if (state.currentFile.startsWith('blog:'))
+        if (state.currentFile.startsWith('archive:'))
+            el.statusFile.innerText = `[archive] ${blogMeta[state.currentFile]?.slug || ''}`;
         else
             el.statusFile.innerText = `${state.currentFile}.md`;
     } else {
