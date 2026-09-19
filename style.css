@@ -768,13 +768,15 @@ body {
 .buffer-bar {
     background-color: var(--bg-dark);
     height: var(--header-h);
-    display: flex;
     align-items: center;
     padding-left: 0;
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     overflow: hidden;
     white-space: nowrap;
+
+    /* display: flex; */
+    display: none;
 }
 
 /* Left side (Tabs) */
