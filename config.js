@@ -20,7 +20,7 @@ const config = {
         titleColor: 'var(--blue)',
         titleAccent: 'milella',
         titleAccentColor: 'var(--comment)',
-        subtitle: 'Welcome to my neovim-themed personal website',
+        subtitle: 'Welcome to my website!',
         subtitleColor: 'var(--comment)',
         actions: [
             // { key: 'h', icon: 'fas fa-home',     label: 'Home',  cmd: 'home' },
@@ -32,7 +32,7 @@ const config = {
     },
 
     meta: {
-        description: 'Mauro\'s personal website',
+        description: 'Mauro\'s website',
         ogImage: 'images/og-image.png',
         favicon: 'images/favicon.svg',
         favicon32: 'images/favicon-32.png',
