@@ -10,6 +10,12 @@ window.THEMES = THEMES;
 let asciiAnimId = null;
 const asciiAngles = { A: 0, B: 0 };
 
+// Dynamically define your cursor, depending on a color
+function getCursorSvg(hexColor) {
+    const cleanHex = hexColor.replace('#', '');
+    return `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" stroke="%23${cleanHex}" stroke-width="2.5" fill="none"/></svg>') 12 12, crosshair`;
+}
+
 const el = {
     output: document.getElementById('markdown-output'),
     scroll: document.getElementById('scroll-container'),
@@ -104,6 +110,8 @@ function setTheme(themeName) {
         THEMES.forEach(t => label.classList.remove(`theme-${t}`));
         label.classList.add(`theme-${themeName}`);
     }
+
+    updateCursorColor();
 }
 
 const savedTheme = localStorage.getItem('theme') || config.defaultTheme || THEMES[0];
@@ -120,6 +128,33 @@ if (themeSwitch) {
 }
 
 window.setTheme = setTheme;
+
+function updateCursorColor() {
+    const computedStyle = getComputedStyle(document.documentElement);
+    const fgColor = computedStyle.getPropertyValue('--fg').trim();
+    const rgbColor = hexToRgb(fgColor) || { r: 235, g: 221, b: 178 };
+    const hexColor = rgbToHex(rgbColor.r, rgbColor.g, rgbColor.b);
+
+    document.body.style.cursor = getCursorSvg(hexColor);
+}
+
+function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+function rgbToHex(r, g, b) {
+    return [r, g, b].map(x => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+    }).join('').toUpperCase();
+}
+
+updateCursorColor();
 
 function parseIcons(html) {
     const codeBlocks = [];

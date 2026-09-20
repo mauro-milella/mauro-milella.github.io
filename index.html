@@ -150,6 +150,16 @@
     <script src="commands.js"></script>
     <script src="engine.js"></script>
 
+    <!-- The cursor is just an illusion ; ) -->
+    <div id="custom-cursor"></div>
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+
+        window.addEventListener('mousemove', (e) => {
+          cursor.style.left = `${e.clientX}px`;
+          cursor.style.top = `${e.clientY}px`;
+        });
+    </script>
 </body>
 
 </html>
