@@ -9,7 +9,7 @@ const config = {
     ],
 
     links: [
-        { label: 'GitHub', url: 'https://github.com/m0rr13', icon: 'fab fa-github' },
+        { label: 'GitHub', url: 'https://github.com/mauro-milella', icon: 'fab fa-github' },
         { label: 'LinkedIn', url: 'https://www.linkedin.com/in/mauro-milella/', icon: 'fab fa-linkedin' },
     ],
 
