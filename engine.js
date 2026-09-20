@@ -175,11 +175,21 @@ function startAsciiDonut(container) {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    const W = 90, H = 28;
+    /* 
+    // Keep this is you want a limited canva
+    const W = 90, H= 28;
+    const cssW = window.innerWidth;
+    const cssH = window.innerHeight;
+    */
+
+    const W = Math.floor(window.innerWidth / 12), H = Math.floor(window.innerHeight / 18);
     const chars = ' .,-~:;=!*#$@';
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const cssW = 900;
-    const cssH = 400;
+
+    // Keep this is the canvas is full screen in the CSS
+    const cssW = window.innerWidth;
+    const cssH = window.innerHeight;
+    
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
@@ -255,7 +265,10 @@ function startAsciiStarfield(container) {
     if (!ctx) return;
 
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const cssW = 900, cssH = 450;
+    
+    // const cssW = 900, cssH = 450;
+    const cssW = window.innerWidth, cssH = window.innerHeight;
+
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
@@ -323,13 +336,18 @@ function startAsciiCube(container) {
     if (!ctx) return;
 
     const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    const cssW = 900, cssH = 450;
+
+    // const cssW = 900, cssH = 450;
+    const cssW = window.innerWidth, cssH = window.innerHeight;
+
     canvas.width = Math.floor(cssW * dpr);
     canvas.height = Math.floor(cssH * dpr);
 
     const W = canvas.width, H = canvas.height;
     const cx = W / 2, cy = H / 2;
-    const size = Math.min(W, H) * 0.35;
+
+    // const size = Math.min(W, H) * 0.25;
+    const size = Math.min(W, H) * 0.25;
 
     const vertices = [
         [-1,-1,-1], [1,-1,-1], [1,1,-1], [-1,1,-1],
