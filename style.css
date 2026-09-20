@@ -187,6 +187,7 @@ a,
 button,
 .file-node,
 .alpha-btn,
+.telescope-row,
 .tab {
     cursor: none !important;
 }
@@ -224,24 +225,21 @@ button,
     button,
     .file-node,
     .alpha-btn,
+    .telescope-row,
     .tab {
         cursor: auto !important;
     }
 }
 
 /* Hover State: Expands circle smoothly and changes color */
-.file-node:hover~#custom-cursor,
-a:hover~#custom-cursor,
-button:hover~#custom-cursor,
-.alpha-btn:hover~#custom-cursor,
-.tab:hover~#custom-cursor,
 body:has(.file-node:hover) #custom-cursor,
 body:has(a:hover) #custom-cursor,
 body:has(button:hover) #custom-cursor,
 body:has(.alpha-btn:hover) #custom-cursor,
-body:has(.tab:hover) #custom-cursor 
+body:has(.tab:hover) #custom-cursor,
 body:has(#theme-switch:hover) #custom-cursor,
-body:has(.segment:hover) #custom-cursor {
+body:has(.segment:hover) #custom-cursor,
+body:has(.telescope-row:hover) #custom-cursor {
     width: 28px;
     height: 28px;
     border-color: var(--yellow);
@@ -1521,6 +1519,15 @@ pre[class*="language-"] {
     align-items: center;
     gap: 4px;
     margin-bottom: 40px;
+
+    /* Block accidental clicks while the intro animation is playing.
+       The buttons become interactive only after the animation fully settles. */
+    pointer-events: none;
+    animation: alphaUnlock 0s 2s forwards;
+}
+
+@keyframes alphaUnlock {
+    to { pointer-events: auto; }
 }
 
 .alpha-btn {
@@ -1713,7 +1720,7 @@ pre[class*="language-"] {
     align-items: center;
     gap: 10px;
     padding: 6px 16px;
-    cursor: pointer;
+    /* cursor: pointer; */
     color: var(--fg);
     font-size: 0.85rem;
     transition: background 0.05s;

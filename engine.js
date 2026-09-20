@@ -554,6 +554,7 @@ function showAlpha() {
     if (!asciiAnimId) startAlphaAnimation(dash);
 
     state.mode = 'ALPHA';
+    state.alphaReadyAt = Date.now() + 2000; // ignore keys until animation settles
     el.modeSeg.innerText = 'ALPHA';
     el.modeSeg.className = 'segment mode-alpha';
 }
@@ -1345,6 +1346,8 @@ if (gitBranch) {
 document.addEventListener('keydown', e => {
     if (state.mode === 'ALPHA') {
         e.preventDefault();
+        // Swallow all keys during the intro animation to prevent accidental navigation
+        if (Date.now() < (state.alphaReadyAt || 0)) return;
         const key = e.key.toLowerCase();
         if (key === ':') { hideAlpha(); setMode('COMMAND'); return; }
         if (alphaKeyMap[key]) { hideAlpha(); alphaKeyMap[key](); return; }
