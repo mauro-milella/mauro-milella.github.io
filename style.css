@@ -212,7 +212,7 @@ button,
         transform 0.05s ease-out;
 }
 
-/* Hover State: Expands circle smoothly and changes color to var(--blue) */
+/* Hover State: Expands circle smoothly and changes color */
 .file-node:hover~#custom-cursor,
 a:hover~#custom-cursor,
 button:hover~#custom-cursor,
@@ -222,20 +222,14 @@ body:has(.file-node:hover) #custom-cursor,
 body:has(a:hover) #custom-cursor,
 body:has(button:hover) #custom-cursor,
 body:has(.alpha-btn:hover) #custom-cursor,
-body:has(.tab:hover) #custom-cursor {
+body:has(.tab:hover) #custom-cursor 
+body:has(#theme-switch:hover) #custom-cursor,
+body:has(.segment:hover) #custom-cursor {
     width: 28px;
     height: 28px;
     border-color: var(--yellow);
 }
 
-/* .file-node:hover, */
-/* a:hover, */
-/* button:hover, */
-/* .alpha-btn:hover, */
-/* .tab:hover { */
-/*     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="var(--blue, %237aa2f7)" stroke-width="2.5" fill="none"/></svg>') 12 12, pointer !important; */
-/* } */
-/**/
 /* --- VISUAL FX --- */
 
 .scanlines {
