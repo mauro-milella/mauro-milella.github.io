@@ -162,10 +162,13 @@
     <script>
         const cursor = document.getElementById('custom-cursor');
 
-        window.addEventListener('mousemove', (e) => {
-          cursor.style.left = `${e.clientX}px`;
-          cursor.style.top = `${e.clientY}px`;
-        });
+        // Only track mouse on non-touch (pointer) devices
+        if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
+            window.addEventListener('mousemove', (e) => {
+              cursor.style.left = `${e.clientX}px`;
+              cursor.style.top = `${e.clientY}px`;
+            });
+        }
     </script>
 </body>
 

@@ -212,6 +212,23 @@ button,
         transform 0.05s ease-out;
 }
 
+/* Hide the custom cursor on touch/mobile devices */
+@media (hover: none) and (pointer: coarse) {
+    #custom-cursor {
+        display: none !important;
+    }
+
+    html,
+    body,
+    a,
+    button,
+    .file-node,
+    .alpha-btn,
+    .tab {
+        cursor: auto !important;
+    }
+}
+
 /* Hover State: Expands circle smoothly and changes color */
 .file-node:hover~#custom-cursor,
 a:hover~#custom-cursor,
@@ -1343,8 +1360,9 @@ pre[class*="language-"] {
 
 @media (max-width: 768px) {
     .alpha-donut-canvas {
-        width: 200vw;
-        height: calc(200vw * 300 / 660);
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
         opacity: 0.85;
     }
 }
