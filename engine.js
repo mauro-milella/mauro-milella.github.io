@@ -274,9 +274,9 @@ function startAsciiStarfield(container) {
 
     const W = canvas.width, H = canvas.height;
     const cx = W / 2, cy = H / 2;
-    const numStars = 600;
+    const numStars = 1500;
     const stars = [];
-    const starChars = '.+*@#°';
+    const starChars = '■□♢♦';
 
     for (let i = 0; i < numStars; i++) {
         stars.push({
@@ -446,11 +446,17 @@ function showAlpha() {
         const chars = (titleText + accentText).split('');
         const titleLen = titleText.length;
 
+        const firstchar = document.createElement('span');
+        firstchar.className = 'alpha-first-char';
+        firstchar.textContent = '~';
+        firstchar.style.setProperty('--i', 0);
+        logo.appendChild(firstchar);
+
         chars.forEach((ch, i) => {
             const span = document.createElement('span');
             span.textContent = ch;
             span.className = 'alpha-char';
-            span.style.setProperty('--i', i);
+            span.style.setProperty('--i', i+1);
             span.style.setProperty('--char-color', i >= titleLen ? accentColor : titleColor);
             logo.appendChild(span);
         });
@@ -458,7 +464,7 @@ function showAlpha() {
         const cursor = document.createElement('span');
         cursor.className = 'alpha-cursor';
         cursor.textContent = '_';
-        cursor.style.setProperty('--i', chars.length);
+        cursor.style.setProperty('--i', chars.length+1);
         logo.appendChild(cursor);
 
         const subtitle = document.createElement('div');
