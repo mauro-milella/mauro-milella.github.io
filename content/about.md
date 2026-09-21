@@ -1,4 +1,4 @@
-![image info](./images/asciinator_21Sep_002.png)
+![image info](./images/sunflower.png)
 
 ## :fas fa-terminal: mauro-milella ~ > cat about.md
 
