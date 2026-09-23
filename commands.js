@@ -8,6 +8,8 @@ const customCommands = {
             html += `<table>`;
 
             for (const [key, cmd] of Object.entries(customCommands)) {
+                if (cmd.easterEgg) continue;
+
                 html += `<tr>
                     <td style="color: var(--cyan); font-weight:bold; padding-right:20px">:${key}</td>
                     <td style="color: var(--fg);">${cmd.desc}</td>
@@ -71,6 +73,7 @@ const customCommands = {
 
     'sl': {
         desc: 'Don\'t mistype ls',
+        easterEgg: true,
         fn: (args, sys) => {
             const train = document.createElement('pre');
             train.style.position = 'fixed';

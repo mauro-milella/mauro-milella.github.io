@@ -1040,6 +1040,8 @@ function buildTelescopeItems() {
     });
 
     for (const [key, cmd] of Object.entries(customCommands)) {
+        if (cmd.easterEgg) continue;
+
         items.push({
             section: 'Commands',
             label: `:${key}`,
