@@ -188,6 +188,7 @@ button,
 .file-node,
 .alpha-btn,
 .telescope-row,
+.alpha-theme-dot,
 .tab {
     cursor: none !important;
 }
@@ -239,7 +240,8 @@ body:has(.alpha-btn:hover) #custom-cursor,
 body:has(.tab:hover) #custom-cursor,
 body:has(#theme-switch:hover) #custom-cursor,
 body:has(.segment:hover) #custom-cursor,
-body:has(.telescope-row:hover) #custom-cursor {
+body:has(.telescope-row:hover) #custom-cursor,
+body:has(.alpha-theme-dot:hover) #custom-cursor {
     width: 28px;
     height: 28px;
     border-color: var(--yellow);
@@ -496,7 +498,7 @@ body:has(.telescope-row:hover) #custom-cursor {
 /*     70%  { content: '⠧'; } */
 /*     80%  { content: '⠇'; } */
 /*     90%  { content: '⠏'; } */
-}
+/*}*/
 
 .markdown-body h1 {
     color: var(--h1);
@@ -1523,7 +1525,7 @@ pre[class*="language-"] {
     /* Block accidental clicks while the intro animation is playing.
        The buttons become interactive only after the animation fully settles. */
     pointer-events: none;
-    animation: alphaUnlock 0s 2s forwards;
+    animation: alphaUnlock 0s 1.5s forwards;
 }
 
 @keyframes alphaUnlock {
