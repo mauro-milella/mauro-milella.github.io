@@ -43,11 +43,6 @@ const config = {
         googleId: ''
     },
 
-    // repo: {
-    //     url: '',
-    //     branch: 'main'
-    // },
-
     contact: {
         email: 'mauro.milella@unife.it'
     },
