@@ -143,4 +143,37 @@ __/ =| o |=-~~\\  /~\\  /~\\  /~\\ ____Y___________|__|_________________|
             sys.print(html);
         }
     },
+
+    'sunflower': {
+        desc: 'Spawn a chikorita',
+        easterEgg: true,
+        fn: (args, sys) => {
+            const sunflower = document.createElement('pre');
+            sunflower.style.position = 'fixed';
+            sunflower.style.top = 'calc(50% - 100px)';
+            sunflower.style.left = '100vw';
+            sunflower.style.zIndex = '10000';
+            sunflower.style.color = 'var(--fg)';
+            sunflower.style.fontFamily = 'monospace';
+            sunflower.style.fontWeight = 'bold';
+            sunflower.style.fontSize = '36px';
+            sunflower.style.lineHeight = '12px';
+            sunflower.style.pointerEvents = 'none';
+            sunflower.style.transition = 'transform 6s linear';
+
+            // Uh! So you are inspecting the source code ; )
+            sunflower.innerText = `🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻`;
+
+            document.body.appendChild(sunflower);
+
+            requestAnimationFrame(() => {
+                const distance = window.innerWidth + 600;
+                sunflower.style.transform = `translateX(-${distance}px)`;
+            });
+
+            setTimeout(() => {
+                document.body.removeChild(sunflower);
+            }, 6000);
+        }
+    },
 };
