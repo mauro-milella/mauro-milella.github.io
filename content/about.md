@@ -8,15 +8,18 @@ I am part of the [Applied Computational Logic and Artificial Intelligence Lab](h
 
 You can read about my research elsewhere on this website.
 
-I usually spend my day studying (mostly logic, with a flavor of computer-science), practicing fast typing, studying, sleeping a bit, training, playing videogames, studying, making love, and designing puzzles (one is hidden in this page!).
+I try to spend my days doing important stuff; unfortunately, one day I am going to disappear and it would be so sad not having enjoyed breathing. So I mainly walk, breath, enjoy sleeping, study (I am currently into formal verification!), practice fast-typing and making love. Sometimes I like to design puzzles for certain friends: luckily for you, there is one hidden in this page!
 
-I am also obsessed with color themes, my favourite one being 
+I am obsessed with color themes, my favourite one being 
 <a href="https://www.color-hex.com/color-palette/1026676" style="color: #8ec07c">the</a> 
 <a href="https://www.color-hex.com/color-palette/1026676" style="color: #458588">gruvbox</a> 
 <a href="https://www.color-hex.com/color-palette/1026676" style="color: #d79921">color</a> 
-<a href="https://www.color-hex.com/color-palette/1026676" style="color: #cc241d">palette</a>,
-which is my default choice when customizing many software environments.
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: #cc241d">palette</a>.
+
+It is my default choice when customizing many software environments.
 Also, <span style="color: #d79921">ochre</span> reminds me of my bestie :P
+
+I listen to Current Joys and Lucio Dalla almost every day.
 
 ---
 
