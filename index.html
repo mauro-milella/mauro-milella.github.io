@@ -160,7 +160,14 @@
 
     <!-- The cursor is just an illusion ; ) -->
     <div id="custom-cursor" aria-hidden="true">
-        <svg class="cursor-ring" width="48" height="48" viewBox="-24 -24 48 48"><circle cx="0" cy="0" r="16" /></svg>
+        <svg class="cursor-ring" width="48" height="48" viewBox="-24 -24 48 48"><ellipse cx="0" cy="0" rx="16" ry="16" /></svg>
+        <!-- Over clickable things: a pointing hand, with the little saturn on its fingertip -->
+        <svg class="cursor-hand" width="30" height="30" viewBox="-10 -2 30 30">
+            <path class="hand-body" d="M -2.5 15.6 V 2.5 A 2.5 2.5 0 0 1 2.5 2.5 V 9.5 Q 2.5 7.5 4.5 7.5 Q 6.5 7.5 6.5 9.5 Q 6.5 8.5 8.25 8.5 Q 10 8.5 10 10.5 Q 10 9.8 11.5 9.8 Q 13 9.8 13 11.8 V 16 Q 13 22 7 22 H 1.5 Q -1.5 22 -3.5 19.5 L -7.4 14.6 Q -8.4 13.2 -7.2 12.4 Q -6 11.7 -5 12.8 Z" />
+            <path class="hand-detail" d="M 6.5 9.5 V 12.5 M 10 10.5 V 12.5 M -2.5 6 H 2.5 M 3 18.5 H 9" />
+        </svg>
+        <svg class="cursor-ring-front" width="48" height="48" viewBox="-24 -24 48 48"><path d="" /></svg>
+        <div class="cursor-ping"></div>
         <div class="cursor-dot"></div>
     </div>
     <script src="cursor.js"></script>

@@ -1,6 +1,7 @@
 // The cursor is just an illusion ; )
 // A small planet (the dot) sticks to the pointer and a ring trails behind it.
-// Over anything clickable the ring tightens and the planet orbits along it.
+// Over anything clickable a pointing hand appears, the ring tilts into a
+// saturn ring around its fingertip and the planet orbits along it.
 (() => {
     const cursor = document.getElementById('custom-cursor');
     // Only on devices with a real pointer; touch screens keep their native behaviour
@@ -9,7 +10,11 @@
     const root = document.documentElement;
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const ring = cursor.querySelector('.cursor-ring');
-    const circle = ring.querySelector('circle');
+    const ellipse = ring.querySelector('ellipse');
+    const front = cursor.querySelector('.cursor-ring-front');
+    const frontArc = front.querySelector('path');
+    const hand = cursor.querySelector('.cursor-hand');
+    const ping = cursor.querySelector('.cursor-ping');
     const dot = cursor.querySelector('.cursor-dot');
 
     const INTERACTIVE = [
@@ -19,7 +24,8 @@
         '[tabindex]:not([tabindex="-1"]):not(.content-scroll)',
     ].join(', ');
     const CLICKABLE_CURSORS = new Set(['pointer', 'zoom-in', 'zoom-out', 'grab', 'grabbing']);
-    const RING_R = 16, RING_HOVER_R = 10, PRESS_SCALE = 0.75;
+    const RING_R = 16, RING_HOVER_R = 13, PRESS_SCALE = 0.75;
+    const SQUASH = 0.32, TILT = -22; // the hover ring's flattening and tilt (degrees)
     const ORBIT_SPEED = Math.PI * 2 * 0.85; // radians per second
 
     // Hides the native cursor everywhere (see style.css)
@@ -76,14 +82,31 @@
 
         // The dot slides from the pointer onto the ring and circles it; with
         // reduced motion the ring just shrinks and the dot stays put
+        // The ring flattens and tilts like saturn's as the hand comes in
+        const rx = r, ry = r * (1 - (1 - SQUASH) * hover), tilt = TILT * hover;
+        const rad = tilt * Math.PI / 180, cos = Math.cos(rad), sin = Math.sin(rad);
         const orbit = still ? 0 : hover;
         if (orbit > 0.001) angle += dt * ORBIT_SPEED;
-        const dx = mouse.x + (ringPos.x + Math.cos(angle) * r - mouse.x) * orbit;
-        const dy = mouse.y + (ringPos.y + Math.sin(angle) * r - mouse.y) * orbit;
+        const ox = Math.cos(angle) * rx, oy = Math.sin(angle) * ry;
+        const dx = mouse.x + (ringPos.x + ox * cos - oy * sin - mouse.x) * orbit;
+        const dy = mouse.y + (ringPos.y + ox * sin + oy * cos - mouse.y) * orbit;
 
-        ring.style.transform = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0)`;
-        circle.setAttribute('r', r.toFixed(2));
+        const ringAt = `translate3d(${ringPos.x}px, ${ringPos.y}px, 0) rotate(${tilt.toFixed(2)}deg)`;
+        ring.style.transform = ringAt;
+        front.style.transform = ringAt;
+        ellipse.setAttribute('rx', rx.toFixed(2));
+        ellipse.setAttribute('ry', ry.toFixed(2));
+        // The near half of the ring is drawn again over the finger
+        frontArc.setAttribute('d', `M ${-rx} 0 A ${rx} ${ry} 0 0 0 ${rx} 0`);
+        frontArc.style.opacity = hover > 0.05 ? (0.95 * hover).toFixed(2) : '0';
         dot.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+        dot.classList.toggle('is-behind', orbit > 0.5 && oy < 0);
+
+        const handScale = (0.6 + 0.6 * hover) * (pressed ? 0.88 : 1);
+        const at = `translate3d(${mouse.x}px, ${mouse.y}px, 0)`;
+        hand.style.transform = `${at} scale(${handScale.toFixed(3)})`;
+        ping.style.setProperty('--ping-at', at);
+        ping.style.transform = at;
 
         const settled = !interactive && hover < 0.001 && Math.abs(r - rGoal) < 0.01
             && Math.abs(mouse.x - ringPos.x) + Math.abs(mouse.y - ringPos.y) < 0.1;
@@ -116,7 +139,17 @@
         cursor.classList.remove('is-visible');
     });
 
-    window.addEventListener('mousedown', () => { pressed = true; wake(); }, { passive: true });
+    window.addEventListener('mousedown', () => {
+        pressed = true;
+        if (interactive) {
+            // Restart the click burst even on rapid clicks
+            cursor.classList.remove('is-click');
+            void ping.offsetWidth;
+            cursor.classList.add('is-click');
+        }
+        wake();
+    }, { passive: true });
+    ping.addEventListener('animationend', () => cursor.classList.remove('is-click'));
     window.addEventListener('mouseup', () => { pressed = false; wake(); recheckSoon(); }, { passive: true });
     window.addEventListener('keydown', recheckSoon, { passive: true });
 })();
