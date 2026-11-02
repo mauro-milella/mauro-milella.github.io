@@ -39,4 +39,4 @@ For example, you can prompt `:contact` to send me an email, or `:about` to
 return to this page.
 
 ![image info](./images/dodecahedron.png)
-![image info](./images/sunflower.png)
+<!-- ![image info](./images/sunflower.png) -->
