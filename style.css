@@ -180,38 +180,77 @@ body {
     overflow: hidden;
 }
 
-/* Hehehe! The cursor is just an illusion! */
-html,
-body,
-a,
-button,
-.file-node,
-.alpha-btn,
-.telescope-row,
-.alpha-theme-dot,
-.tab {
+/* Hehehe! The cursor is just an illusion! (see cursor.js)
+   The native cursor is hidden everywhere the custom one is drawn. */
+html.custom-cursor-on,
+html.custom-cursor-on * {
     cursor: none !important;
 }
 
 #custom-cursor {
+    --cursor-color: var(--fg);
+    --cursor-hover: var(--yellow);
     position: fixed;
     top: 0;
     left: 0;
-    width: 16px;
-    height: 16px;
-    border: 2.5px solid var(--fg, #ebd9b2);
-    border-radius: 50%;
+    width: 0;
+    height: 0;
 
     /* Allows clicks to pass through to underlying elements */
     pointer-events: none;
     z-index: 99999;
-    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
 
-    /* Smooth CSS Transitions for scale, color, and border */
-    transition: width 0.2s ease,
-        height 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.05s ease-out;
+/* Latte's yellow is too pale on a light background */
+[data-theme="latte"] #custom-cursor {
+    --cursor-hover: var(--purple);
+}
+
+#custom-cursor.is-visible {
+    opacity: 1;
+}
+
+/* Both parts are placed with transforms by cursor.js */
+.cursor-ring,
+.cursor-dot {
+    position: absolute;
+    left: 0;
+    top: 0;
+    will-change: transform;
+}
+
+.cursor-ring {
+    margin: -24px 0 0 -24px;
+    overflow: visible;
+}
+
+.cursor-ring circle {
+    fill: none;
+    stroke: var(--cursor-color);
+    stroke-width: 1.5;
+    opacity: 0.55;
+    transition: stroke 0.2s ease, opacity 0.2s ease;
+}
+
+.cursor-dot {
+    width: 7px;
+    height: 7px;
+    margin: -3.5px 0 0 -3.5px;
+    border-radius: 50%;
+    background: var(--cursor-color);
+    transition: background-color 0.2s ease;
+}
+
+/* Over anything clickable: accent colour, the ring tightens and the dot orbits */
+#custom-cursor.is-hover circle {
+    stroke: var(--cursor-hover);
+    opacity: 0.95;
+}
+
+#custom-cursor.is-hover .cursor-dot {
+    background: var(--cursor-hover);
 }
 
 /* Hide the custom cursor on touch/mobile devices */
@@ -219,32 +258,6 @@ button,
     #custom-cursor {
         display: none !important;
     }
-
-    html,
-    body,
-    a,
-    button,
-    .file-node,
-    .alpha-btn,
-    .telescope-row,
-    .tab {
-        cursor: auto !important;
-    }
-}
-
-/* Hover State: Expands circle smoothly and changes color */
-body:has(.file-node:hover) #custom-cursor,
-body:has(a:hover) #custom-cursor,
-body:has(button:hover) #custom-cursor,
-body:has(.alpha-btn:hover) #custom-cursor,
-body:has(.tab:hover) #custom-cursor,
-body:has(#theme-switch:hover) #custom-cursor,
-body:has(.segment:hover) #custom-cursor,
-body:has(.telescope-row:hover) #custom-cursor,
-body:has(.alpha-theme-dot:hover) #custom-cursor {
-    width: 28px;
-    height: 28px;
-    border-color: var(--yellow);
 }
 
 /* --- VISUAL FX --- */
@@ -359,7 +372,7 @@ body:has(.alpha-theme-dot:hover) #custom-cursor {
 
 .file-node {
     padding: 4px 8px;
-    /* cursor: pointer; */
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -385,7 +398,7 @@ body:has(.alpha-theme-dot:hover) #custom-cursor {
     margin-top: 10px;
     color: var(--comment);
     font-size: 0.75rem;
-    /* cursor: pointer; */
+    cursor: pointer;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -642,6 +655,10 @@ body:has(.alpha-theme-dot:hover) #custom-cursor {
 .seg-dark {
     background: var(--seg-bg);
     color: var(--fg);
+}
+
+#theme-switch {
+    cursor: pointer;
 }
 
 .seg-light {
@@ -1327,6 +1344,7 @@ pre[class*="language-"] {
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     background: var(--bg);
     z-index: 9999;
     display: flex;
@@ -1335,7 +1353,9 @@ pre[class*="language-"] {
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
 }
 
 .alpha-donut-canvas {
@@ -1437,11 +1457,39 @@ pre[class*="language-"] {
 
 .alpha-content {
     text-align: center;
-    max-width: 600px;
-    width: 90%;
-    padding: 40px 0;
+    width: 100%;
+    max-width: 1132px;
+    /* margin: auto centres it, and keeps it scrollable when the screen is too short */
+    margin: auto;
+    padding: 40px 16px;
     position: relative;
     z-index: 1;
+}
+
+/* Full-screen canvases of the 'field' animation and of the ASCII-art name (alpha.js) */
+.alpha-canvas {
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Placeholder sized by alpha.js; the name itself is drawn on a canvas
+   (click it and it bursts apart) */
+.alpha-name {
+    margin: 0 auto 28px;
+    cursor: pointer;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
 }
 
 .alpha-logo {
@@ -1494,15 +1542,6 @@ pre[class*="language-"] {
     }
 }
 
-.alpha-subtitle {
-    color: var(--comment);
-    font-size: 1rem;
-    margin-bottom: 40px;
-    opacity: 0;
-    animation: alphaFadeUp 0.5s ease forwards;
-    animation-delay: 0.7s;
-}
-
 @keyframes alphaFadeUp {
     from {
         opacity: 0;
@@ -1515,17 +1554,67 @@ pre[class*="language-"] {
     }
 }
 
+/* Everything below the name fades up in a stagger set by --d */
+.alpha-intro {
+    opacity: 0;
+    animation: alphaFadeUp 0.45s ease both;
+    animation-delay: var(--d, 0s);
+}
+
+/* Typewriter prompt: a fixed-width, left-aligned line so typing does not shift it */
+.alpha-prompt {
+    width: min(44ch, 100%);
+    margin: 0 auto 34px;
+    display: flex;
+    align-items: center;
+    gap: 1ch;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--comment);
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.alpha-prompt .alpha-first-char {
+    opacity: 1;
+}
+
+.alpha-prompt-sym {
+    color: var(--green);
+    font-weight: bold;
+}
+
+.alpha-typed {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.alpha-caret {
+    flex-shrink: 0;
+    width: 1ch;
+    height: 1.2em;
+    margin-left: -1ch;
+    background: var(--green);
+    animation: alphaBlink 1s step-end infinite;
+}
+
+/* Solid while typing, blinking when idle, like a real terminal */
+.alpha-prompt.typing .alpha-caret {
+    animation: none;
+}
+
 .alpha-buttons {
+    width: min(400px, 100%);
+    margin: 0 auto 22px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 40px;
+    gap: 2px;
 
     /* Block accidental clicks while the intro animation is playing.
        The buttons become interactive only after the animation fully settles. */
     pointer-events: none;
-    animation: alphaUnlock 0s 1.5s forwards;
+    animation: alphaUnlock 0s 1.4s forwards;
 }
 
 @keyframes alphaUnlock {
@@ -1533,24 +1622,35 @@ pre[class*="language-"] {
 }
 
 .alpha-btn {
-    display: flex;
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
     align-items: center;
-    gap: 12px;
-    padding: 8px 20px;
+    gap: 14px;
+    padding: 8px 16px 8px 14px;
     color: var(--comment);
-    /* cursor: pointer; */
+    border-left: 2px solid transparent;
     border-radius: 4px;
     font-size: 14px;
     line-height: 1.4;
-    min-width: 220px;
-    opacity: 0;
-    animation: alphaFadeUp 0.3s ease forwards;
-    animation-delay: calc(0.8s + var(--i) * 0.06s);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.12s, color 0.12s, border-color 0.12s;
 }
 
-.alpha-btn:hover {
+.alpha-btn:hover,
+.alpha-btn.selected {
     color: var(--fg);
     background: var(--selection);
+}
+
+.alpha-btn.selected {
+    border-left-color: var(--blue);
+}
+
+.alpha-btn i {
+    color: var(--blue);
+    text-align: center;
+    font-size: 14px;
 }
 
 .alpha-btn .alpha-key {
@@ -1560,55 +1660,137 @@ pre[class*="language-"] {
     text-align: center;
 }
 
-.alpha-btn i {
-    color: var(--blue);
-    width: 18px;
-    text-align: center;
-    font-size: 14px;
+.alpha-hint {
+    color: var(--comment);
+    font-size: 0.7rem;
+    margin-bottom: 26px;
+}
+
+.alpha-hint kbd {
+    font-family: inherit;
+    font-size: 0.65rem;
+    color: var(--fg);
+    background: var(--bg-dark);
+    border: 1px solid var(--line-nr);
+    border-radius: 3px;
+    padding: 1px 5px;
+    margin: 0 2px;
+}
+
+/* Touch screens have no keyboard to hint at */
+@media (hover: none) and (pointer: coarse) {
+    .alpha-hint {
+        display: none;
+    }
 }
 
 .alpha-footer {
     color: var(--comment);
     font-size: 0.75rem;
-    margin-top: 20px;
-    opacity: 0;
-    animation: alphaFadeUp 0.4s ease forwards;
-    animation-delay: 1.5s;
+    line-height: 1.6;
+}
+
+.alpha-footer i {
+    color: var(--yellow);
 }
 
 .alpha-footer span {
     color: var(--green);
 }
 
+.alpha-footer b {
+    color: var(--fg);
+    font-weight: normal;
+}
+
+.alpha-fortune {
+    max-width: 520px;
+    margin: 6px auto 0;
+    color: var(--comment);
+    font-size: 0.75rem;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+.alpha-fortune span {
+    white-space: nowrap;
+}
+
 .alpha-theme-switcher {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 24px;
-    opacity: 0;
-    animation: alphaFadeUp 0.4s ease forwards;
-    animation-delay: 1.8s;
+    align-items: center;
+    gap: 12px;
+    margin-top: 22px;
+    color: var(--fg);
 }
 
+/* Each dot has its own data-theme, so these variables are that theme's colours */
 .alpha-theme-dot {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: var(--comment);
+    background: conic-gradient(var(--blue) 0 25%, var(--green) 0 50%, var(--yellow) 0 75%, var(--purple) 0);
+    border: 3px solid var(--bg);
+    box-sizing: content-box;
     cursor: pointer;
-    transition: transform 0.15s, background 0.15s;
-    opacity: 0.4;
+    transition: transform 0.15s, opacity 0.15s;
+    opacity: 0.55;
 }
 
 .alpha-theme-dot:hover {
-    transform: scale(1.4);
-    opacity: 0.8;
+    transform: scale(1.25);
+    opacity: 0.9;
 }
 
+/* currentColor is inherited from the switcher, i.e. the active theme's --fg */
 .alpha-theme-dot.active {
-    background: var(--blue);
     opacity: 1;
-    transform: scale(1.3);
+    transform: scale(1.2);
+    outline: 1.5px solid currentColor;
+}
+
+.alpha-theme-name {
+    min-width: 9ch;
+    color: var(--comment);
+    font-size: 0.75rem;
+    text-align: left;
+}
+
+/* Leaving: the content zooms past the viewer while the editor eases in behind */
+.alpha-content {
+    transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.alpha-dashboard.leaving .alpha-content {
+    transform: scale(1.04);
+    filter: blur(2px);
+}
+
+.alpha-dashboard.skip-intro .alpha-intro {
+    animation: none;
+    opacity: 1;
+}
+
+.alpha-dashboard.skip-intro .alpha-buttons {
+    animation: none;
+    pointer-events: auto;
+}
+
+.app-container.alpha-reveal .workspace {
+    animation: editorReveal 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes editorReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1616,10 +1798,60 @@ pre[class*="language-"] {
         font-size: 2.5rem;
     }
 
+    .alpha-content {
+        padding: 28px 16px;
+    }
+
+    .alpha-name {
+        margin-bottom: 22px;
+    }
+
+    .alpha-prompt {
+        font-size: 0.85rem;
+        margin-bottom: 24px;
+    }
+
     .alpha-btn {
-        font-size: 0.8rem;
-        min-width: 180px;
-        padding: 10px 16px;
+        font-size: 0.85rem;
+        padding: 11px 14px 11px 12px;
+    }
+
+    .alpha-fortune {
+        font-size: 0.7rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .alpha-intro,
+    .alpha-char,
+    .alpha-cursor {
+        animation: none;
+        opacity: 1;
+    }
+
+    .alpha-buttons {
+        animation: none;
+        pointer-events: auto;
+    }
+
+    .alpha-caret {
+        animation: none;
+    }
+
+    .alpha-content,
+    .alpha-theme-dot,
+    .alpha-btn {
+        transition: none;
+    }
+
+    .alpha-dashboard.leaving .alpha-content {
+        transform: none;
+        filter: none;
+    }
+
+    .app-container.alpha-reveal .workspace {
+        animation: none;
     }
 }
 
@@ -1722,7 +1954,7 @@ pre[class*="language-"] {
     align-items: center;
     gap: 10px;
     padding: 6px 16px;
-    /* cursor: pointer; */
+    cursor: pointer;
     color: var(--fg);
     font-size: 0.85rem;
     transition: background 0.05s;
