@@ -126,7 +126,7 @@
                 <!-- Theme switcher -->
                 <!-- Minor TODO: the cursor transition now applies to segments, 
                 independently from the id -->
-                <div class="segment seg-dark" id="theme-switch"
+                <div class="segment seg-dark" id="theme-switch" role="button"
                     style="border-left: 1px solid var(--border);">
                     <i class="fas fa-palette" style="font-size: 10px;"></i>
                     <span id="theme-name"></span>
@@ -152,24 +152,18 @@
     <div class="mobile-toggle mobile-search" onclick="openTelescope()"><i class="fas fa-search"></i></div>
     <div class="mobile-toggle" onclick="toggleTree()"><i class="fas fa-bars"></i></div>
 
-    <!-- Scripts (Load Order Matters: config → commands → engine) -->
+    <!-- Scripts (Load Order Matters: config → commands → alpha → engine) -->
     <script src="config.js"></script>
     <script src="commands.js"></script>
+    <script src="alpha.js"></script>
     <script src="engine.js"></script>
 
     <!-- The cursor is just an illusion ; ) -->
-    <div id="custom-cursor"></div>
-    <script>
-        const cursor = document.getElementById('custom-cursor');
-
-        // Only track mouse on non-touch (pointer) devices
-        if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
-            window.addEventListener('mousemove', (e) => {
-              cursor.style.left = `${e.clientX}px`;
-              cursor.style.top = `${e.clientY}px`;
-            });
-        }
-    </script>
+    <div id="custom-cursor" aria-hidden="true">
+        <svg class="cursor-ring" width="48" height="48" viewBox="-24 -24 48 48"><circle cx="0" cy="0" r="16" /></svg>
+        <div class="cursor-dot"></div>
+    </div>
+    <script src="cursor.js"></script>
 </body>
 
 </html>

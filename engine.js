@@ -10,6 +10,11 @@ window.THEMES = THEMES;
 let asciiAnimId = null;
 const asciiAngles = { A: 0, B: 0 };
 
+let alphaHideTimer = null;
+let alphaIntroUntil = 0;
+let alphaSel = 0;
+let telescopeFromAlpha = false;
+
 // Dynamically define your cursor, depending on a color
 function getCursorSvg(hexColor) {
     const cleanHex = hexColor.replace('#', '');
@@ -111,7 +116,14 @@ function setTheme(themeName) {
         label.classList.add(`theme-${themeName}`);
     }
 
+    syncAlphaThemeUI(themeName);
     updateCursorColor();
+}
+
+function cycleTheme() {
+    const current = localStorage.getItem('theme') || THEMES[0];
+    const currentIndex = THEMES.indexOf(current);
+    setTheme(THEMES[(currentIndex + 1) % THEMES.length]);
 }
 
 const savedTheme = localStorage.getItem('theme') || config.defaultTheme || THEMES[0];
@@ -119,12 +131,7 @@ setTheme(savedTheme);
 
 const themeSwitch = document.getElementById('theme-switch');
 if (themeSwitch) {
-    themeSwitch.addEventListener('click', () => {
-        const current = localStorage.getItem('theme') || THEMES[0];
-        const currentIndex = THEMES.indexOf(current);
-        const nextIndex = (currentIndex + 1) % THEMES.length;
-        setTheme(THEMES[nextIndex]);
-    });
+    themeSwitch.addEventListener('click', cycleTheme);
 }
 
 window.setTheme = setTheme;
@@ -183,7 +190,22 @@ function initLightbox() {
     }
 }
 
+// Dashboard-only actions: they run on top of the dashboard and keep it open
+const alphaBuiltins = {
+    '@telescope': () => openTelescope(),
+    '@theme': () => cycleTheme(),
+    '@cv': () => {
+        customCommands.cv?.fn([], {});
+        showToast('Downloading CV...', 'success');
+    },
+};
+
 function runAlphaAction(cmd) {
+    if (alphaBuiltins[cmd]) {
+        alphaBuiltins[cmd]();
+        return;
+    }
+    hideAlpha();
     if (cmd.startsWith(':')) {
         executeCmd(cmd);
     } else {
@@ -447,7 +469,8 @@ function startAsciiCube(container) {
 
 function startAlphaAnimation(container) {
     const animType = config.alpha?.animation;
-    if (animType === false) return;
+    // 'field' is drawn by AlphaFX (alpha.js)
+    if (animType === false || animType === 'field') return;
 
     const animations = {
         donut: startAsciiDonut,
@@ -459,113 +482,230 @@ function startAlphaAnimation(container) {
     fn(container);
 }
 
+// The small typed logo, used when the title has letters the ASCII-art font lacks
+function buildAlphaLogo(ac) {
+    const logo = document.createElement('div');
+    logo.className = 'alpha-logo';
+
+    const titleText = ac.title || 'neovim-web';
+    const accentText = ac.titleAccent || '';
+    const titleColor = ac.titleColor || 'var(--blue)';
+    const accentColor = ac.titleAccentColor || 'var(--comment)';
+    const chars = (titleText + accentText).split('');
+    const titleLen = titleText.length;
+
+    const firstchar = document.createElement('span');
+    firstchar.className = 'alpha-first-char';
+    firstchar.textContent = '~';
+    firstchar.style.setProperty('--i', 0);
+    logo.appendChild(firstchar);
+
+    chars.forEach((ch, i) => {
+        const span = document.createElement('span');
+        span.textContent = ch;
+        span.className = 'alpha-char';
+        span.style.setProperty('--i', i+1);
+        span.style.setProperty('--char-color', i >= titleLen ? accentColor : titleColor);
+        logo.appendChild(span);
+    });
+
+    const cursor = document.createElement('span');
+    cursor.className = 'alpha-cursor';
+    cursor.textContent = '_';
+    cursor.style.setProperty('--i', chars.length+1);
+    logo.appendChild(cursor);
+
+    return logo;
+}
+
+function alphaWords() {
+    const ac = config.alpha || {};
+    return [ac.title || 'neovim-web', ac.titleAccent].filter(Boolean);
+}
+
+function buildAlphaDashboard() {
+    const ac = config.alpha || {};
+    const dash = document.createElement('div');
+    dash.id = 'alpha-dashboard';
+    dash.className = 'alpha-dashboard';
+
+    const content = document.createElement('div');
+    content.className = 'alpha-content';
+
+    const words = alphaWords();
+    if (AlphaFX.canDraw(words)) {
+        const heading = document.createElement('h1');
+        heading.className = 'sr-only';
+        heading.textContent = words.join(' ');
+        const name = document.createElement('div');
+        name.className = 'alpha-name';
+        name.setAttribute('aria-hidden', 'true');
+        content.appendChild(heading);
+        content.appendChild(name);
+    } else {
+        content.appendChild(buildAlphaLogo(ac));
+    }
+
+    const prompt = document.createElement('div');
+    prompt.className = 'alpha-prompt alpha-intro';
+    prompt.style.setProperty('--d', '0.75s');
+    prompt.innerHTML = `<span class="alpha-first-char">~</span><span class="alpha-prompt-sym">λ</span><span class="alpha-typed"></span><span class="alpha-caret"></span>`;
+    if (ac.subtitleColor) prompt.querySelector('.alpha-typed').style.color = ac.subtitleColor;
+
+    const buttons = document.createElement('div');
+    buttons.className = 'alpha-buttons';
+
+    (ac.actions || []).forEach((a, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'alpha-btn alpha-intro';
+        btn.setAttribute('role', 'button');
+        btn.style.setProperty('--d', `${0.85 + i * 0.06}s`);
+        btn.innerHTML = `<i class="${a.icon}"></i><span class="alpha-label">${a.label}</span><span class="alpha-key">${a.key}</span>`;
+        btn.addEventListener('mouseenter', () => selectAlphaBtn(i));
+        btn.addEventListener('click', () => runAlphaAction(a.cmd));
+        buttons.appendChild(btn);
+    });
+
+    const hint = document.createElement('div');
+    hint.className = 'alpha-hint alpha-intro';
+    hint.style.setProperty('--d', '1.25s');
+    hint.innerHTML = `<kbd>j</kbd><kbd>k</kbd> move &middot; <kbd>enter</kbd> open &middot; <kbd>:</kbd> command &middot; <kbd>/</kbd> search`;
+
+    // alpha-nvim's "loaded N plugins in X ms", with real numbers
+    const commands = Object.values(customCommands || {});
+    const secrets = commands.filter(c => c.easterEgg).length;
+    const footer = document.createElement('div');
+    footer.className = 'alpha-footer alpha-intro';
+    footer.style.setProperty('--d', '1.3s');
+    footer.innerHTML = `<i class="fas fa-bolt"></i> <span>${words.join('-')}</span> loaded `
+        + `<b>${config.files.length}</b> files, <b>${commands.length - secrets}</b> commands `
+        + `and <b>${secrets}</b> secrets in <b>${performance.now().toFixed(2)}</b>ms`;
+
+    const fortune = document.createElement('div');
+    fortune.className = 'alpha-fortune alpha-intro';
+    fortune.style.setProperty('--d', '1.4s');
+
+    const themeSwitcher = document.createElement('div');
+    themeSwitcher.className = 'alpha-theme-switcher alpha-intro';
+    themeSwitcher.style.setProperty('--d', '1.5s');
+    THEMES.forEach(t => {
+        const dot = document.createElement('span');
+        dot.className = 'alpha-theme-dot';
+        dot.setAttribute('role', 'button');
+        // The dot carries its own data-theme, so its swatch shows that theme's colours
+        dot.dataset.theme = t;
+        dot.title = t;
+        dot.addEventListener('click', () => setTheme(t));
+        themeSwitcher.appendChild(dot);
+    });
+    const themeName = document.createElement('span');
+    themeName.className = 'alpha-theme-name';
+    themeSwitcher.appendChild(themeName);
+
+    content.appendChild(prompt);
+    content.appendChild(buttons);
+    content.appendChild(hint);
+    content.appendChild(footer);
+    content.appendChild(fortune);
+    content.appendChild(themeSwitcher);
+    dash.appendChild(content);
+    document.body.appendChild(dash);
+
+    // The first click during the intro only fast-forwards it
+    dash.addEventListener('pointerdown', () => {
+        if (Date.now() < alphaIntroUntil) finishAlphaIntro();
+    });
+
+    return dash;
+}
+
+function syncAlphaThemeUI(themeName) {
+    document.querySelectorAll('.alpha-theme-dot').forEach(d => d.classList.toggle('active', d.dataset.theme === themeName));
+    const label = document.querySelector('.alpha-theme-name');
+    if (label) label.textContent = themeName;
+}
+
+function selectAlphaBtn(i) {
+    const btns = document.querySelectorAll('#alpha-dashboard .alpha-btn');
+    if (!btns.length) return;
+    alphaSel = (i + btns.length) % btns.length;
+    btns.forEach((b, j) => b.classList.toggle('selected', j === alphaSel));
+}
+
+function activateAlphaBtn() {
+    const action = (config.alpha?.actions || [])[alphaSel];
+    if (action) runAlphaAction(action.cmd);
+}
+
+function finishAlphaIntro() {
+    alphaIntroUntil = 0;
+    document.getElementById('alpha-dashboard')?.classList.add('skip-intro');
+    AlphaFX.finishIntro();
+}
+
+function isAlphaActive() {
+    return !!document.getElementById('alpha-dashboard')?.classList.contains('active');
+}
+
+function setAlphaMode() {
+    state.mode = 'ALPHA';
+    el.modeSeg.innerText = 'ALPHA';
+    el.modeSeg.className = 'segment mode-alpha';
+}
+
 function showAlpha() {
     const ac = config.alpha || {};
-    let dash = document.getElementById('alpha-dashboard');
+    const dash = document.getElementById('alpha-dashboard') || buildAlphaDashboard();
 
-    if (!dash) {
-        dash = document.createElement('div');
-        dash.id = 'alpha-dashboard';
-        dash.className = 'alpha-dashboard';
+    clearTimeout(alphaHideTimer);
+    dash.classList.remove('leaving', 'skip-intro');
 
-        const content = document.createElement('div');
-        content.className = 'alpha-content';
-
-        const logo = document.createElement('div');
-        logo.className = 'alpha-logo';
-
-        const titleText = ac.title || 'neovim-web';
-        const accentText = ac.titleAccent || '';
-        const titleColor = ac.titleColor || 'var(--blue)';
-        const accentColor = ac.titleAccentColor || 'var(--comment)';
-        const chars = (titleText + accentText).split('');
-        const titleLen = titleText.length;
-
-        const firstchar = document.createElement('span');
-        firstchar.className = 'alpha-first-char';
-        firstchar.textContent = '~';
-        firstchar.style.setProperty('--i', 0);
-        logo.appendChild(firstchar);
-
-        chars.forEach((ch, i) => {
-            const span = document.createElement('span');
-            span.textContent = ch;
-            span.className = 'alpha-char';
-            span.style.setProperty('--i', i+1);
-            span.style.setProperty('--char-color', i >= titleLen ? accentColor : titleColor);
-            logo.appendChild(span);
-        });
-
-        const cursor = document.createElement('span');
-        cursor.className = 'alpha-cursor';
-        cursor.textContent = '_';
-        cursor.style.setProperty('--i', chars.length+1);
-        logo.appendChild(cursor);
-
-        const subtitle = document.createElement('div');
-        subtitle.className = 'alpha-subtitle';
-        subtitle.textContent = ac.subtitle || '';
-        if (ac.subtitleColor) subtitle.style.color = ac.subtitleColor;
-
-        const buttons = document.createElement('div');
-        buttons.className = 'alpha-buttons';
-
-        (ac.actions || []).forEach((a, i) => {
-            const btn = document.createElement('div');
-            btn.className = 'alpha-btn';
-            btn.style.setProperty('--i', i);
-            btn.innerHTML = `<span class="alpha-key">${a.key}</span> <i class="${a.icon}"></i> ${a.label}`;
-            btn.addEventListener('click', () => { hideAlpha(); runAlphaAction(a.cmd); });
-            buttons.appendChild(btn);
-        });
-
-        const footer = document.createElement('div');
-        footer.className = 'alpha-footer';
-        footer.innerHTML = `<span>${titleText}${accentText}</span> &nbsp; ${config.files.length} files &nbsp; ${Object.keys(customCommands || {}).length} commands`;
-
-        const themeSwitcher = document.createElement('div');
-        themeSwitcher.className = 'alpha-theme-switcher';
-        THEMES.forEach(t => {
-            const dot = document.createElement('span');
-            dot.className = 'alpha-theme-dot';
-            dot.dataset.theme = t;
-            dot.title = t;
-            dot.addEventListener('click', () => {
-                setTheme(t);
-                themeSwitcher.querySelectorAll('.alpha-theme-dot').forEach(d => d.classList.toggle('active', d.dataset.theme === t));
-            });
-            const current = localStorage.getItem('theme') || THEMES[0];
-            if (t === current) dot.classList.add('active');
-            themeSwitcher.appendChild(dot);
-        });
-
-        content.appendChild(logo);
-        content.appendChild(subtitle);
-        content.appendChild(buttons);
-        content.appendChild(footer);
-        content.appendChild(themeSwitcher);
-        dash.appendChild(content);
-        startAlphaAnimation(dash);
-        document.body.appendChild(dash);
+    const fortunes = ac.fortunes || [];
+    const fortune = dash.querySelector('.alpha-fortune');
+    if (fortune && fortunes.length) {
+        const f = fortunes[Math.floor(Math.random() * fortunes.length)];
+        fortune.innerHTML = `&ldquo;${f.quote}&rdquo; <span>&mdash; ${f.author}</span>`;
     }
 
     dash.style.display = 'flex';
     requestAnimationFrame(() => dash.classList.add('active'));
     if (!asciiAnimId) startAlphaAnimation(dash);
+    AlphaFX.start(dash, {
+        field: ac.animation === 'field',
+        words: alphaWords(),
+        lines: [ac.subtitle, ...(ac.taglines || [])].filter(Boolean),
+    });
 
-    state.mode = 'ALPHA';
-    state.alphaReadyAt = Date.now() + 2000; // ignore keys until animation settles
-    el.modeSeg.innerText = 'ALPHA';
-    el.modeSeg.className = 'segment mode-alpha';
+    selectAlphaBtn(0);
+    syncAlphaThemeUI(localStorage.getItem('theme') || THEMES[0]);
+    setAlphaMode();
+    alphaIntroUntil = Date.now() + 1500; // the first key during the intro just fast-forwards it
 }
 
 function hideAlpha() {
     const dash = document.getElementById('alpha-dashboard');
     if (!dash) return;
+    const wasActive = dash.classList.contains('active');
     dash.classList.remove('active');
+    dash.classList.add('leaving');
     stopAsciiAnimation();
-    setTimeout(() => { dash.style.display = 'none'; }, 300);
+    AlphaFX.stop();
+    clearTimeout(alphaHideTimer);
+    alphaHideTimer = setTimeout(() => {
+        dash.style.display = 'none';
+        dash.classList.remove('leaving');
+    }, 350);
+    if (wasActive) revealEditor();
     setMode('NORMAL');
+}
+
+// The editor eases in behind the fading dashboard
+function revealEditor() {
+    const app = document.querySelector('.app-container');
+    app.classList.remove('alpha-reveal');
+    void app.offsetWidth;
+    app.classList.add('alpha-reveal');
+    setTimeout(() => app.classList.remove('alpha-reveal'), 700);
 }
 
 window.showAlpha = showAlpha;
@@ -1069,7 +1209,9 @@ function buildTelescopeItems() {
 }
 
 function openTelescope() {
-    if (state.mode === 'TELESCOPE' || state.mode === 'ALPHA') return;
+    if (state.mode === 'TELESCOPE') return;
+    // From the dashboard, telescope opens on top of it; Escape goes back there
+    telescopeFromAlpha = state.mode === 'ALPHA';
 
     state.mode = 'TELESCOPE';
     el.modeSeg.innerText = 'TELESCOPE';
@@ -1146,16 +1288,14 @@ function openTelescope() {
 
             row.addEventListener('click', (e) => {
                 e.stopPropagation();
-                closeTelescope();
-                item.action();
+                runTelescopeItem(item);
             });
             let rowTouchY;
             row.addEventListener('touchstart', (e) => { rowTouchY = e.touches[0].clientY; }, { passive: true });
             row.addEventListener('touchend', (e) => {
                 if (Math.abs(e.changedTouches[0].clientY - rowTouchY) < 10) {
                     e.preventDefault();
-                    closeTelescope();
-                    item.action();
+                    runTelescopeItem(item);
                 }
             });
             results.appendChild(row);
@@ -1198,7 +1338,20 @@ function closeTelescope() {
     overlay.classList.remove('active');
     setTimeout(() => { overlay.style.display = 'none'; }, 200);
     telescopeState = null;
-    setMode('NORMAL');
+    if (telescopeFromAlpha && isAlphaActive()) {
+        document.activeElement?.blur();
+        setAlphaMode();
+    } else {
+        setMode('NORMAL');
+    }
+    telescopeFromAlpha = false;
+}
+
+function runTelescopeItem(item) {
+    const fromAlpha = telescopeFromAlpha;
+    closeTelescope();
+    if (fromAlpha) hideAlpha();
+    item.action();
 }
 
 function telescopeNav(delta) {
@@ -1211,9 +1364,7 @@ function telescopeNav(delta) {
 
 function telescopeSelect() {
     if (!telescopeState || telescopeState.filteredItems.length === 0) return;
-    const item = telescopeState.filteredItems[telescopeState.selectedIndex];
-    closeTelescope();
-    item.action();
+    runTelescopeItem(telescopeState.filteredItems[telescopeState.selectedIndex]);
 }
 
 window.openTelescope = openTelescope;
@@ -1347,16 +1498,21 @@ if (gitBranch) {
 
 document.addEventListener('keydown', e => {
     if (state.mode === 'ALPHA') {
-        e.preventDefault();
-        // Swallow all keys during the intro animation to prevent accidental navigation
-        if (Date.now() < (state.alphaReadyAt || 0)) return;
         const key = e.key.toLowerCase();
+        if (e.ctrlKey && key === 'p') { e.preventDefault(); openTelescope(); return; }
+        // Leave browser shortcuts (reload, zoom, devtools...) alone
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+        e.preventDefault();
+        if (key === 'shift' || key === 'control' || key === 'alt' || key === 'meta') return;
+        // The first key during the intro only fast-forwards it, to prevent accidental navigation
+        if (Date.now() < alphaIntroUntil) { finishAlphaIntro(); return; }
         if (key === ':') { hideAlpha(); setMode('COMMAND'); return; }
-        if (alphaKeyMap[key]) { hideAlpha(); alphaKeyMap[key](); return; }
-        if (key !== 'shift' && key !== 'control' && key !== 'alt' && key !== 'meta') {
-            hideAlpha();
-            openFile(config.startPage);
-        }
+        if (key === 'j' || key === 'arrowdown') { selectAlphaBtn(alphaSel + 1); return; }
+        if (key === 'k' || key === 'arrowup') { selectAlphaBtn(alphaSel - 1); return; }
+        if (key === 'enter' || key === ' ') { activateAlphaBtn(); return; }
+        if (alphaKeyMap[key]) { alphaKeyMap[key](); return; }
+        hideAlpha();
+        openFile(config.startPage);
         return;
     }
 
