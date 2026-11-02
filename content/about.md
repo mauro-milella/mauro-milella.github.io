@@ -1,3 +1,8 @@
+
+This website is still a work in progress and it's quite empty.
+
+Have a nice day!
+
 ## :fas fa-terminal: mauro-milella ~ > cat about.md
 
 Hi : )
