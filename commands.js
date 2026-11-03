@@ -86,7 +86,7 @@ const customCommands = {
         }
     },
 
-    'sl': {
+    'train': {
         desc: 'Spawn a train',
         easterEgg: true,
         fn: (args, sys) => {
