@@ -82,7 +82,7 @@ const customCommands = {
             const nextTheme = themes[nextIndex];
 
             window.setTheme(nextTheme);
-            sys.print(`<p>System theme updated: <strong style="color:var(--blue)">${nextTheme.toUpperCase()}</strong></p>`);
+            sys.print(`<p>System theme updated: <strong style="color:var(--main)">${nextTheme.toUpperCase()}</strong></p>`);
         }
     },
 

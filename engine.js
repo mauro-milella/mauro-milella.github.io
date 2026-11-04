@@ -489,7 +489,7 @@ function buildAlphaLogo(ac) {
 
     const titleText = ac.title || 'neovim-web';
     const accentText = ac.titleAccent || '';
-    const titleColor = ac.titleColor || 'var(--blue)';
+    const titleColor = ac.titleColor || 'var(--main)';
     const accentColor = ac.titleAccentColor || 'var(--comment)';
     const chars = (titleText + accentText).split('');
     const titleLen = titleText.length;
@@ -668,6 +668,7 @@ function showAlpha() {
     }
 
     dash.style.display = 'flex';
+    document.body.classList.add('alpha-open');
     requestAnimationFrame(() => dash.classList.add('active'));
     if (!asciiAnimId) startAlphaAnimation(dash);
     AlphaFX.start(dash, {
@@ -688,6 +689,7 @@ function hideAlpha() {
     const wasActive = dash.classList.contains('active');
     dash.classList.remove('active');
     dash.classList.add('leaving');
+    document.body.classList.remove('alpha-open');
     stopAsciiAnimation();
     AlphaFX.stop();
     clearTimeout(alphaHideTimer);
@@ -917,7 +919,7 @@ function updateUI() {
         }
 
         const fileIndex = config.files.indexOf(file);
-        const color = fileIndex > -1 ? COLORS[fileIndex % COLORS.length] : 'var(--blue)';
+        const color = fileIndex > -1 ? COLORS[fileIndex % COLORS.length] : 'var(--main)';
         return `
             <div class="tab ${active}" onclick="openFile('${file}')">
                 <i class="fas fa-file-code" style="color: ${color}"></i> ${file}.md
@@ -999,7 +1001,7 @@ function buildOverflowItem(file) {
     } else {
         const fileIndex = config.files.indexOf(file);
         icon = 'fas fa-file-code';
-        color = fileIndex > -1 ? COLORS[fileIndex % COLORS.length] : 'var(--blue)';
+        color = fileIndex > -1 ? COLORS[fileIndex % COLORS.length] : 'var(--main)';
         label = file + '.md';
     }
 
@@ -1100,7 +1102,7 @@ window.initDuckDB = async function(sys) {
         window.duckDB = db;
         window.duckConn = await db.connect();
 
-        sys.print(`<p style="color:var(--blue)">> Ingesting site pages...</p>`);
+        sys.print(`<p style="color:var(--main)">> Ingesting site pages...</p>`);
 
         await window.duckConn.query(`
             CREATE TABLE pages (

@@ -102,7 +102,7 @@
         dot.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
         dot.classList.toggle('is-behind', orbit > 0.5 && oy < 0);
 
-        const handScale = (0.6 + 0.6 * hover) * (pressed ? 0.88 : 1);
+        const handScale = (0.6 + 0.45 * hover) * (pressed ? 0.88 : 1);
         const at = `translate3d(${mouse.x}px, ${mouse.y}px, 0)`;
         hand.style.transform = `${at} scale(${handScale.toFixed(3)})`;
         ping.style.setProperty('--ping-at', at);

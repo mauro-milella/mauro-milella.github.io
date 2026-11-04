@@ -8,9 +8,11 @@
  *          same everywhere, spirals in, dodges the mouse and glitches sometimes
  *   typer  the typewriter prompt under the name
  *
- * Colours come from the active theme's CSS variables. Nothing runs while the
- * dashboard is hidden or the tab is in the background, and
- * prefers-reduced-motion gets a single still frame.
+ * The field is the whole site's backdrop: it lives in #site-bg behind the
+ * editor too, and only calms down (dimmer, quieter behind the page text) when
+ * a page is open. Colours come from the active theme's CSS variables. Nothing
+ * runs while the tab is in the background, and prefers-reduced-motion gets a
+ * single still frame.
  */
 const AlphaFX = (() => {
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -19,10 +21,13 @@ const AlphaFX = (() => {
     const smoothstep = (a, b, v) => { const t = clamp((v - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
     const pick = arr => arr[Math.floor(Math.random() * arr.length)];
     const FONT = '"JetBrains Mono", monospace';
-    const LOGIC = Array.from('∀∃λ⊢⊨¬∧∨→⊤⊥∈≡∑∫∂∇∞πℕ□◇');
+    const LOGIC = Array.from('∀∃∄λ⊢⊨⊩¬∧∨→↦⇒⇔⊤⊥∈∉⊂⊆∪∩∅≡≈≠≤≥∑∏∫∮∂∇∞√πφεδθμσωΓΔΦΨΩℕℤℚℝℂ□◇⊕⊗∘∴ℵ');
 
     let dash = null, content = null, running = false, mounted = false;
     let useField = false, raf = 0, last = 0;
+    // The field stays on behind the pages; `calm` eases from 0 (dashboard) to 1 (page open)
+    let backdrop = false, calm = 0;
+    const PAGE_GAIN = 0.6, PAGE_FLOOR = 0.3;
     const pointer = { x: -1e4, y: -1e4, inside: false, mouse: false, presence: 0 };
 
     // --- THEME ---
@@ -50,14 +55,14 @@ const AlphaFX = (() => {
         const v = name => resolveColor(`var(--${name})`);
         const ac = config.alpha || {};
         const bg = v('bg');
-        const words = [ac.titleColor || 'var(--blue)', ac.titleAccentColor || 'var(--comment)'].map(resolveColor);
+        const words = [ac.titleColor || 'var(--main)', ac.titleAccentColor || 'var(--comment)'].map(resolveColor);
         const luma = (0.2126 * bg[0] + 0.7152 * bg[1] + 0.0722 * bg[2]) / 255;
         colors = {
             bg: css(bg),
             // The same alpha reads much stronger on a light background
             fieldGain: luma > 0.5 ? 0.7 : 1,
             fg: css(v('fg')),
-            tiers: ['comment', 'blue', 'yellow'].map(n => css(v(n))),
+            tiers: ['comment', 'main', 'yellow'].map(n => css(v(n))),
             accents: ['blue', 'cyan', 'green', 'yellow', 'orange', 'purple', 'red'].map(n => css(v(n))),
             glitch: ['red', 'cyan'].map(n => css(v(n))),
             // ANSI Shadow's box-drawing "shadow" is the word colour sunk towards the background
@@ -123,20 +128,26 @@ const AlphaFX = (() => {
     // Gaussian vortex to psi, a click a travelling ring.
     const field = (() => {
         const GLYPHS = ['·', '-', '\\', '|', '/'];
-        const FREQ = 0.0022, LEVELS = 3.2, FLOW = 7000, MAX_SPEED = 140;
-        const VORTEX = 0.9, RIPPLE_AMP = 0.3, RIPPLE_MS = 1600;
+        const FREQ = 0.0019, LEVELS = 3.8, FLOW = 3800, MAX_SPEED = 60;
+        const VORTEX = 0.4, RIPPLE_AMP = 1, RIPPLE_MS = 900;
         const noise = simplex3(Math.random() * 2 ** 32);
         let canvas, ctx, dpr = 1, W = 0, H = 0, cw = 0, ch = 0, sw = 0, sh = 0, cols = 0, rows = 0;
         let atlas = null, vortexR = 200;
         let psi, gxs, gys, tiers, att;
         let particles = [], ripples = [];
 
-        function mount(parent) {
+        function mount() {
             if (canvas) return;
+            let host = document.getElementById('site-bg');
+            if (!host) {
+                host = document.createElement('div');
+                host.id = 'site-bg';
+                document.body.insertBefore(host, document.body.firstChild);
+            }
             canvas = document.createElement('canvas');
             canvas.className = 'alpha-canvas';
             canvas.setAttribute('aria-hidden', 'true');
-            parent.insertBefore(canvas, parent.firstChild);
+            host.appendChild(canvas);
             ctx = canvas.getContext('2d');
         }
 
@@ -165,7 +176,7 @@ const AlphaFX = (() => {
             tiers = new Uint8Array(n);
             att = new Float32Array(n).fill(1);
 
-            const want = clamp(Math.round(W * H / 24000), 16, 64);
+            const want = clamp(Math.round(W * H / 11000), 30, 130);
             while (particles.length < want) particles.push(spawn({}, true));
             particles.length = want;
             particles.forEach(p => { if (p.x > W || p.y > H) spawn(p, true); });
@@ -187,8 +198,8 @@ const AlphaFX = (() => {
             });
         }
 
-        // Dim the field behind the dashboard text so it stays readable
-        function avoid(rects) {
+        // Dim the field behind the dashboard or page text so it stays readable
+        function avoid(rects, floor = 0.14) {
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
                     const x = (c + 0.5) * cw, y = (r + 0.5) * ch;
@@ -196,7 +207,7 @@ const AlphaFX = (() => {
                     for (const b of rects) {
                         const qx = Math.abs(x - b.cx) - b.hw, qy = Math.abs(y - b.cy) - b.hh;
                         const d = Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0);
-                        a = Math.min(a, 0.14 + 0.86 * smoothstep(-6, 42, d));
+                        a = Math.min(a, floor + (1 - floor) * smoothstep(-6, 42, d));
                     }
                     att[r * cols + c] = a;
                 }
@@ -212,7 +223,7 @@ const AlphaFX = (() => {
             p.vy = 0;
             p.g = pick(LOGIC);
             p.c = Math.floor(Math.random() * 7);
-            p.life = 8 + Math.random() * 10;
+            p.life = 10 + Math.random() * 12;
             p.age = scatter ? Math.random() * p.life : 0;
             p.big = Math.random() < 0.3;
             return p;
@@ -222,29 +233,11 @@ const AlphaFX = (() => {
             ripples.push({ x, y, t0: now });
             if (ripples.length > 4) ripples.shift();
 
-            for (const p of particles) {
-                const dx = p.x - x, dy = p.y - y, d = Math.hypot(dx, dy) || 1;
-                if (d < 260) {
-                    const f = (1 - d / 260) * 240;
-                    p.vx += dx / d * f;
-                    p.vy += dy / d * f;
-                }
-            }
-            for (let i = 0; i < 5; i++) {
-                const p = spawn(pick(particles));
-                const a = Math.random() * Math.PI * 2, v = 120 + Math.random() * 160;
-                p.x = x;
-                p.y = y;
-                p.vx = Math.cos(a) * v;
-                p.vy = Math.sin(a) * v;
-                p.big = true;
-                p.life = 3 + Math.random() * 3;
-            }
         }
 
         // psi on the grid, plus which colour tier each cell gets
         function sample(now) {
-            const z = now * 0.00004;
+            const z = now * 0.00002;
             const pres = pointer.presence, px = pointer.x, py = pointer.y;
             const sig2 = 2 * (vortexR * 0.42) ** 2, reach2 = (vortexR * 1.3) ** 2;
             for (let r = 0, i = 0; r < rows; r++) {
@@ -257,15 +250,15 @@ const AlphaFX = (() => {
                         if (d2 < reach2) {
                             const b = VORTEX * pres * Math.exp(-d2 / sig2);
                             v += b;
-                            if (b > 0.12) t = 1;
+                            if (b > 0.1) t = 1;
                         }
                     }
                     for (let k = 0; k < ripples.length; k++) {
                         const rp = ripples[k], age = Math.max(0, now - rp.t0);
                         const d = Math.hypot(x - rp.x, y - rp.y);
                         const w = RIPPLE_AMP * Math.exp(-(((d - age * 0.5) / 36) ** 2)) * (1 - age / RIPPLE_MS);
-                        v += w;
-                        if (w > 0.08) t = 2;
+                        // Light only: the ring highlights the lines it crosses without bending them
+                        if (w > 0.35) t = 2;
                     }
                     psi[i] = v;
                     tiers[i] = t;
@@ -280,7 +273,7 @@ const AlphaFX = (() => {
 
             ctx.globalAlpha = 1;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const gain = palette().fieldGain;
+            const gain = palette().fieldGain * (1 - (1 - PAGE_GAIN) * calm);
 
             for (let r = 0, i = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++, i++) {
@@ -296,18 +289,18 @@ const AlphaFX = (() => {
                     const lv = psi[i] * LEVELS, level = Math.round(lv);
                     const dist = Math.abs(lv - level) / (g * LEVELS);
                     const half = 0.5 * (Math.abs(gx) * cw + Math.abs(gy) * ch) / g;
-                    const I = 1 - smoothstep(0.5 * half, 1.05 * half, dist);
+                    const I = 1 - smoothstep(0.3 * half, 0.7 * half, dist);
                     const tier = tiers[i];
 
                     let alpha, glyph = 0;
                     if (I > 0.02) {
                         // Every fourth contour is an "index contour", like on a topographic map
-                        alpha = tier ? 0.35 + 0.6 * I : (level % 4 === 0 ? 0.5 : 0.26) * I;
+                        alpha = tier ? 0.25 + 0.4 * I : (level % 3 === 0 ? 0.36 : 0.2) * I;
                         // Lines are undirected: fold the tangent angle into [0, pi) and pick - \ | /
                         const a = Math.atan2(gy, gx) + Math.PI / 2;
                         glyph = 1 + (Math.round((((a % Math.PI) + Math.PI) % Math.PI) / (Math.PI / 4)) & 3);
-                    } else if ((r + c) % 2 === 0) {
-                        alpha = 0.07; // faint graph-paper dots between the lines
+                    } else if (r % 2 === 0 && c % 3 === 0) {
+                        alpha = 0.05; // sparse graph-paper dots between the lines
                     } else {
                         continue;
                     }
@@ -334,12 +327,12 @@ const AlphaFX = (() => {
                         if (s > MAX_SPEED) { vx *= MAX_SPEED / s; vy *= MAX_SPEED / s; }
                         p.x += (vx + p.vx) * dt;
                         p.y += (vy + p.vy) * dt;
-                        const damp = Math.exp(-dt * 2.5);
+                        const damp = Math.exp(-dt * 3.5);
                         p.vx *= damp;
                         p.vy *= damp;
                     }
                     const fade = clamp(Math.min(p.age / 1.2, (p.life - p.age) / 1.2), 0, 1);
-                    const alpha = fade * (big ? 0.7 : 0.45) * att[cellAt(p.x, p.y)];
+                    const alpha = fade * (big ? 0.6 : 0.42) * att[cellAt(p.x, p.y)] * (1 - (1 - PAGE_GAIN) * calm);
                     if (alpha < 0.02) continue;
                     ctx.globalAlpha = alpha;
                     ctx.fillStyle = accents[p.c];
@@ -720,12 +713,13 @@ const AlphaFX = (() => {
         const dt = Math.min(0.05, (now - last) / 1000);
         last = now;
         pointer.presence += ((pointer.inside ? 1 : 0) - pointer.presence) * Math.min(1, dt * 6);
-        if (useField) field.frame(now, dt);
-        name.frame(now);
+        calm += ((running ? 0 : 1) - calm) * Math.min(1, dt * 3);
+        if (backdrop) field.frame(now, dt);
+        if (running) name.frame(now);
     }
 
     function play() {
-        if (raf || !running || document.hidden) return;
+        if (raf || !(running || backdrop) || document.hidden) return;
         if (reduced()) return still();
         last = performance.now();
         raf = requestAnimationFrame(loop);
@@ -739,13 +733,31 @@ const AlphaFX = (() => {
     function still() {
         const now = performance.now();
         pointer.presence = 0;
+        calm = running ? 0 : 1;
+        if (backdrop) field.frame(now, 0);
+        if (!running) return;
         name.finish();
-        if (useField) field.frame(now, 0);
         name.frame(now, true);
     }
 
+    // With a page open, quiet the field behind the text column
+    function pageRects() {
+        const out = document.getElementById('markdown-output');
+        const box = out?.getBoundingClientRect();
+        if (!box || !box.width) return [];
+        const view = document.getElementById('scroll-container')?.getBoundingClientRect() || box;
+        const top = Math.max(box.top, view.top), bottom = Math.min(box.bottom, view.bottom);
+        if (bottom <= top) return [];
+        return [{ cx: box.left + box.width / 2, cy: (top + bottom) / 2, hw: box.width / 2, hh: (bottom - top) / 2 }];
+    }
+
     function refreshRects() {
-        if (!running) return;
+        if (!running) {
+            if (!backdrop) return;
+            field.avoid(pageRects(), PAGE_FLOOR);
+            if (reduced()) still();
+            return;
+        }
         name.place();
         if (useField) {
             const rects = [...content.children]
@@ -760,9 +772,9 @@ const AlphaFX = (() => {
     }
 
     function relayout() {
-        if (!running) return;
-        if (useField) field.layout();
-        name.layout();
+        if (!running && !backdrop) return;
+        if (backdrop) field.layout();
+        if (running) name.layout();
         refreshRects();
     }
 
@@ -779,6 +791,14 @@ const AlphaFX = (() => {
         document.fonts?.ready.then(() => { field.retheme(); queueRelayout(); });
         new ResizeObserver(() => running && refreshRects()).observe(content);
         dash.addEventListener('scroll', () => running && refreshRects(), { passive: true });
+
+        // Pages: follow the text column as it scrolls, grows and changes
+        const out = document.getElementById('markdown-output');
+        if (out) {
+            new ResizeObserver(() => !running && refreshRects()).observe(out);
+            document.getElementById('scroll-container')
+                ?.addEventListener('scroll', () => !running && refreshRects(), { passive: true });
+        }
 
         document.addEventListener('visibilitychange', () => (document.hidden ? pause() : play()));
         motion.addEventListener('change', () => {
@@ -801,21 +821,24 @@ const AlphaFX = (() => {
             pointer.inside = true;
             pointer.mouse = false;
         };
-        dash.addEventListener('mousemove', e => {
+        // The pointer stirs the field everywhere, not only on the dashboard
+        window.addEventListener('mousemove', e => {
             pointer.x = e.clientX;
             pointer.y = e.clientY;
             pointer.inside = true;
             pointer.mouse = true;
-        });
-        dash.addEventListener('mouseleave', () => { pointer.inside = false; });
-        dash.addEventListener('touchstart', setTouch, { passive: true });
-        dash.addEventListener('touchmove', setTouch, { passive: true });
-        dash.addEventListener('touchend', () => { pointer.inside = false; }, { passive: true });
-        dash.addEventListener('pointerdown', e => {
-            if (!running || reduced() || e.target.closest('.alpha-btn, .alpha-theme-dot')) return;
+        }, { passive: true });
+        document.documentElement.addEventListener('mouseleave', () => { pointer.inside = false; });
+        window.addEventListener('touchstart', setTouch, { passive: true });
+        window.addEventListener('touchmove', setTouch, { passive: true });
+        window.addEventListener('touchend', () => { pointer.inside = false; }, { passive: true });
+        const NO_RIPPLE = 'a, button, input, textarea, select, [onclick], [role="button"], .alpha-btn, .alpha-theme-dot,'
+            + ' .file-node, .tab, .segment, .telescope-overlay, .markdown-body';
+        window.addEventListener('pointerdown', e => {
+            if (!(running || backdrop) || reduced() || e.target.closest(NO_RIPPLE)) return;
             const now = performance.now();
-            if (name.contains(e.target)) name.bloom(e.clientX, e.clientY, now);
-            if (useField) field.ripple(e.clientX, e.clientY, now);
+            if (running && name.contains(e.target)) name.bloom(e.clientX, e.clientY, now);
+            if (backdrop) field.ripple(e.clientX, e.clientY, now);
         });
     }
 
@@ -823,7 +846,10 @@ const AlphaFX = (() => {
         dash = d;
         content = d.querySelector('.alpha-content');
         useField = !!opts.field;
-        if (useField) field.mount(d);
+        if (useField) {
+            field.mount();
+            backdrop = true;
+        }
         name.setup(d, d.querySelector('.alpha-name'), opts.words || []);
         if (!mounted) mount();
 
@@ -834,12 +860,17 @@ const AlphaFX = (() => {
         play();
     }
 
+    // Leaving the dashboard: the name and typer stop, the backdrop keeps going
     function stop() {
         running = false;
-        pointer.inside = false;
-        pointer.presence = 0;
-        pause();
         typer.stop();
+        if (!backdrop) {
+            pointer.inside = false;
+            pointer.presence = 0;
+            pause();
+            return;
+        }
+        queueRelayout();
     }
 
     function finishIntro() {

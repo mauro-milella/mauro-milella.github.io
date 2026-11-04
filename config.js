@@ -18,7 +18,7 @@ const config = {
         // 'field' (ASCII flow field, see alpha.js), 'starfield', 'donut', 'cube' or false
         animation: 'field',
         title: 'mauro',
-        titleColor: 'var(--blue)',
+        titleColor: 'var(--main)',
         titleAccent: 'milella',
         titleAccentColor: 'var(--comment)',
         // The prompt under the name types the subtitle, then cycles through the taglines

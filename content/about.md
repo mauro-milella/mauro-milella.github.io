@@ -13,7 +13,7 @@ I am part of the [Applied Computational Logic and Artificial Intelligence Lab](h
 
 You can read about my research elsewhere on this website.
 
-I try to spend my days doing important stuff; unfortunately, one day I am going to disappear and it would be so sad not having made wonderful memories. So I mainly walk, talk with a few friends, enjoy sleeping, study (I am currently into model checking!), practice fast-typing and making a lot of love. Sometimes I like to design puzzles for certain friends: luckily for you, there is one hidden in this page (actually, I still need to finish it. Ops. WIP).
+I try to spend my days doing important stuff; unfortunately, one day I am going to disappear and it would be so sad not having made wonderful memories. So I extremely important stuff like reading books, having walks, talking with a few friends, enjoy sleeping, studying (I am currently into model checking!), practicing fast-typing and making a lot of love. Sometimes I like to design puzzles for certain friends; luckily for you, there is one hidden in this page (actually, I still need to finish it. Ops. WIP).
 
 I am obsessed with color themes, my favourite one being 
 <a href="https://www.color-hex.com/color-palette/1026676" style="color: #8ec07c">the</a> 
