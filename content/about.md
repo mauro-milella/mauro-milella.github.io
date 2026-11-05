@@ -13,7 +13,9 @@ I am part of the [Applied Computational Logic and Artificial Intelligence Lab](h
 
 You can read about my research elsewhere on this website.
 
-I try to spend my days doing important stuff; unfortunately, one day I am going to disappear and it would be so sad not having made wonderful memories. So I extremely important stuff like reading books, having walks, talking with a few friends, enjoy sleeping, studying (I am currently into model checking!), practicing fast-typing and making a lot of love. Sometimes I like to design puzzles for certain friends; luckily for you, there is one hidden in this page (actually, I still need to finish it. Ops. WIP).
+I try to spend my days doing important stuff, such as reading good books, hanging out with good friends, making love, practicing fast typing, studying, making love, sleeping, playing, listening to Lucio Dalla, etc.
+
+I also love to design puzzles: there is one hidden in this page (actually, I still need to finish it. Ops. WIP).
 
 I am obsessed with color themes, my favourite one being 
 <a href="https://www.color-hex.com/color-palette/1026676" style="color: #8ec07c">the</a> 
@@ -23,8 +25,6 @@ I am obsessed with color themes, my favourite one being
 
 It is my default choice when customizing many software environments.
 Also, <span style="color: #d79921">ochre</span> reminds me of my bestie :P
-
-I listen to Current Joys and Lucio Dalla almost every day.
 
 ---
 
