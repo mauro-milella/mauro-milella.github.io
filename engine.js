@@ -11,7 +11,12 @@ let asciiAnimId = null;
 const asciiAngles = { A: 0, B: 0 };
 
 let alphaHideTimer = null;
-let alphaIntroUntil = 0;
+// The dashboard ignores every key and click until its intro has fully played,
+// plus a short grace period, so nobody skips it by accident
+let alphaReady = false;
+let alphaReadyTimer = null;
+const ALPHA_INTRO_MS = 2000;  // the staggered fade-ins below the name end around here
+const ALPHA_GRACE_MS = 400;   // the little epsilon after everything has settled
 let alphaSel = 0;
 let telescopeFromAlpha = false;
 
@@ -205,6 +210,9 @@ function runAlphaAction(cmd) {
         alphaBuiltins[cmd]();
         return;
     }
+    // Let the chosen entry flash while the dashboard leaves
+    const i = (config.alpha?.actions || []).findIndex(a => a.cmd === cmd);
+    document.querySelectorAll('#alpha-dashboard .alpha-btn').forEach((b, j) => b.classList.toggle('launch', j === i));
     hideAlpha();
     if (cmd.startsWith(':')) {
         executeCmd(cmd);
@@ -611,10 +619,15 @@ function buildAlphaDashboard() {
     dash.appendChild(content);
     document.body.appendChild(dash);
 
-    // The first click during the intro only fast-forwards it
-    dash.addEventListener('pointerdown', () => {
-        if (Date.now() < alphaIntroUntil) finishAlphaIntro();
-    });
+    // Swallow clicks on the controls until the intro is over
+    const guard = e => {
+        if (!alphaReady && e.target.closest('.alpha-btn, .alpha-theme-dot')) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    };
+    dash.addEventListener('pointerdown', guard, true);
+    dash.addEventListener('click', guard, true);
 
     return dash;
 }
@@ -637,10 +650,26 @@ function activateAlphaBtn() {
     if (action) runAlphaAction(action.cmd);
 }
 
-function finishAlphaIntro() {
-    alphaIntroUntil = 0;
-    document.getElementById('alpha-dashboard')?.classList.add('skip-intro');
-    AlphaFX.finishIntro();
+// Unlock once the name has landed, the first line is typed and the fade-ins are
+// done, then wait the grace period
+function armAlphaReady(dash) {
+    clearTimeout(alphaReadyTimer);
+    alphaReady = false;
+    dash.classList.remove('ready');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const t0 = performance.now();
+    const check = () => {
+        const played = reduced || (performance.now() - t0 >= ALPHA_INTRO_MS && AlphaFX.introDone());
+        if (!played) {
+            alphaReadyTimer = setTimeout(check, 100);
+            return;
+        }
+        alphaReadyTimer = setTimeout(() => {
+            alphaReady = true;
+            dash.classList.add('ready');
+        }, ALPHA_GRACE_MS);
+    };
+    check();
 }
 
 function isAlphaActive() {
@@ -658,7 +687,8 @@ function showAlpha() {
     const dash = document.getElementById('alpha-dashboard') || buildAlphaDashboard();
 
     clearTimeout(alphaHideTimer);
-    dash.classList.remove('leaving', 'skip-intro');
+    dash.classList.remove('leaving');
+    dash.querySelectorAll('.alpha-btn.launch').forEach(b => b.classList.remove('launch'));
 
     const fortunes = ac.fortunes || [];
     const fortune = dash.querySelector('.alpha-fortune');
@@ -680,23 +710,25 @@ function showAlpha() {
     selectAlphaBtn(0);
     syncAlphaThemeUI(localStorage.getItem('theme') || THEMES[0]);
     setAlphaMode();
-    alphaIntroUntil = Date.now() + 1500; // the first key during the intro just fast-forwards it
+    armAlphaReady(dash);
 }
 
 function hideAlpha() {
     const dash = document.getElementById('alpha-dashboard');
     if (!dash) return;
     const wasActive = dash.classList.contains('active');
-    dash.classList.remove('active');
+    clearTimeout(alphaReadyTimer);
+    alphaReady = false;
+    dash.classList.remove('active', 'ready');
     dash.classList.add('leaving');
     document.body.classList.remove('alpha-open');
     stopAsciiAnimation();
-    AlphaFX.stop();
+    AlphaFX.leave();
     clearTimeout(alphaHideTimer);
     alphaHideTimer = setTimeout(() => {
         dash.style.display = 'none';
         dash.classList.remove('leaving');
-    }, 350);
+    }, 950);
     if (wasActive) revealEditor();
     setMode('NORMAL');
 }
@@ -707,7 +739,7 @@ function revealEditor() {
     app.classList.remove('alpha-reveal');
     void app.offsetWidth;
     app.classList.add('alpha-reveal');
-    setTimeout(() => app.classList.remove('alpha-reveal'), 700);
+    setTimeout(() => app.classList.remove('alpha-reveal'), 1400);
 }
 
 window.showAlpha = showAlpha;
@@ -1501,13 +1533,13 @@ if (gitBranch) {
 document.addEventListener('keydown', e => {
     if (state.mode === 'ALPHA') {
         const key = e.key.toLowerCase();
-        if (e.ctrlKey && key === 'p') { e.preventDefault(); openTelescope(); return; }
+        if (e.ctrlKey && key === 'p') { e.preventDefault(); if (alphaReady) openTelescope(); return; }
         // Leave browser shortcuts (reload, zoom, devtools...) alone
         if (e.ctrlKey || e.metaKey || e.altKey) return;
         e.preventDefault();
         if (key === 'shift' || key === 'control' || key === 'alt' || key === 'meta') return;
-        // The first key during the intro only fast-forwards it, to prevent accidental navigation
-        if (Date.now() < alphaIntroUntil) { finishAlphaIntro(); return; }
+        // Nothing happens until the intro has played out
+        if (!alphaReady) return;
         if (key === ':') { hideAlpha(); setMode('COMMAND'); return; }
         if (key === 'j' || key === 'arrowdown') { selectAlphaBtn(alphaSel + 1); return; }
         if (key === 'k' || key === 'arrowup') { selectAlphaBtn(alphaSel - 1); return; }

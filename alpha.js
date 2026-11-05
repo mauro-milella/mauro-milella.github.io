@@ -26,7 +26,7 @@ const AlphaFX = (() => {
     let dash = null, content = null, running = false, mounted = false;
     let useField = false, raf = 0, last = 0;
     // The field stays on behind the pages; `calm` eases from 0 (dashboard) to 1 (page open)
-    let backdrop = false, calm = 0;
+    let backdrop = false, calm = 0, exiting = false, exitUntil = 0;
     const PAGE_GAIN = 0.6, PAGE_FLOOR = 0.3;
     const pointer = { x: -1e4, y: -1e4, inside: false, mouse: false, presence: 0 };
 
@@ -473,6 +473,22 @@ const AlphaFX = (() => {
             start('bloom', now);
         }
 
+        // Leaving the dashboard: every cell spirals away from the name's centre and fades
+        function scatter(now) {
+            const reach = Math.max(window.innerWidth, window.innerHeight) * 0.7 * dpr;
+            const mx = cols / 2, my = rows / 2;
+            for (const cell of cells) {
+                cell.phi = Math.atan2((cell.r - my) * chh, (cell.c - mx) * cw) + (Math.random() - 0.5) * 0.9;
+                cell.r0 = (0.45 + Math.random() * 0.55) * reach;
+                cell.spin = (Math.random() < 0.5 ? -1 : 1) * (0.4 + Math.random() * 0.8);
+                cell.delay = Math.abs(cell.c - mx) / cols * 140 + Math.random() * 90;
+                cell.dur = 420 + Math.random() * 200;
+            }
+            start('out', now);
+        }
+
+        const settled = now => !slot || !cells.length || mode !== 'in' || now - t0 >= flightEnd;
+
         function start(m, now) {
             mode = m;
             t0 = now;
@@ -566,6 +582,11 @@ const AlphaFX = (() => {
             }
             if (glitch && now > glitch.until) { glitch = null; dirty = true; }
 
+            if (mode === 'out' && !flying) {
+                if (dirty) ctx.clearRect(0, 0, canvas.width, canvas.height);
+                dirty = false;
+                return;
+            }
             if (!flying && !moving && !dirty && !glitch && !force) return;
             dirty = false;
 
@@ -578,6 +599,8 @@ const AlphaFX = (() => {
             const pos = cell => {
                 let x = ox + cell.c * cw + cell.ox, y = oy + cell.r * chh + cell.oy, morph = 1;
                 const p = flying ? clamp((t - cell.delay) / cell.dur, 0, 1) : 1;
+                // A cell that has finished flying away stays gone
+                if (mode === 'out' && p >= 1) return { x, y, morph: -1, landed: Infinity };
                 if (p < 1) {
                     if (mode === 'in') {
                         const e = 1 - (1 - p) ** 3, rad = cell.r0 * (1 - e), ang = cell.phi + cell.spin * (1 - e);
@@ -585,6 +608,12 @@ const AlphaFX = (() => {
                         y += Math.sin(ang) * rad;
                         morph = p < 0.8 ? 0 : (p - 0.8) / 0.2;
                         if (p === 0) morph = -1;
+                    } else if (mode === 'out') {
+                        // The intro played backwards: accelerating away, turning back into glyphs
+                        const e = p ** 2.2, rad = cell.r0 * e, ang = cell.phi + cell.spin * e;
+                        x += Math.cos(ang) * rad;
+                        y += Math.sin(ang) * rad;
+                        morph = p > 0.15 ? 0 : 1;
                     } else {
                         const q = 1 - (1 - p) ** 2, s = Math.sin(Math.PI * q);
                         x += Math.cos(cell.phi + cell.spin * s) * cell.r0 * s;
@@ -618,7 +647,10 @@ const AlphaFX = (() => {
                     const { x, y, morph, landed } = pos(cell);
                     if (morph < 0) return;
                     if (glitch?.swaps.has(i) || morph === 0) {
-                        drawGlyph(cell, x, y, color, glitch?.swaps.has(i) ? 1 : clamp((t - cell.delay) / 120, 0, 1));
+                        const fade = mode === 'out'
+                            ? 1 - clamp((t - cell.delay) / cell.dur, 0, 1) ** 1.5
+                            : clamp((t - cell.delay) / 120, 0, 1);
+                        drawGlyph(cell, x, y, color, glitch?.swaps.has(i) ? 1 : fade);
                         return;
                     }
                     if (morph < 1) {
@@ -647,7 +679,7 @@ const AlphaFX = (() => {
         }
 
         return {
-            setup, layout, place, intro, bloom, finish, frame,
+            setup, layout, place, intro, bloom, scatter, settled, finish, frame,
             retheme: () => { dirty = true; },
             contains: el => !!slot && slot.contains(el),
         };
@@ -656,7 +688,7 @@ const AlphaFX = (() => {
     // --- TYPER ---
 
     const typer = (() => {
-        let el = null, lines = [], i = 0, n = 0, phase = 'type', timer = null;
+        let el = null, lines = [], i = 0, n = 0, phase = 'type', timer = null, firstDone = false;
 
         function schedule(ms) { timer = setTimeout(tick, ms); }
 
@@ -669,6 +701,7 @@ const AlphaFX = (() => {
                 prompt.classList.add('typing');
                 if (n < line.length) return schedule(35 + Math.random() * 70);
                 prompt.classList.remove('typing');
+                firstDone = true;
                 if (lines.length < 2) return;
                 phase = 'erase';
                 return schedule(2600);
@@ -686,6 +719,7 @@ const AlphaFX = (() => {
             stop();
             el = target;
             lines = all;
+            firstDone = !el || !lines.length || reduced();
             if (!el || !lines.length) return;
             i = 0;
             n = 0;
@@ -703,7 +737,7 @@ const AlphaFX = (() => {
             el?.parentElement?.classList.remove('typing');
         }
 
-        return { start, stop };
+        return { start, stop, firstLineDone: () => firstDone };
     })();
 
     // --- LOOP & WIRING ---
@@ -715,11 +749,13 @@ const AlphaFX = (() => {
         pointer.presence += ((pointer.inside ? 1 : 0) - pointer.presence) * Math.min(1, dt * 6);
         calm += ((running ? 0 : 1) - calm) * Math.min(1, dt * 3);
         if (backdrop) field.frame(now, dt);
-        if (running) name.frame(now);
+        if (running || exiting) name.frame(now);
+        if (exiting && now > exitUntil) exiting = false;
+        if (!running && !backdrop && !exiting) pause();
     }
 
     function play() {
-        if (raf || !(running || backdrop) || document.hidden) return;
+        if (raf || !(running || backdrop || exiting) || document.hidden) return;
         if (reduced()) return still();
         last = performance.now();
         raf = requestAnimationFrame(loop);
@@ -873,10 +909,21 @@ const AlphaFX = (() => {
         queueRelayout();
     }
 
-    function finishIntro() {
-        name.finish();
-        if (running && reduced()) still();
+    // Closing the dashboard with a flourish: the name spirals away while the backdrop calms
+    function leave() {
+        const wasRunning = running;
+        exiting = false;
+        stop();
+        if (!wasRunning || reduced()) return;
+        const now = performance.now();
+        name.scatter(now);
+        exiting = true;
+        exitUntil = now + 1100;
+        if (!raf) play();
     }
 
-    return { start, stop, finishIntro, canDraw };
+    // The intro is over once the name has landed and the first line is typed
+    const introDone = () => name.settled(performance.now()) && typer.firstLineDone();
+
+    return { start, stop, leave, introDone, canDraw };
 })();

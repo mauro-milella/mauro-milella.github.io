@@ -1678,14 +1678,25 @@ pre[class*="language-"] {
     flex-direction: column;
     gap: 2px;
 
-    /* Block accidental clicks while the intro animation is playing.
-       The buttons become interactive only after the animation fully settles. */
+    /* No accidental clicks: the controls only wake up once engine.js marks the
+       dashboard .ready, after the whole intro has played */
     pointer-events: none;
-    animation: alphaUnlock 0s 1.4s forwards;
 }
 
-@keyframes alphaUnlock {
-    to { pointer-events: auto; }
+.alpha-theme-switcher {
+    pointer-events: none;
+}
+
+.alpha-dashboard.ready .alpha-buttons,
+.alpha-dashboard.ready .alpha-theme-switcher {
+    pointer-events: auto;
+}
+
+/* The selection bar only lights up when the menu is ready to use */
+.alpha-dashboard:not(.ready) .alpha-btn.selected {
+    color: var(--comment);
+    background: transparent;
+    border-left-color: transparent;
 }
 
 .alpha-btn {
@@ -1824,40 +1835,85 @@ pre[class*="language-"] {
     text-align: left;
 }
 
-/* Leaving: the content zooms past the viewer while the editor eases in behind */
-.alpha-content {
-    transition: transform 0.35s ease, filter 0.35s ease;
-}
+/* --- LEAVING THE DASHBOARD ---
+   The name spirals away (alpha.js) while the lines below it lift off one by one;
+   then the editor assembles itself: sidebar from the left, tabs from above, the
+   page rising into focus, the status line last. */
 
-.alpha-dashboard.leaving .alpha-content {
-    transform: scale(1.04);
-    filter: blur(2px);
-}
-
-.alpha-dashboard.skip-intro .alpha-intro {
-    animation: none;
+.alpha-dashboard.leaving {
     opacity: 1;
 }
 
-.alpha-dashboard.skip-intro .alpha-buttons {
-    animation: none;
-    pointer-events: auto;
+.alpha-dashboard.leaving .alpha-content > :not(.alpha-name):not(.sr-only) {
+    animation: alphaLeave 0.42s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+    animation-delay: var(--o, 0s);
 }
 
-.app-container.alpha-reveal .workspace {
-    animation: editorReveal 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+.alpha-dashboard.leaving .alpha-buttons { --o: 0.05s; }
+.alpha-dashboard.leaving .alpha-hint { --o: 0.09s; }
+.alpha-dashboard.leaving .alpha-footer { --o: 0.12s; }
+.alpha-dashboard.leaving .alpha-fortune { --o: 0.14s; }
+.alpha-dashboard.leaving .alpha-theme-switcher { --o: 0.16s; }
+
+/* The chosen entry flashes as it goes */
+.alpha-dashboard.leaving .alpha-btn.launch {
+    color: var(--fg);
+    background: color-mix(in srgb, var(--main) 24%, transparent);
+    border-left-color: var(--main);
 }
 
-@keyframes editorReveal {
+@keyframes alphaLeave {
     from {
-        opacity: 0;
-        transform: translateY(12px);
+        opacity: 1;
+        transform: none;
+        filter: none;
     }
 
     to {
-        opacity: 1;
-        transform: none;
+        opacity: 0;
+        transform: translateY(-14px);
+        filter: blur(3px);
     }
+}
+
+.app-container.alpha-reveal .buffer-bar {
+    animation: revealDrop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
+}
+
+.app-container.alpha-reveal .editor-container {
+    animation: revealRise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.38s both;
+}
+
+.app-container.alpha-reveal .status-line,
+.app-container.alpha-reveal .cmd-bar {
+    animation: revealLift 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both;
+}
+
+/* On phones the sidebar is an off-canvas drawer: leave its transform alone */
+@media (min-width: 769px) {
+    .app-container.alpha-reveal .nvim-tree {
+        animation: revealFromLeft 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.26s both;
+    }
+}
+
+@keyframes revealFromLeft {
+    from { opacity: 0; transform: translateX(-28px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes revealDrop {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes revealRise {
+    from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+    to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes revealLift {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
 }
 
 @media (max-width: 768px) {
@@ -1897,10 +1953,6 @@ pre[class*="language-"] {
         opacity: 1;
     }
 
-    .alpha-buttons {
-        animation: none;
-        pointer-events: auto;
-    }
 
     .alpha-caret {
         animation: none;
@@ -1912,12 +1964,16 @@ pre[class*="language-"] {
         transition: none;
     }
 
-    .alpha-dashboard.leaving .alpha-content {
-        transform: none;
-        filter: none;
+    .alpha-dashboard.leaving {
+        opacity: 0;
     }
 
-    .app-container.alpha-reveal .workspace {
+    .alpha-dashboard.leaving .alpha-content > :not(.alpha-name):not(.sr-only),
+    .app-container.alpha-reveal .buffer-bar,
+    .app-container.alpha-reveal .editor-container,
+    .app-container.alpha-reveal .status-line,
+    .app-container.alpha-reveal .cmd-bar,
+    .app-container.alpha-reveal .nvim-tree {
         animation: none;
     }
 }
