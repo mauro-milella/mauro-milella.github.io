@@ -565,7 +565,7 @@ function buildAlphaDashboard() {
 
     (ac.actions || []).forEach((a, i) => {
         const btn = document.createElement('div');
-        btn.className = 'alpha-btn alpha-intro';
+        btn.className = `alpha-btn alpha-intro${a.primary ? ' primary' : ''}`;
         btn.setAttribute('role', 'button');
         btn.style.setProperty('--d', `${0.85 + i * 0.06}s`);
         btn.innerHTML = `<i class="${a.icon}"></i><span class="alpha-label">${a.label}</span><span class="alpha-key">${a.key}</span>`;
@@ -1543,10 +1543,9 @@ document.addEventListener('keydown', e => {
         if (key === ':') { hideAlpha(); setMode('COMMAND'); return; }
         if (key === 'j' || key === 'arrowdown') { selectAlphaBtn(alphaSel + 1); return; }
         if (key === 'k' || key === 'arrowup') { selectAlphaBtn(alphaSel - 1); return; }
-        if (key === 'enter' || key === ' ') { activateAlphaBtn(); return; }
+        if (key === 'enter') { activateAlphaBtn(); return; }
         if (alphaKeyMap[key]) { alphaKeyMap[key](); return; }
-        hideAlpha();
-        openFile(config.startPage);
+        // Any other key does nothing: the way in is the Enter button
         return;
     }
 

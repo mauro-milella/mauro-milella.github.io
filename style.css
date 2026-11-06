@@ -1725,6 +1725,46 @@ pre[class*="language-"] {
     border-left-color: var(--main);
 }
 
+/* Enter: the main way into the site, filled with the theme's main colour */
+.alpha-btn.primary {
+    margin-bottom: 8px;
+    color: var(--main);
+    font-weight: 700;
+    background: color-mix(in srgb, var(--main) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--main) 45%, transparent);
+    border-left-width: 2px;
+}
+
+.alpha-btn.primary:hover,
+.alpha-btn.primary.selected {
+    color: var(--bg);
+    background: var(--main);
+    border-color: var(--main);
+}
+
+.alpha-btn.primary:hover i,
+.alpha-btn.primary.selected i,
+.alpha-btn.primary:hover .alpha-key,
+.alpha-btn.primary.selected .alpha-key {
+    color: var(--bg);
+}
+
+/* Before the menu is ready it keeps its resting look, unfilled */
+.alpha-dashboard:not(.ready) .alpha-btn.primary.selected {
+    color: var(--main);
+    background: color-mix(in srgb, var(--main) 14%, transparent);
+    border-color: color-mix(in srgb, var(--main) 45%, transparent);
+}
+
+.alpha-dashboard:not(.ready) .alpha-btn.primary.selected i,
+.alpha-dashboard:not(.ready) .alpha-btn.primary.selected .alpha-key {
+    color: var(--main);
+}
+
+.alpha-btn.primary .alpha-key {
+    color: var(--main);
+}
+
 .alpha-btn i {
     color: var(--main);
     text-align: center;

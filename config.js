@@ -42,11 +42,11 @@ const config = {
         // '@theme', '@cv') that runs on top of the dashboard and keeps it open
         actions: [
             // { key: 'h', icon: 'fas fa-home',     label: 'Home',  cmd: 'home' },
-            { key: 'a', icon: 'fas fa-user',              label: 'About me',      cmd: 'about' },
+            // The one way into the site: a click (or the Enter key while it is selected)
+            { key: '↵', icon: 'fas fa-arrow-right-to-bracket', label: 'Enter', cmd: 'about', primary: true },
             { key: '/', icon: 'fas fa-magnifying-glass',  label: 'Find anything', cmd: '@telescope' },
             { key: 'c', icon: 'fas fa-envelope',          label: 'Contact',       cmd: ':contact' },
             { key: 'd', icon: 'fas fa-file-arrow-down',   label: 'Download CV',   cmd: '@cv' },
-            { key: 't', icon: 'fas fa-palette',           label: 'Switch theme',  cmd: '@theme' },
             { key: '?', icon: 'fas fa-terminal',          label: 'Help',          cmd: ':help' },
             // { key: 's', icon: 'fas fa-database', label: 'SQL',   cmd: ':sql' },
             // { key: 'g', icon: 'fas fa-gamepad',  label: 'Snake', cmd: ':snake' },
