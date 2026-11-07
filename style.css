@@ -283,6 +283,16 @@ html.custom-cursor-on * {
     stroke-linejoin: round;
 }
 
+/* On a main-coloured button (Enter) the cursor inverts: background-coloured
+   lines on a main-coloured hand */
+#custom-cursor.on-accent {
+    --cursor-hover: var(--bg);
+}
+
+#custom-cursor.on-accent .cursor-hand .hand-body {
+    fill: var(--main);
+}
+
 /* A small burst from the fingertip on click */
 .cursor-ping {
     width: 26px;

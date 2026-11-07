@@ -53,6 +53,9 @@
         target = el;
         interactive = isInteractive(el);
         cursor.classList.toggle('is-hover', interactive);
+        // Over a control filled with the main colour, switch to the background
+        // colour so the saturn does not vanish into it
+        cursor.classList.toggle('on-accent', interactive && !!el?.closest?.('.alpha-btn.primary'));
     }
 
     // Overlays open and close under a resting pointer, so look again after input

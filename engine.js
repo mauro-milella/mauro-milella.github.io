@@ -569,7 +569,8 @@ function buildAlphaDashboard() {
         btn.setAttribute('role', 'button');
         btn.style.setProperty('--d', `${0.85 + i * 0.06}s`);
         btn.innerHTML = `<i class="${a.icon}"></i><span class="alpha-label">${a.label}</span><span class="alpha-key">${a.key}</span>`;
-        btn.addEventListener('mouseenter', () => selectAlphaBtn(i));
+        // Hovering only highlights (CSS :hover); the keyboard selection moves with
+        // j/k alone, so the Enter key still means the Enter button after a stray hover
         btn.addEventListener('click', () => runAlphaAction(a.cmd));
         buttons.appendChild(btn);
     });
