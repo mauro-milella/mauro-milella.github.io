@@ -165,6 +165,188 @@
     --h3: var(--blue);
 }
 
+/* --- MIASMA THEME: Miasma, as published on terminalcolors.com: an earthy palette of browns, olives and ochre --- */
+[data-theme="miasma"] {
+    --main: var(--yellow);
+    --bg: #222222;
+    --bg-dark: #1a1a1a;
+    --fg: #c2c2b0;
+    --comment: #666666;
+    --blue: #78824b;
+    --cyan: #5f875f;
+    --purple: #bb7744;
+    --orange: #b36d43;
+    --yellow: #c9a554;
+    --green: #5f875f;
+    --red: #685742;
+    --magenta: #d7c483;
+    --line-nr: #3a3a32;
+    --selection: #3a3a32;
+    --status-bg: #161616;
+    --border: #161616;
+    --badge-fg: #1a1a1a;
+    --seg-bg: #3a3a32;
+    --h1: var(--yellow);
+    --h2: var(--orange);
+    --h3: var(--green);
+}
+
+/* --- ROSE-PINE THEME: Rosé Pine (main): base, surface, overlay, text and its love/gold/rose/pine/foam/iris accents --- */
+[data-theme="rose-pine"] {
+    --main: var(--purple);
+    --bg: #191724;
+    --bg-dark: #1f1d2e;
+    --fg: #e0def4;
+    --comment: #6e6a86;
+    --blue: #31748f;
+    --cyan: #9ccfd8;
+    --purple: #c4a7e7;
+    --orange: #ebbcba;
+    --yellow: #f6c177;
+    --green: #9ccfd8;
+    --red: #eb6f92;
+    --magenta: #ebbcba;
+    --line-nr: #26233a;
+    --selection: #26233a;
+    --status-bg: #151320;
+    --border: #151320;
+    --badge-fg: #1f1d2e;
+    --seg-bg: #403d52;
+    --h1: var(--purple);
+    --h2: var(--magenta);
+    --h3: var(--cyan);
+}
+
+/* --- EVERFOREST THEME: Everforest dark, medium contrast --- */
+[data-theme="everforest"] {
+    --main: var(--green);
+    --bg: #2d353b;
+    --bg-dark: #232a2e;
+    --fg: #d3c6aa;
+    --comment: #859289;
+    --blue: #7fbbb3;
+    --cyan: #83c092;
+    --purple: #d699b6;
+    --orange: #e69875;
+    --yellow: #dbbc7f;
+    --green: #a7c080;
+    --red: #e67e80;
+    --magenta: #d699b6;
+    --line-nr: #3d484d;
+    --selection: #3d484d;
+    --status-bg: #1e2326;
+    --border: #1e2326;
+    --badge-fg: #232a2e;
+    --seg-bg: #475258;
+    --h1: var(--green);
+    --h2: var(--orange);
+    --h3: var(--cyan);
+}
+
+/* --- ONE-DARK THEME: Atom One Dark --- */
+[data-theme="one-dark"] {
+    --main: var(--blue);
+    --bg: #282c34;
+    --bg-dark: #21252b;
+    --fg: #abb2bf;
+    --comment: #5c6370;
+    --blue: #61afef;
+    --cyan: #56b6c2;
+    --purple: #c678dd;
+    --orange: #d19a66;
+    --yellow: #e5c07b;
+    --green: #98c379;
+    --red: #e06c75;
+    --magenta: #c678dd;
+    --line-nr: #3e4451;
+    --selection: #3e4451;
+    --status-bg: #1b1f23;
+    --border: #1b1f23;
+    --badge-fg: #21252b;
+    --seg-bg: #4b5263;
+    --h1: var(--blue);
+    --h2: var(--purple);
+    --h3: var(--green);
+}
+
+/* --- MONOKAI THEME: Monokai classic; its signature pink is the main colour --- */
+[data-theme="monokai"] {
+    --main: var(--magenta);
+    --bg: #272822;
+    --bg-dark: #1e1f1c;
+    --fg: #f8f8f2;
+    --comment: #75715e;
+    --blue: #66d9ef;
+    --cyan: #66d9ef;
+    --purple: #ae81ff;
+    --orange: #fd971f;
+    --yellow: #e6db74;
+    --green: #a6e22e;
+    --red: #f92672;
+    --magenta: #f92672;
+    --line-nr: #49483e;
+    --selection: #49483e;
+    --status-bg: #1a1a17;
+    --border: #1a1a17;
+    --badge-fg: #1e1f1c;
+    --seg-bg: #49483e;
+    --h1: var(--green);
+    --h2: var(--magenta);
+    --h3: var(--yellow);
+}
+
+/* --- NORD THEME: Nord: polar night, snow storm, frost and aurora --- */
+[data-theme="nord"] {
+    --main: var(--cyan);
+    --bg: #2e3440;
+    --bg-dark: #272c36;
+    --fg: #d8dee9;
+    --comment: #616e88;
+    --blue: #81a1c1;
+    --cyan: #88c0d0;
+    --purple: #b48ead;
+    --orange: #d08770;
+    --yellow: #ebcb8b;
+    --green: #a3be8c;
+    --red: #bf616a;
+    --magenta: #b48ead;
+    --line-nr: #434c5e;
+    --selection: #434c5e;
+    --status-bg: #242933;
+    --border: #242933;
+    --badge-fg: #272c36;
+    --seg-bg: #4c566a;
+    --h1: var(--cyan);
+    --h2: var(--blue);
+    --h3: var(--green);
+}
+
+/* --- CATPPUCCIN THEME: Catppuccin Mocha (the light flavour, Latte, is already the latte theme) --- */
+[data-theme="catppuccin"] {
+    --main: var(--purple);
+    --bg: #1e1e2e;
+    --bg-dark: #181825;
+    --fg: #cdd6f4;
+    --comment: #6c7086;
+    --blue: #89b4fa;
+    --cyan: #94e2d5;
+    --purple: #cba6f7;
+    --orange: #fab387;
+    --yellow: #f9e2af;
+    --green: #a6e3a1;
+    --red: #f38ba8;
+    --magenta: #f5c2e7;
+    --line-nr: #313244;
+    --selection: #313244;
+    --status-bg: #11111b;
+    --border: #11111b;
+    --badge-fg: #181825;
+    --seg-bg: #45475a;
+    --h1: var(--purple);
+    --h2: var(--blue);
+    --h3: var(--green);
+}
+
 * {
     box-sizing: border-box;
 }
@@ -526,6 +708,29 @@ html.custom-cursor-on * {
     line-height: var(--line-height);
     max-width: 900px;
     margin: 0 auto;
+    position: relative;
+    isolation: isolate;
+}
+
+/* A soft veil behind the text column: it lifts the text off the sky without
+   hiding it, and its feathered edges keep it from reading as a box */
+.markdown-body::before {
+    content: "";
+    position: absolute;
+    inset: -28px -48px;
+    z-index: -1;
+    pointer-events: none;
+    background: color-mix(in srgb, var(--bg) 62%, transparent);
+    backdrop-filter: blur(1.5px);
+    -webkit-backdrop-filter: blur(1.5px);
+    -webkit-mask-image:
+        linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent),
+        linear-gradient(to bottom, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 48px), transparent),
+        linear-gradient(to bottom, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+    mask-composite: intersect;
 }
 
 .markdown-body * {
@@ -1390,6 +1595,34 @@ pre[class*="language-"] {
     content: "LATTE";
 }
 
+.theme-miasma::after {
+    content: "MIASMA";
+}
+
+.theme-rose-pine::after {
+    content: "ROSÉ PINE";
+}
+
+.theme-everforest::after {
+    content: "EVERFOREST";
+}
+
+.theme-one-dark::after {
+    content: "ONE DARK";
+}
+
+.theme-monokai::after {
+    content: "MONOKAI";
+}
+
+.theme-nord::after {
+    content: "NORD";
+}
+
+.theme-catppuccin::after {
+    content: "CATPPUCCIN";
+}
+
 /* Mobile */
 @media (max-width: 768px) {
     .theme-tokyo::after {
@@ -1410,6 +1643,34 @@ pre[class*="language-"] {
 
     .theme-latte::after {
         content: "L";
+    }
+
+    .theme-miasma::after {
+        content: "MI";
+    }
+
+    .theme-rose-pine::after {
+        content: "RP";
+    }
+
+    .theme-everforest::after {
+        content: "EF";
+    }
+
+    .theme-one-dark::after {
+        content: "OD";
+    }
+
+    .theme-monokai::after {
+        content: "MK";
+    }
+
+    .theme-nord::after {
+        content: "N";
+    }
+
+    .theme-catppuccin::after {
+        content: "CP";
     }
 }
 
@@ -1846,15 +2107,32 @@ pre[class*="language-"] {
 
 .alpha-theme-switcher {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     gap: 12px;
+    max-width: min(420px, 100%);
+    margin-inline: auto;
     margin-top: 22px;
     color: var(--fg);
 }
 
 /* Each dot has its own data-theme, so these variables are that theme's colours */
+/* The theme's name sits on its own line under the dots */
+.alpha-theme-switcher .alpha-theme-name {
+    flex-basis: 100%;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .alpha-theme-switcher {
+        gap: 9px;
+    }
+}
+
 .alpha-theme-dot {
+    /* Twelve themes: never squash the dots, wrap the row instead */
+    flex: none;
     width: 14px;
     height: 14px;
     border-radius: 50%;

@@ -16,7 +16,7 @@ const config = {
     alpha: {
         enabled: true,
         // 'field' (ASCII flow field, see alpha.js), 'starfield', 'donut', 'cube' or false
-        animation: 'field',
+        animation: 'sky', // 'sky' (3D stars and symbols) or 'field' (the ASCII flow field)
         title: 'mauro',
         titleColor: 'var(--main)',
         titleAccent: 'milella',
@@ -25,7 +25,7 @@ const config = {
         subtitle: 'welcome to my website!',
         subtitleColor: 'var(--comment)',
         taglines: [
-            'phd student in mathematics @ unife',
+            // 'phd student in mathematics @ unife',
             // 'formal aspects of language modeling',
             // 'currently into formal verification',
             // 'obsessed with color themes (gruvbox)',
@@ -75,6 +75,13 @@ const config = {
         postsDir: 'posts'
     },
 
-    themes: ['gruvbox', 'tokyo', 'dracula', 'cyberpunk', 'latte'],
+    themes: [
+        'gruvbox',
+        // 'tokyo',     // set aside for now
+        // 'dracula',   // set aside for now
+        'miasma', 'rose-pine', 'everforest', 'one-dark', 'monokai', 'nord', 'catppuccin',
+        'cyberpunk',
+        'latte',
+    ],
     defaultTheme: 'gruvbox',
 };

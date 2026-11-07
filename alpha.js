@@ -25,9 +25,10 @@ const AlphaFX = (() => {
 
     let dash = null, content = null, running = false, mounted = false;
     let useField = false, raf = 0, last = 0;
+    let bg = null; // the backdrop in use, chosen in start(): the ASCII flow field or the 3D sky
     // The field stays on behind the pages; `calm` eases from 0 (dashboard) to 1 (page open)
     let backdrop = false, calm = 0, exiting = false, exitUntil = 0;
-    const PAGE_GAIN = 0.6, PAGE_FLOOR = 0.3;
+    const PAGE_GAIN = 0.6, PAGE_FLOOR = 0.18;
     const pointer = { x: -1e4, y: -1e4, inside: false, mouse: false, presence: 0 };
 
     // --- THEME ---
@@ -343,6 +344,142 @@ const AlphaFX = (() => {
         }
 
         return { mount, layout, avoid, frame, ripple, retheme: () => { atlas = null; } };
+    })();
+
+    // --- SKY ---
+
+    // The deep-field backdrop: stars, mathematical symbols and two little
+    // ringed planets placed in real 3D and seen through a pinhole camera. The
+    // camera floats forward very slowly, so the sky streams gently outwards;
+    // the pointer only tilts the view a little. Clicks do nothing (on purpose).
+    const sky = (() => {
+        const NEAR = 0.25, FAR = 3.2, SPEED = 0.05;
+        let canvas, ctx, dpr = 1, W = 0, H = 0, f = 1;
+        let items = [], rects = [], floor = 0.14, tiltX = 0, tiltY = 0;
+
+        function mount() {
+            if (canvas) return;
+            let host = document.getElementById('site-bg');
+            if (!host) {
+                host = document.createElement('div');
+                host.id = 'site-bg';
+                document.body.insertBefore(host, document.body.firstChild);
+            }
+            canvas = document.createElement('canvas');
+            canvas.className = 'alpha-canvas';
+            canvas.setAttribute('aria-hidden', 'true');
+            host.appendChild(canvas);
+            ctx = canvas.getContext('2d');
+        }
+
+        // Anywhere inside the view frustum: near spawns fill the sky at load,
+        // far ones replace whatever has flown past the camera
+        function spawn(it, far) {
+            it.Z = far ? FAR * (0.85 + Math.random() * 0.15) : NEAR * 1.6 + Math.random() * (FAR - NEAR * 1.6);
+            const sx = W / (2 * f) * 1.15, sy = H / (2 * f) * 1.15;
+            it.X = (Math.random() * 2 - 1) * sx * it.Z;
+            it.Y = (Math.random() * 2 - 1) * sy * it.Z;
+            return it;
+        }
+
+        function layout() {
+            dpr = Math.min(2, window.devicePixelRatio || 1);
+            W = window.innerWidth;
+            H = window.innerHeight;
+            canvas.width = Math.round(W * dpr);
+            canvas.height = Math.round(H * dpr);
+            canvas.style.width = `${W}px`;
+            canvas.style.height = `${H}px`;
+            f = Math.min(W, H) * 0.55;
+            items = [];
+            const dots = clamp(Math.round(W * H / 1300), 300, 1800);
+            const syms = clamp(Math.round(W * H / 8000), 40, 260);
+            for (let i = 0; i < dots; i++) items.push(spawn({ kind: 'dot', m: Math.random() ** 2 }));
+            for (let i = 0; i < syms; i++) items.push(spawn({ kind: 'sym', g: pick(LOGIC), c: Math.floor(Math.random() * 7) }));
+            for (let i = 0; i < 2; i++) items.push(spawn({ kind: 'planet', c: i ? 1 : 4, moon: Math.random() * 6 }));
+        }
+
+        // Dim whatever sits behind the dashboard or page text
+        function avoid(r, fl = 0.14) {
+            rects = r;
+            floor = fl;
+        }
+
+        function dim(x, y) {
+            let a = 1;
+            for (const b of rects) {
+                const qx = Math.abs(x - b.cx) - b.hw, qy = Math.abs(y - b.cy) - b.hh;
+                const d = Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0);
+                a = Math.min(a, floor + (1 - floor) * smoothstep(-6, 42, d));
+            }
+            return a;
+        }
+
+        // A tiny ringed planet, like the cursor: back half of the ring, planet, front half, moon
+        function saturn(x, y, r, moon, body, ring, alpha) {
+            const rx = r * 3, ry = r * 1.05, tilt = -0.4;
+            const mx = x + Math.cos(moon) * rx * Math.cos(tilt) - Math.sin(moon) * ry * Math.sin(tilt);
+            const my = y + Math.cos(moon) * rx * Math.sin(tilt) + Math.sin(moon) * ry * Math.cos(tilt);
+            const behind = Math.sin(moon) < 0;
+            const half = front => { ctx.beginPath(); ctx.ellipse(x, y, rx, ry, tilt, front ? 0 : Math.PI, front ? Math.PI : Math.PI * 2); ctx.stroke(); };
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = ring;
+            ctx.fillStyle = body;
+            ctx.globalAlpha = 0.5 * alpha; half(false);
+            if (behind) { ctx.globalAlpha = 0.8 * alpha; ctx.beginPath(); ctx.arc(mx, my, Math.max(1, r * 0.32), 0, 7); ctx.fill(); }
+            ctx.globalAlpha = 0.95 * alpha; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+            ctx.globalAlpha = 0.7 * alpha; half(true);
+            if (!behind) { ctx.globalAlpha = 0.9 * alpha; ctx.beginPath(); ctx.arc(mx, my, Math.max(1, r * 0.32), 0, 7); ctx.fill(); }
+        }
+
+        function frame(now, dt) {
+            const pal = palette();
+            const gain = pal.fieldGain * (1 - (1 - PAGE_GAIN) * calm);
+            // A gentle tilt towards the pointer, gone when it leaves the window
+            const k = Math.min(1, dt * 1.5);
+            tiltX += (pointer.presence * (pointer.x / W - 0.5) * 0.12 - tiltX) * k;
+            tiltY += (pointer.presence * (pointer.y / H - 0.5) * 0.08 - tiltY) * k;
+
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            ctx.clearRect(0, 0, W, H);
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const vx = W / 2, vy = H / 2;
+            let font = '';
+            for (const it of items) {
+                it.Z -= SPEED * dt * (it.kind === 'planet' ? 0.5 : 1);
+                let x = vx + (it.X - tiltX) / it.Z * f, y = vy + (it.Y - tiltY) / it.Z * f;
+                if (it.Z < NEAR || x < -60 || x > W + 60 || y < -60 || y > H + 60) {
+                    spawn(it, true);
+                    x = vx + (it.X - tiltX) / it.Z * f;
+                    y = vy + (it.Y - tiltY) / it.Z * f;
+                }
+                const near = 1 / it.Z;
+                const alpha = clamp((FAR - it.Z) / 0.6, 0, 1) * gain * dim(x, y);
+                if (alpha < 0.02) continue;
+                if (it.kind === 'dot') {
+                    const r = 0.4 + (0.6 + 1.4 * it.m) * near * 0.55;
+                    ctx.globalAlpha = alpha * (0.15 + 0.6 * it.m) * clamp(near * 0.9, 0.3, 1);
+                    ctx.fillStyle = pal.fg;
+                    if (r < 1.1) ctx.fillRect(x - r, y - r, 2 * r, 2 * r);
+                    else { ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); }
+                } else if (it.kind === 'sym') {
+                    const size = Math.round(clamp(7 + 7 * near, 7, 30));
+                    const want = `${size}px ${FONT}`;
+                    if (want !== font) { ctx.font = want; font = want; }
+                    ctx.globalAlpha = alpha * clamp(0.25 + 0.18 * near, 0.25, 0.85);
+                    ctx.fillStyle = pal.accents[it.c];
+                    ctx.fillText(it.g, x, y);
+                } else {
+                    it.moon += dt * 1.2;
+                    saturn(x, y, clamp(2.2 * near, 1.2, 12), it.moon, pal.accents[it.c], pal.fg, alpha * 0.9);
+                }
+            }
+            ctx.globalAlpha = 1;
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+        }
+
+        return { mount, layout, avoid, frame, ripple() {}, retheme() {} };
     })();
 
     // --- NAME ---
@@ -748,7 +885,7 @@ const AlphaFX = (() => {
         last = now;
         pointer.presence += ((pointer.inside ? 1 : 0) - pointer.presence) * Math.min(1, dt * 6);
         calm += ((running ? 0 : 1) - calm) * Math.min(1, dt * 3);
-        if (backdrop) field.frame(now, dt);
+        if (backdrop) bg.frame(now, dt);
         if (running || exiting) name.frame(now);
         if (exiting && now > exitUntil) exiting = false;
         if (!running && !backdrop && !exiting) pause();
@@ -770,7 +907,7 @@ const AlphaFX = (() => {
         const now = performance.now();
         pointer.presence = 0;
         calm = running ? 0 : 1;
-        if (backdrop) field.frame(now, 0);
+        if (backdrop) bg.frame(now, 0);
         if (!running) return;
         name.finish();
         name.frame(now, true);
@@ -790,7 +927,7 @@ const AlphaFX = (() => {
     function refreshRects() {
         if (!running) {
             if (!backdrop) return;
-            field.avoid(pageRects(), PAGE_FLOOR);
+            bg.avoid(pageRects(), PAGE_FLOOR);
             if (reduced()) still();
             return;
         }
@@ -802,14 +939,14 @@ const AlphaFX = (() => {
                     const r = el.getBoundingClientRect();
                     return { cx: r.left + r.width / 2, cy: r.top + r.height / 2, hw: r.width / 2, hh: r.height / 2 };
                 });
-            field.avoid(rects);
+            bg.avoid(rects);
         }
         if (reduced()) still();
     }
 
     function relayout() {
         if (!running && !backdrop) return;
-        if (backdrop) field.layout();
+        if (backdrop) bg.layout();
         if (running) name.layout();
         refreshRects();
     }
@@ -824,7 +961,7 @@ const AlphaFX = (() => {
     function mount() {
         mounted = true;
         window.addEventListener('resize', queueRelayout);
-        document.fonts?.ready.then(() => { field.retheme(); queueRelayout(); });
+        document.fonts?.ready.then(() => { bg?.retheme(); queueRelayout(); });
         new ResizeObserver(() => running && refreshRects()).observe(content);
         dash.addEventListener('scroll', () => running && refreshRects(), { passive: true });
 
@@ -844,37 +981,30 @@ const AlphaFX = (() => {
         });
         new MutationObserver(() => {
             colors = null;
-            field.retheme();
+            bg?.retheme();
             name.retheme();
             if (running && reduced()) still();
         }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-        const setTouch = e => {
-            const t = e.touches[0];
-            if (!t) return;
-            pointer.x = t.clientX;
-            pointer.y = t.clientY;
-            pointer.inside = true;
-            pointer.mouse = false;
-        };
-        // The pointer stirs the field everywhere, not only on the dashboard
-        window.addEventListener('mousemove', e => {
+        // Only a real mouse hovers: it stirs the backdrop and nudges the name.
+        // A finger never hovers (and phones fake mouse moves after a tap, which
+        // pointermove ignores), so on touch screens only taps count, below.
+        window.addEventListener('pointermove', e => {
+            if (e.pointerType !== 'mouse') return;
             pointer.x = e.clientX;
             pointer.y = e.clientY;
             pointer.inside = true;
             pointer.mouse = true;
         }, { passive: true });
         document.documentElement.addEventListener('mouseleave', () => { pointer.inside = false; });
-        window.addEventListener('touchstart', setTouch, { passive: true });
-        window.addEventListener('touchmove', setTouch, { passive: true });
-        window.addEventListener('touchend', () => { pointer.inside = false; }, { passive: true });
         const NO_RIPPLE = 'a, button, input, textarea, select, [onclick], [role="button"], .alpha-btn, .alpha-theme-dot,'
             + ' .file-node, .tab, .segment, .telescope-overlay, .markdown-body';
         window.addEventListener('pointerdown', e => {
+            if (e.pointerType !== 'mouse') pointer.inside = false;
             if (!(running || backdrop) || reduced() || e.target.closest(NO_RIPPLE)) return;
             const now = performance.now();
             if (running && name.contains(e.target)) name.bloom(e.clientX, e.clientY, now);
-            if (backdrop) field.ripple(e.clientX, e.clientY, now);
+            if (backdrop) bg.ripple(e.clientX, e.clientY, now);
         });
     }
 
@@ -883,7 +1013,8 @@ const AlphaFX = (() => {
         content = d.querySelector('.alpha-content');
         useField = !!opts.field;
         if (useField) {
-            field.mount();
+            bg = opts.backdrop === 'sky' ? sky : field;
+            bg.mount();
             backdrop = true;
         }
         name.setup(d, d.querySelector('.alpha-name'), opts.words || []);

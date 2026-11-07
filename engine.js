@@ -477,8 +477,8 @@ function startAsciiCube(container) {
 
 function startAlphaAnimation(container) {
     const animType = config.alpha?.animation;
-    // 'field' is drawn by AlphaFX (alpha.js)
-    if (animType === false || animType === 'field') return;
+    // 'field' and 'sky' are drawn by AlphaFX (alpha.js)
+    if (animType === false || animType === 'field' || animType === 'sky') return;
 
     const animations = {
         donut: startAsciiDonut,
@@ -611,10 +611,14 @@ function buildAlphaDashboard() {
     themeName.className = 'alpha-theme-name';
     themeSwitcher.appendChild(themeName);
 
-    content.appendChild(prompt);
+    // The typed prompt under the name is built but left off the page; with no
+    // prompt the intro lock simply skips waiting for it
+    // content.appendChild(prompt);
     content.appendChild(buttons);
-    content.appendChild(hint);
-    content.appendChild(footer);
+    // The key hint and the alpha-nvim "loaded N files" footer are built but
+    // left off the page for now; append them here again to bring them back
+    // content.appendChild(hint);
+    // content.appendChild(footer);
     content.appendChild(fortune);
     content.appendChild(themeSwitcher);
     dash.appendChild(content);
@@ -703,7 +707,8 @@ function showAlpha() {
     requestAnimationFrame(() => dash.classList.add('active'));
     if (!asciiAnimId) startAlphaAnimation(dash);
     AlphaFX.start(dash, {
-        field: ac.animation === 'field',
+        field: ac.animation === 'field' || ac.animation === 'sky',
+        backdrop: ac.animation,
         words: alphaWords(),
         lines: [ac.subtitle, ...(ac.taglines || [])].filter(Boolean),
     });
@@ -1448,7 +1453,7 @@ function executeCmd(val) {
         };
         customCommands[cmd].fn(args, sys);
     } else {
-        showToast(`E492: Not an editor command: ${cmd}`, 'error');
+        showToast('Not an editor command', 'error');
 
         if (typeof gtag === 'function') {
             gtag('event', 'command_error', { 'invalid_input': cmd });

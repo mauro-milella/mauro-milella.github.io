@@ -122,7 +122,9 @@
         raf = requestAnimationFrame(frame);
     }
 
-    window.addEventListener('mousemove', (e) => {
+    // Real mice only: a touchscreen laptop's taps should not drag the cursor around
+    window.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
         mouse.x = e.clientX;
         mouse.y = e.clientY;
         if (!visible) {
