@@ -1,7 +1,9 @@
 :root {
     /* --- GRUVBOX PALETTE IS THE DEFAULT --- */
-    /* --main is each theme's signature accent: gruvbox's green, blue elsewhere */
+    /* --main is each theme's signature accent: gruvbox's green, blue elsewhere;
+       --second is its companion accent (the surname on the hero page) */
     --main: var(--green);
+    --second: var(--orange);
     --bg: #282828;
     --bg-dark: #1d2021;
     --fg: #ebdbb2;
@@ -34,6 +36,7 @@
 
 [data-theme="tokyo"] {
     --main: var(--blue);
+    --second: var(--purple);
     --bg: #24283b;
     --bg-dark: #1f2335;
     --fg: #c0caf5;
@@ -63,6 +66,7 @@
 /* --- GRUVBOX THEME --- */
 [data-theme="gruvbox"] {
     --main: var(--green);
+    --second: var(--orange);
     --bg: #282828;
     --bg-dark: #1d2021;
     --fg: #ebdbb2;
@@ -89,6 +93,7 @@
 /* --- DRACULA THEME (Vampire) --- */
 [data-theme="dracula"] {
     --main: var(--blue);
+    --second: var(--purple);
     --bg: #282a36;
     --bg-dark: #21222c;
     --fg: #f8f8f2;
@@ -115,6 +120,7 @@
 /* --- CYBERPUNK THEME --- */
 [data-theme="cyberpunk"] {
     --main: var(--blue);
+    --second: var(--magenta);
     --bg: #050505;
     --bg-dark: #000000;
     --fg: #e0e0e0;
@@ -140,6 +146,7 @@
 
 [data-theme="latte"] {
     --main: var(--blue);
+    --second: var(--purple);
     --bg: #eff1f5;
     --bg-dark: #e6e9ef;
     --fg: #4c4f69;
@@ -168,6 +175,7 @@
 /* --- MIASMA THEME: Miasma, as published on terminalcolors.com: an earthy palette of browns, olives and ochre --- */
 [data-theme="miasma"] {
     --main: var(--yellow);
+    --second: var(--orange);
     --bg: #222222;
     --bg-dark: #1a1a1a;
     --fg: #c2c2b0;
@@ -194,6 +202,7 @@
 /* --- ROSE-PINE THEME: Rosé Pine (main): base, surface, overlay, text and its love/gold/rose/pine/foam/iris accents --- */
 [data-theme="rose-pine"] {
     --main: var(--purple);
+    --second: var(--magenta);
     --bg: #191724;
     --bg-dark: #1f1d2e;
     --fg: #e0def4;
@@ -220,6 +229,7 @@
 /* --- EVERFOREST THEME: Everforest dark, medium contrast --- */
 [data-theme="everforest"] {
     --main: var(--green);
+    --second: var(--orange);
     --bg: #2d353b;
     --bg-dark: #232a2e;
     --fg: #d3c6aa;
@@ -246,6 +256,7 @@
 /* --- ONE-DARK THEME: Atom One Dark --- */
 [data-theme="one-dark"] {
     --main: var(--blue);
+    --second: var(--purple);
     --bg: #282c34;
     --bg-dark: #21252b;
     --fg: #abb2bf;
@@ -272,6 +283,7 @@
 /* --- MONOKAI THEME: Monokai classic; its signature pink is the main colour --- */
 [data-theme="monokai"] {
     --main: var(--magenta);
+    --second: var(--green);
     --bg: #272822;
     --bg-dark: #1e1f1c;
     --fg: #f8f8f2;
@@ -298,6 +310,7 @@
 /* --- NORD THEME: Nord: polar night, snow storm, frost and aurora --- */
 [data-theme="nord"] {
     --main: var(--cyan);
+    --second: var(--purple);
     --bg: #2e3440;
     --bg-dark: #272c36;
     --fg: #d8dee9;
@@ -324,6 +337,7 @@
 /* --- CATPPUCCIN THEME: Catppuccin Mocha (the light flavour, Latte, is already the latte theme) --- */
 [data-theme="catppuccin"] {
     --main: var(--purple);
+    --second: var(--blue);
     --bg: #1e1e2e;
     --bg-dark: #181825;
     --fg: #cdd6f4;

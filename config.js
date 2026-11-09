@@ -20,7 +20,7 @@ const config = {
         title: 'mauro',
         titleColor: 'var(--main)',
         titleAccent: 'milella',
-        titleAccentColor: 'var(--comment)',
+        titleAccentColor: 'var(--second)',
         // The prompt under the name types the subtitle, then cycles through the taglines
         subtitle: 'welcome to my website!',
         subtitleColor: 'var(--comment)',
