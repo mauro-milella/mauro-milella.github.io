@@ -18,10 +18,10 @@ I try to spend my days doing important stuff, such as reading good books, hangin
 I also love to design puzzles: there is one hidden in this page (actually, I still need to finish it. Ops. WIP).
 
 I am obsessed with color themes, my favourite one being 
-<a href="https://www.color-hex.com/color-palette/1026676" style="color: #8ec07c">the</a> 
-<a href="https://www.color-hex.com/color-palette/1026676" style="color: #458588">gruvbox</a> 
-<a href="https://www.color-hex.com/color-palette/1026676" style="color: #d79921">color</a> 
-<a href="https://www.color-hex.com/color-palette/1026676" style="color: #cc241d">palette</a>.
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: var(--cyan)">the</a> 
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: var(--blue)">gruvbox</a> 
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: var(--yellow)">color</a> 
+<a href="https://www.color-hex.com/color-palette/1026676" style="color: var(--red)">palette</a>.
 
 It is my default choice when customizing many software environments.
 Also, <span style="color: #d79921">ochre</span> reminds me of my bestie :P

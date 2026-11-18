@@ -855,7 +855,7 @@ html.custom-cursor-on * {
 .markdown-body a {
     color: var(--cyan);
     text-decoration: none;
-    border-bottom: 1px dashed var(--cyan);
+    border-bottom: 1px dashed currentColor;
 }
 
 .markdown-body a:hover {
